@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "noResolve": false,
+        "noImplicitAny": false,
+        "removeComments": false,
+        "sourceMap": true,
+        "allowJs": true,
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "keyofStringsOnly": true,
+        "baseUrl": "./src"
+    },
+    "include": [
+        "./src/**/*.tsx",
+        "@type", "src/component/App.jsx", "src/component/Calendar.jsx"
+    ],
+    "exclude": [
+        "node_modules",
+        "build",
+        "scripts",
+        "webpack",
+        "jest",
+    ]
+}

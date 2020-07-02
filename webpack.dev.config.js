@@ -7,7 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 module.exports = {
     mode: 'development',
     entry: {
-        main: './src/client/index.js'
+        main: './src/index.js'
     },
     output: {
         filename: '[name].js',
@@ -29,6 +29,14 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
+                test: /\.(ts|tsx)$/,
+                loader: 'ts-loader',
+                options: {
+                    transpileOnly: true,
+                },
+                exclude: /node_modules/
+            },
+            {
                 test: /\.(scss|css)$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']
             },
@@ -41,7 +49,7 @@ module.exports = {
                 loader: 'file-loader',
                 exclude: /node_modules/,
                 options: {
-                    publicPath: '/src/client/imgs',
+                    publicPath: '/src/assets',
                     outputPath: '/dist/',
                     name: '[name].[ext]?[hash]'
                 }
@@ -55,7 +63,7 @@ module.exports = {
         }),
 
         new HtmlWebPackPlugin({
-            template: './src/client/index.html',
+            template: './src/index.html',
         }),
 
         new CleanWebpackPlugin(),

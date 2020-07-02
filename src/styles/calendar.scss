@@ -1,0 +1,49 @@
+.calendar-wrapper {
+    border: 1px solid blue;
+}
+
+.calendar-title {
+    border: 2px solid black;
+    text-align: center;
+}
+
+.calendar-days {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border: 1px solid green;
+}
+
+.calendar-date {
+    border: 2px solid blue;
+
+    .week-row {
+        border: 1px solid red;
+        display: flex;
+        justify-content: space-evenly;
+        
+        .day {
+            border: 1px solid green;
+            width: 2em;
+            padding: 2px;
+            margin: 2px;
+        }
+    }
+}
+
+.grayed {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.left-icon, .right-icon {
+    border: 1px solid red;
+}
+
+.saturday {
+    color: blue;
+}
+
+.sunday {
+    color: red;
+}
