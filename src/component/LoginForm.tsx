@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import axios from 'axios'
-import { timeStamp } from 'console'
 
 export default function LoginForm({ logged, isEmpty }) {
 

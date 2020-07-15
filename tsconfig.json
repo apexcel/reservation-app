@@ -15,7 +15,7 @@
     },
     "include": [
         "./src/**/*.tsx",
-        "@type", "src/component/App.tsx", "src/component/Calendar.jsx"
+        "@type", "src/component/App.tsx", "src/component/Calendar.ts"
     ],
     "exclude": [
         "node_modules",
