@@ -8,12 +8,17 @@ router.use(cors())
 router.use(bodyParser.json())
 
 router.post('/login_check', (req, res) => {
-    const sign_in = req.body.data
+    const data = req.body
     const dbconn = db.init()
-    console.log(sign_in)
-    console.log(typeof sign_in.stamp)
+    
+    // Time over
+    if (data.stamp > new Date().getTime() + 1000) {
+        res.send('Session Time Over!')
+        console.log('timeover')
+    }
+
     const query = 'SELECT * FROM users WHERE id=? AND pw=?'
-    const query_data = [sign_in.id, sign_in.pw]
+    const query_data = [data.user.id, data.user.pw]
     db.conn(dbconn)
     dbconn.query(query, query_data, (err, row) => {
         res.send({result: row, logged: true})
