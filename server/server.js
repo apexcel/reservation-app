@@ -1,15 +1,27 @@
 const express = require('express')
 const app = express()
-const http = require('http')
 const path = require('path')
-const router = require('./router')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 
-const server = http.createServer(app)
+// static
+const frontend = path.join(__dirname, '..', 'build/')
+app.use(express.static(frontend))
 
-app.use(cors)
-app.use(router)
+// libs
+app.use(cors())
+app.use(bodyParser.json())
 
-server.listen(4000, () => {
-    console.log(`Server running on 4000 port`)
+// route
+const api = require('./api')
+app.use('/api', api)
+
+// env
+const port = process.env.port || 9000
+
+// export
+module.exports = app;
+const server = app.listen(port, () => {
+    console.log(`Server running on ${port} port`)
 })
+module.exports = app;
