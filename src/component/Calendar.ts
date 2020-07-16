@@ -3,38 +3,49 @@ function isLeapYear(year: number) {
     else return false
 }
 
-function findDay(c, y, m, d) {
+function findDay(century: number, year: number, month, day: number) {
     enum _MONTH {march = 1, april, may, june, july, august, september, october, november, december, january, february}
-    enum _DATE {sun, mon, tue, wed, thu, fri, sat}
 
-    let month = parseInt(_MONTH[m])
-    if (month > 10) y -= 1
+    let _month = parseInt(_MONTH[month])
+    if (_month > 10) year -= 1
 
-    return weekDay(d, month, y, c)
+    return weekDay(day, month, year, century)
 }
 
-function weekDay(d, m, y, c) {
-    let wod = (Math.floor((13 * m -1) / 5) + Math.floor(y/4) + Math.floor(c/4) + d + y - (2*c)) % 7
-    if (wod < 0) wod += 7
-    return wod
+function weekDay(day, month, year, century) {
+    let week_of_day = (Math.floor((13 * month -1) / 5) + 
+                        Math.floor(year/4) + 
+                        Math.floor(century/4) + 
+                        day + year - 
+                        (2 * century)) % 7
+
+    if (week_of_day < 0) week_of_day += 7
+    return week_of_day
 }
 
-function printCalendar(dow, month) {
+function printCalendar(dow: number, month) {
     console.log('sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
-    let sun = [], mon = []
+    console.log(dow)
+    let weeks = []
+    let sun = [], mon = [], tue = [], wed = [], thu = [], fri = [], sat = []
+    weeks = [sun, mon, tue, wed, thu, fri, sat]
     let arr: Array<number> = []
+    // isLeapYear일 때 28일에 1일 추가
     const days = [31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31, 28]
-
-    for (let i = 0; i <= days[month]; i++) {
-        arr[i] = i + 1
-        if (i % 7 === 0) sun.push(i)
-        if (i % 7 === 1) mon.push(i)
+    const dows = [0, 1, 2, 3, 4, 5, 6]
+    let item = [].concat(dows.slice(dow), dows.slice(0, dow))
+    console.log('item', item)
+    for (let i = 1; i <= days[month - 1]; i++) {
+        arr[i - 1] = i
     }
     console.log(arr)
-    console.log(sun)
-    console.log(mon)
+
+    for (let i = 0; i < arr.length; i++) {
+        weeks[item[i % 7]].push(arr[i])
+    }
+    console.log(weeks)
     return arr
 }
 
-printCalendar(findDay(0, 1, 'january', 1), 1)
+printCalendar(findDay(20, 20, 5, 1), 5)
 
