@@ -1,5 +1,5 @@
-function isLeapYear(y) {
-    if (( y % 4 === 0 && (y % 100 !== 0) || y % 400 === 0 )) return true
+function isLeapYear(year: number) {
+    if (( year % 4 === 0 && (year % 100 !== 0) || year % 400 === 0 )) return true
     else return false
 }
 
@@ -10,7 +10,7 @@ function findDay(c, y, m, d) {
     let month = parseInt(_MONTH[m])
     if (month > 10) y -= 1
 
-    console.log(weekDay(d, month, y, c))
+    return weekDay(d, month, y, c)
 }
 
 function weekDay(d, m, y, c) {
@@ -19,5 +19,22 @@ function weekDay(d, m, y, c) {
     return wod
 }
 
-findDay(19, 94, 'march', 1)
-findDay(19, 97, 'march', 1)
+function printCalendar(dow, month) {
+    console.log('sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
+    let sun = [], mon = []
+    let arr: Array<number> = []
+    const days = [31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31, 28]
+
+    for (let i = 0; i <= days[month]; i++) {
+        arr[i] = i + 1
+        if (i % 7 === 0) sun.push(i)
+        if (i % 7 === 1) mon.push(i)
+    }
+    console.log(arr)
+    console.log(sun)
+    console.log(mon)
+    return arr
+}
+
+printCalendar(findDay(0, 1, 'january', 1), 1)
+
