@@ -6,10 +6,10 @@ export default function Main({setLogged, setUserInfo, logged}) {
         e.preventDefault()
         setLogged(false)
     }
-    
+
     return (
         <div>
-            HI
+            <button>Check Profile</button>
             <button onClick={logout}>logout</button>
         </div>
     )

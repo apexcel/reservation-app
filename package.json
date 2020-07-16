@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --open --config ./webpack.dev.config.js"
+    "dev": "webpack-dev-server --open --config ./webpack.dev.config.js",
+    "ngrok": "ngrok http 9000",
+    "build": "webpack --config ./webpack.config.js"
   },
   "keywords": [],
   "author": "",
@@ -39,6 +41,7 @@
     "file-loader": "^5.0.2",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "ngrok": "^3.2.7",
     "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.1.3",

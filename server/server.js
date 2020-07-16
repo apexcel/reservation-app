@@ -5,9 +5,11 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 
 // static
-const frontend = path.join(__dirname, '..', 'build/')
+const frontend = path.join(__dirname, '..', 'dist/')
 app.use(express.static(frontend))
-
+app.get('/', (req, res) => {
+    res.sendFile(frontend)
+})
 // libs
 app.use(cors())
 app.use(bodyParser.json())

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import axios from 'axios'
-
 import Main from './Main.tsx'
+
+import '../styles/loginform.scss'
 
 export default function LoginForm({ setLogged, logged, setUserInfo, isEmpty }) {
 
@@ -35,14 +36,18 @@ export default function LoginForm({ setLogged, logged, setUserInfo, isEmpty }) {
     }
 
     return (
-        <div>
+        <>
             { logged ? <Main setLogged={setLogged} setUserInfo={setUserInfo} /> :
-            <form>
-                <input id='id' onChange={inputHandler} type='text' name='id' placeholder='USERNAME' />
-                <input id='pw' onChange={inputHandler} type='password' name='pw' placeholder='PASSWORD' />
-                <button type='button' onClick={onSignIn}>Sign in</button>
-                <button type='button'><Link to='/signup'>Sign up</Link></button>
+            <form className='form-wrapper'>
+                <div className='input-box'>
+                    <input className='form-input' id='id' onChange={inputHandler} type='text' name='id' placeholder='USERNAME' />
+                </div>
+                <div className='input-box'>
+                    <input className='form-input' id='pw' onChange={inputHandler} type='password' name='pw' placeholder='PASSWORD' />
+                </div>
+                <button className='btn-primary' type='button' onClick={onSignIn}>Sign in</button>
+                <button className='btn-primary' type='button'><Link to='/signup'>Sign up</Link></button>
             </form>}
-        </div>
+        </>
     )
 }
