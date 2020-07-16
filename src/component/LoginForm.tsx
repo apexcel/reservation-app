@@ -2,52 +2,46 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import axios from 'axios'
 
-export default function LoginForm({ logged, isEmpty }) {
+import Main from './Main.tsx'
 
-    const [userData, setUserData] = useState({id: '', pw: ''})
-    const [emptyError, setEmptyError] = useState({id: false, pw: false})
+export default function LoginForm({ setLogged, logged, setUserInfo, isEmpty }) {
 
-    useEffect(() => {
-        console.log(emptyError)
-    }, [emptyError])
+    const [signUpForm, setSignUpForm] = useState({id: '', pw: ''})
 
-    const onChangeHandler = (e) => {
+    const inputHandler = (e) => {
         e.preventDefault()
         const { value, id } = e.target
-        setUserData({ ...userData, [id]: value })
+        setSignUpForm({ ...signUpForm, [id]: value })
     }
 
-    const onSignInHandler = async (e) => {
+    const onSignIn = async (e) => {
         e.preventDefault()
-
-        if (!isEmpty(userData.id) && !isEmpty(userData.pw)) setEmptyError({...emptyError, id: true, pw: true})
-        else setEmptyError({id: false, pw: false})
+        if (isEmpty(signUpForm.id) || isEmpty(signUpForm.pw)) return
 
         const cfg = {
             url:'http://localhost:9000/api/login_check', 
-            data: {
-                user: userData,
+            form_data: {
+                user: signUpForm,
                 stamp: new Date().getTime()
             }
         }
 
-        await axios.post(cfg.url, cfg.data)
-                    .then(res => res.data)
-                    .then(cl => console.log(cl))
+        const response = await axios.post(cfg.url, cfg.form_data).then(res => res.data)
+        console.log(response)
+        if (response.auth) {
+            setUserInfo({user_info: response.result[0], time_stamp: response.stamp, auth: response.auth})
+            setLogged(true)
+        }
     }
 
-    const onSignUpHandler = (e) => {
-        e.preventDefault()
-        console.log(e.target)
-    }
     return (
         <div>
-            { logged ? '' :
+            { logged ? <Main setLogged={setLogged} setUserInfo={setUserInfo} /> :
             <form>
-                <input id='id' onChange={onChangeHandler} type='text' name='id' placeholder='USERNAME' />
-                <input id='pw' onChange={onChangeHandler} type='password' name='pw' placeholder='PASSWORD' />
-                <button type='button' onClick={onSignInHandler}>Sign in</button>
-                <button type='button' onClick={onSignUpHandler}><Link to='/signup'>Sign up</Link></button>
+                <input id='id' onChange={inputHandler} type='text' name='id' placeholder='USERNAME' />
+                <input id='pw' onChange={inputHandler} type='password' name='pw' placeholder='PASSWORD' />
+                <button type='button' onClick={onSignIn}>Sign in</button>
+                <button type='button'><Link to='/signup'>Sign up</Link></button>
             </form>}
         </div>
     )

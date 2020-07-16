@@ -2,24 +2,33 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 import '../styles/common.scss'
+import { encode } from 'punycode'
 
 export default function SignUp() {
 
-    const [userData, setUserData] = useState({})
+    const [userData, setUserData] = useState({
+        id: '',
+        pw: '',
+        pw_check: '',
+        first_name: '',
+        last_name: '',
+        dob: '',
+        tel: '',
+    })
 
     useEffect(() => {
         console.log(userData)
     }, [userData])
-
-    const onSignUp = async (e) => {
+    let a = new String()
+    const onSignUp = (e) => {
         e.preventDefault()
-        await axios.post('http://localhost:9000/api/signup', userData).then(res => console.log(res.status))
+        axios.post('http://localhost:9000/api/signup', userData).then(res => console.log(res.status))
     }
 
     const onChangeHandler = (e) => {
         e.preventDefault()
         const { value, id } = e.target
-        setUserData({ ...userData, [id]: value})
+        setUserData({ ...userData, [id]: btoa(value)})
     }
 
     const month = [1,2,3,4,5,6,7,8,9,10,11,12].map((el, idx) => 
@@ -62,11 +71,6 @@ export default function SignUp() {
                 <div>
                     <h3><label htmlFor='tel'>Tel</label></h3>
                     <input onChange={onChangeHandler} id='tel' type='tel' maxLength={16} />
-                </div>
-
-                <div>
-                    <h3><label htmlFor='id'>Email</label></h3>
-                    <input onChange={onChangeHandler} id='email' type='email' maxLength={50}/>
                 </div>
 
                 <div className='btn_area'><button onClick={onSignUp} className='btn_primary'>Sign Up</button></div>

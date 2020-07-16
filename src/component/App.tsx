@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import LoginForm from './LoginForm.tsx'
 import SignUp from './SignUp.tsx'
@@ -7,28 +7,31 @@ import SignUp from './SignUp.tsx'
 import '../styles/app.scss'
 
 export default function App() {
-
     const [logged, setLogged] = useState(false)
+    const [userInfo, setUserInfo] = useState({})
 
     useEffect(() => {
-        sessionStorage.setItem('userData', 'Kim')
-        console.log(sessionStorage.getItem('userData'))
-    })
+        if (!isEmpty(sessionStorage.getItem('userInfo'))) {
+            setUserInfo(JSON.parse(sessionStorage.getItem('userInfo')))
+            setLogged(true)
+        }
+    }, [])
 
-    const isEmpty = (obj) => {    
-        if (obj === '' || obj === null || obj === undefined || (obj !== null && typeof obj === 'object' && !Object.keys(obj).length)) {
-            return true            
-        }
-        else {
-            return false
-        }
+    useEffect(() => {
+        if (logged) sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+        else sessionStorage.clear()
+    }, [logged])
+
+    const isEmpty = (obj) => {
+        if (obj === '' || obj === null || obj === undefined || (obj !== null && typeof obj === 'object' && !Object.keys(obj).length)) return true
+        else return false
     }
 
-    return(
+    return (
         <div className='container'>
             <Switch>
-                <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} logged={logged}/>}/>
-                <Route exact path='/signup' component={() => <SignUp />}/>
+                <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserInfo={setUserInfo} logged={logged} setLogged={setLogged} />} />
+                <Route exact path='/signup' component={() => <SignUp />} />
             </Switch>
         </div>
     )

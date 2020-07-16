@@ -1,5 +1,5 @@
-function isLeapYear(year: number) {
-    if (( year % 4 === 0 && (year % 100 !== 0) || year % 400 === 0 )) return true
+function isLeapYear(total_year: number) {
+    if (( total_year % 4 === 0 && (total_year % 100 !== 0) || total_year % 400 === 0 )) return true
     else return false
 }
 
@@ -9,18 +9,18 @@ function findDay(century: number, year: number, month, day: number) {
     let _month = parseInt(_MONTH[month])
     if (_month > 10) year -= 1
 
-    return weekDay(day, month, year, century)
+    return findStartDateOfWeek(day, month, year, century)
 }
 
-function weekDay(day, month, year, century) {
-    let week_of_day = (Math.floor((13 * month -1) / 5) + 
+function findStartDateOfWeek(day, month, year, century) {
+    let start_date = (Math.floor((13 * month -1) / 5) + 
                         Math.floor(year/4) + 
                         Math.floor(century/4) + 
                         day + year - 
                         (2 * century)) % 7
 
-    if (week_of_day < 0) week_of_day += 7
-    return week_of_day
+    if (start_date < 0) start_date += 7
+    return start_date
 }
 
 function printCalendar(dow: number, month) {
@@ -44,8 +44,19 @@ function printCalendar(dow: number, month) {
         weeks[item[i % 7]].push(arr[i])
     }
     console.log(weeks)
+    for (let i = 0; i < weeks.length; i++) {
+        let dayw = dow;
+        for (let j = 0; j < 7; j++) {
+            //console.log(weeks[dayw][i])
+            dayw++;
+            if (dayw> 6) dayw = 0;
+        }
+    }
     return arr
 }
 
 printCalendar(findDay(20, 20, 5, 1), 5)
 
+function calendar(century, year, month?, day?) {
+    const isleap = isLeapYear((century * 100) + year)
+}
