@@ -12,7 +12,7 @@ router.use(bodyParser.json())
 // Sign In Check
 router.post('/login_check', (req, res) => {
     const sign_in = req.body
-    const query = 'SELECT * FROM users WHERE id=? AND pw=?'
+    const query = 'SELECT * FROM users WHERE id=BINARY(?) AND pw=BINARY(?)'
     const query_data = [sign_in.user.id, sign_in.user.pw]
     const dbconn = db.init()
     db.conn(dbconn)
@@ -38,6 +38,7 @@ router.post('/login_check', (req, res) => {
     dbconn.end()
 })
 
+//TODO: 이미 존재하는 아이디 체크 하기
 router.post('/signup', (req, res) => {
     let sign_up = req.body
     let query = 'INSERT INTO users VALUES(?, ?, ?, ?, ?)'

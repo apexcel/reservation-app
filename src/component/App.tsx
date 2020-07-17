@@ -12,19 +12,19 @@ export default function App() {
 
     useEffect(() => {
         if (!isEmpty(sessionStorage.getItem('userInfo'))) {
-            setUserInfo(JSON.parse(sessionStorage.getItem('userInfo')))
-            setLogged(true)
+            setUserInfo(JSON.parse(sessionStorage.getItem('userInfo')));
+            setLogged(true);
         }
     }, [])
 
     useEffect(() => {
-        if (logged) sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
-        else sessionStorage.clear()
+        if (logged) sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
+        else sessionStorage.clear();
     }, [logged])
 
     const isEmpty = (obj) => {
-        if (obj === '' || obj === null || obj === undefined || (obj !== null && typeof obj === 'object' && !Object.keys(obj).length)) return true
-        else return false
+        if (obj === '' || obj === null || obj === undefined || (obj !== null && typeof obj === 'object' && !Object.keys(obj).length)) return true;
+        else return false;
     }
 
     return (
