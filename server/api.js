@@ -49,6 +49,12 @@ router.post('/signup', (req, res) => {
         sign_up.dob.replace(/-/g, ''),
         sign_up.tel]
     console.log(query_data)
+
+    if (query_data.filter(el => (el !== '' && el !== null && el !== undefined)).length < 5) {
+        res.status(400);
+        return;
+    }
+
     const dbconn = db.init()
     db.conn(dbconn)
     dbconn.query(query, query_data, (err, result) => {

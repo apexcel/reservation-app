@@ -29,6 +29,7 @@ export default function App() {
 
     return (
         <div className='container'>
+            { logged ? <header>This is Header</header> : ''}
             <Switch>
                 <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserInfo={setUserInfo} logged={logged} setLogged={setLogged} />} />
                 <Route exact path='/signup' component={() => <SignUp />} />

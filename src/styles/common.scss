@@ -41,7 +41,21 @@ input {
 
 .form-wrapper {
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 480px !important;
+
+    legend {
+        font-size: 1.5rem;
+        text-align: center;
+        background-color: transparent;
+    }
+
+    fieldset {
+        outline: none;
+        border: 1px solid #808080;
+    }
 }
 
 .form-input {
@@ -58,4 +72,9 @@ input {
 
 .input-box {
     padding: 1rem;
+}
+
+.fieldset {
+    padding: 10px;
+    border: 1px solid #808080;
 }

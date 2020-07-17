@@ -9,7 +9,7 @@ export default function Main({setLogged, setUserInfo, logged}) {
 
     return (
         <div>
-            <button>Check Profile</button>
+            <button onClick={() => console.log(JSON.parse(sessionStorage.getItem('userInfo')))}>Check Profile</button>
             <button onClick={logout}>logout</button>
         </div>
     )

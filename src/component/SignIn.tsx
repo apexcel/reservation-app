@@ -33,14 +33,15 @@ export default function SignIn({ setUserInfo, setLogged, isEmpty }) {
         const response = await axios.post(config.url, config.form_data).then(res => res.data)
         console.log(response)
         if (response.auth) {
-            setUserInfo({ user_info: response.result[0], time_stamp: response.stamp, auth: response.auth })
+            setUserInfo({ user_info: response.result[0], stamp: response.stamp, auth: response.auth })
             setLogged(true)
         }
     }
 
     return (
-        <>
-            <form className='form-wrapper'>
+        <form className='form-wrapper'>
+            <fieldset>
+                <legend>DILETTANTE</legend>
                 <div className='input-box'>
                     <input className='form-input' id='id' onChange={onChangeInput} type='text' name='id' placeholder='USERNAME' />
                 </div>
@@ -49,7 +50,7 @@ export default function SignIn({ setUserInfo, setLogged, isEmpty }) {
                 </div>
                 <button className='btn-primary' type='button' onClick={onSignIn}>Sign in</button>
                 <button className='btn-primary' type='button'><Link to='/signup'>Sign up</Link></button>
-            </form>
-        </>
+            </fieldset>
+        </form>
     );
 }
