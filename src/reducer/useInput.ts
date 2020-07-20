@@ -21,7 +21,7 @@ function useInput(initialForm) {
 
     const onChangeInput = useCallback(e => {
         const { name, value } = e.target;
-        dispatch({ type: "CHANGE", name, value })
+        dispatch({ type: "CHANGE", name, value });
     }, []);
 
     const reset = useCallback(() => dispatch({ type: "RESET" }), []);

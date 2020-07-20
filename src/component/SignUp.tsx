@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import useInput from '../reducer/useInput.ts'
 
@@ -18,25 +18,26 @@ export default function SignUp() {
     }
 
     const [signUpForm, onChangeInput, reset] = useInput(initForm)
-    const dom = useRef()
 
     useEffect(() => {
         console.log(signUpForm)
-        const values = Object.values(signUpForm)
-        console.log(values)
-        if (values[0] === '' || values[0] === null) {
-            console.log("!!!!")
-        }
     })
-
-    const checkEmpryInput = (e) => {
-        const values = Object.values(signUpForm);
-        
-    }
+    
 
     const onSignUp = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:9000/api/signup', signUpForm).then(res => console.log(res))
+        console.log(signUpForm);
+        const values = Object.values(signUpForm);
+        console.log(values)
+        console.log(values.indexOf(""))
+        console.log(Object.keys(signUpForm))
+        const firstEmptyItem = Object.values(signUpForm).map(el => el !== '')
+        console.log(firstEmptyItem)
+        firstEmptyItem.map((el, idx) => {
+            el ? (document.getElementById(Object.keys(signUpForm)[idx]).classList.remove("empty-warn")) 
+               : (document.getElementById(Object.keys(signUpForm)[idx]).classList.add("empty-warn"));
+        });
+        // axios.post('http://localhost:9000/api/signup', signUpForm).then(res => console.log(res))
     }
 
     const month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((el, idx) =>
@@ -83,7 +84,7 @@ export default function SignUp() {
                     <input className='form-input' onChange={onChangeInput} id='tel' type='tel' name='tel' maxLength={16} />
                 </div>
 
-                <div className='btn_area'><button onClick={onSignUp} className='btn_primary'>Sign Up</button></div>
+                <div className='btn_area'><button type="button" onClick={onSignUp} className='btn_primary'>Sign Up</button></div>
             </fieldset>
         </form>
     )
