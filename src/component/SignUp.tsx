@@ -22,22 +22,22 @@ export default function SignUp() {
     useEffect(() => {
         console.log(signUpForm)
     })
-    
+
 
     const onSignUp = (e) => {
         e.preventDefault();
-        console.log(signUpForm);
-        const values = Object.values(signUpForm);
-        console.log(values)
-        console.log(values.indexOf(""))
-        console.log(Object.keys(signUpForm))
-        const firstEmptyItem = Object.values(signUpForm).map(el => el !== '')
-        console.log(firstEmptyItem)
-        firstEmptyItem.map((el, idx) => {
-            el ? (document.getElementById(Object.keys(signUpForm)[idx]).classList.remove("empty-warn")) 
-               : (document.getElementById(Object.keys(signUpForm)[idx]).classList.add("empty-warn"));
-        });
-        // axios.post('http://localhost:9000/api/signup', signUpForm).then(res => console.log(res))
+        try {
+            const firstEmptyItem = Object.values(signUpForm).map(el => el !== '');
+            firstEmptyItem.map((el, idx) => {
+                let classList = document.getElementById(Object.keys(signUpForm)[idx]).classList;
+                el ? (classList.remove("empty-warn")): (classList.add("empty-warn"));
+            });
+            // axios.post('http://localhost:9000/api/signup', signUpForm).then(res => console.log(res))
+        }
+        catch (err) {
+            // redirect 503 error page;
+            throw err;
+        }
     }
 
     const month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((el, idx) =>

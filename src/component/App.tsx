@@ -2,6 +2,9 @@ import React, { useState, useEffect, useReducer } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import LoginForm from './LoginForm.tsx'
 import SignUp from './SignUp.tsx'
+import Header from './Header.tsx'
+import UserInformation from './UserInfomation.tsx'
+import Table from './Table.tsx'
 
 // styles
 import '../styles/app.scss'
@@ -29,10 +32,12 @@ export default function App() {
 
     return (
         <div className='container'>
-            { logged ? <header>This is Header</header> : ''}
+            <Table />
+            { logged ? <Header  setLogged={setLogged} /> : ''}
             <Switch>
-                <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserInfo={setUserInfo} logged={logged} setLogged={setLogged} />} />
+                <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserInfo={setUserInfo} logged={logged} setLogged={setLogged} userInfo={userInfo} />} />
                 <Route exact path='/signup' component={() => <SignUp />} />
+                <Route path='/userinfo' component={() => <UserInformation userInfo={userInfo}/>} />
             </Switch>
         </div>
     )

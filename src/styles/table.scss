@@ -1,0 +1,48 @@
+.table-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid white;
+    width: 40%;
+}
+
+.table-header-wrapper {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid red;
+    justify-content: center;
+    text-align: center;
+}
+.table-header {
+    background-color: #aaaa75;
+    border: 1px solid green;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.table-body-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+.table-body {
+    display: flex;
+
+}
+
+.table-cell {
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    background-color: blue;
+    &:hover {
+        background-color: rgb(173, 173, 173);
+    }
+}
+.table-unabled {
+    background-color: red;
+}
+.break-time {
+    background-color: black;
+}

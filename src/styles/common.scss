@@ -5,6 +5,11 @@ body {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
+header {
+    position: fixed;
+    top: 0;
+}
+
 .input_box {
     display: block;
     position: relative;

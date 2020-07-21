@@ -29,13 +29,18 @@ export default function SignIn({ setUserInfo, setLogged, isEmpty }) {
                 stamp: new Date().getTime()
             }
         };
-
-        const response = await axios.post(config.url, config.form_data).then(res => res.data)
-        console.log(response)
-        if (response.auth) {
-            setUserInfo({ user_info: response.result[0], stamp: response.stamp, auth: response.auth })
-            setLogged(true)
+        try {
+            const response = await axios.post(config.url, config.form_data).then(res => res.data)
+            console.log(response)
+            if (response.auth) {
+                setUserInfo({ user: response.result[0], stamp: response.stamp, auth: response.auth })
+                setLogged(true)
+            }
+        } catch (err) {
+            // 503에러 페이지
+            throw err;
         }
+
     }
 
     return (
