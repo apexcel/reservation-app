@@ -1,0 +1,46 @@
+.calendar-wrapper {
+    border: 1px solid red;
+}
+
+.calendar-year-month {
+    border: 1px solid blue;
+    text-align: center;
+}
+
+.calendar-body {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid green;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 1;
+}
+
+.calendar-weeks {
+    display: flex;
+    border: 1px solid white;
+    width: 100%;
+    justify-content: start;
+    flex-basis: 0;
+}
+
+.date-cell {
+    position: relative;
+    margin: 0.2rem;
+    padding: 0.4rem 0.8rem;
+    width: 3rem;
+    max-width: 3.5rem;
+    background-color: transparent;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid red;
+
+    &:hover {
+        background-color: #626262;
+    }
+
+    &:active {
+        background-color: red;
+    }
+}
