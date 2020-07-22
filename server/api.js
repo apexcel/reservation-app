@@ -64,4 +64,8 @@ router.post('/signup', (req, res) => {
     dbconn.end()
 })
 
+router.get("/tableData", (req, res) => {
+    res.send("gi")
+})
+
 module.exports = router;

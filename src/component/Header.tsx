@@ -11,6 +11,7 @@ export default function Header({ setLogged }) {
         <header>
             <nav>
                 <Link to="/">Main</Link>
+                <Link to="profile">Profile: Working on</Link>
             </nav>
             <button onClick={logout}>logout</button>
         </header>
