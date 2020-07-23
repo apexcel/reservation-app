@@ -3,14 +3,12 @@
 }
 
 .calendar-year-month {
-    border: 1px solid blue;
     text-align: center;
 }
 
 .calendar-body {
     display: flex;
     flex-direction: column;
-    border: 1px solid green;
     text-align: center;
     align-items: center;
     justify-content: center;
@@ -19,10 +17,23 @@
 
 .calendar-weeks {
     display: flex;
-    border: 1px solid white;
     width: 100%;
     justify-content: start;
     flex-basis: 0;
+}
+
+.calendar-date-wrapper {
+    display: flex;
+    justify-items: start;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid red;
+
+    .calendar-date {
+        margin: 0.2rem;
+        width: 3rem;
+        max-width: 3.5rem;
+    }
 }
 
 .date-cell {
@@ -33,8 +44,8 @@
     max-width: 3.5rem;
     background-color: transparent;
     text-align: center;
+    color: #d3d3d3;
     cursor: pointer;
-    border: 1px solid red;
 
     &:hover {
         background-color: #626262;
@@ -43,4 +54,16 @@
     &:active {
         background-color: red;
     }
+}
+
+.saturday {
+    color: #4856d4;
+}
+
+.sunday {
+    color: #d44848;
+}
+
+.today {
+    background-color: #464646;
 }

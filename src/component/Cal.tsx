@@ -8,8 +8,9 @@ export default function Cal() {
     const createDays = (year, month) => {
         const days = [];
         const calcDays = daysInMonth(year, month)
+        const newDate = new Date(year, month)
         for (let i = 0; i < calcDays; i += 1) {
-            days.push(i + 1)
+            days.push(new Date(newDate.valueOf() + 86400000 * i))
         }
         return days;
     }
@@ -18,6 +19,7 @@ export default function Cal() {
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
         days: createDays(new Date().getFullYear(), new Date().getMonth()),
+        today: new Date().getDate()
     });
 
     const next = () => {
@@ -33,8 +35,6 @@ export default function Cal() {
         calendar.days = createDays(calendar.year, calendar.month)
         createCalendar(calendar.year, calendar.month);
     }
-
-
 
     useEffect(() => {
         createCalendar(calendar.year, calendar.month)
@@ -61,10 +61,8 @@ export default function Cal() {
             for (let j = 0; j < calendar.days.length; j += 1) {
                 dateCell = document.createElement("div");
                 dateCell.classList.add("date-cell");
-                dateCell.addEventListener("click", (ev) => {
-                    console.log(ev.path[0].innerHTML);
-                });
-
+                
+                console.log(j, firstDate)
                 if (firstDate >= calendar.days.length) {
                     dateCell.appendChild(document.createTextNode("X"))
                 }
@@ -74,18 +72,34 @@ export default function Cal() {
                             dateCell.appendChild(document.createTextNode("B"))
                         }
                         else {
-                            dateCell.appendChild(document.createTextNode(calendar.days[firstDate]))
+                            dateCell.appendChild(document.createTextNode(calendar.days[firstDate].getDate()))
+                            dateCell.setAttribute("aria-date", calendar.days[firstDate])
+                            dateCell.addEventListener("click", (ev) => {
+                                console.log(ev.srcElement.attributes[1].value)
+                            });
                             firstDate += 1;
                         }
                     }
 
                     if (i > 0) {
-                        dateCell.appendChild(document.createTextNode(calendar.days[firstDate]))
+                        dateCell.appendChild(document.createTextNode(calendar.days[firstDate].getDate()))
+                        dateCell.setAttribute("aria-date", calendar.days[firstDate])
+                        dateCell.addEventListener("click", (ev) => {
+                            console.log(ev.srcElement.attributes[1].value)
+                        });
                         firstDate += 1;
                     }
                 }
                 weekBody.appendChild(dateCell)
+
+                if (calendar.month === new Date().getMonth() && calendar.year === new Date().getFullYear() && calendar.today === firstDate) {
+                    dateCell.classList.add("today")
+                }
+                if (j % 7 === 0){
+                    dateCell.classList.add("sunday")
+                }
                 if (j % 7 === 6) {
+                    dateCell.classList.add("saturday")
                     j += 1;
                     break;
                 }
@@ -97,9 +111,18 @@ export default function Cal() {
 
     return (
         <div id="calendar-wrapper" className="calendar-wrapper">
-            <div id="calendar-year-month">{calendar.year} {calendar.month + 1}</div>
+            <div id="calendar-year-month" className="calendar-year-month">{calendar.year} {calendar.month + 1}</div>
             <button onClick={prev}>prev</button>
             <button onClick={next}>next</button>
+            <div className="calendar-date-wrapper">
+                <div className="calendar-date">SUN</div>
+                <div className="calendar-date">MON</div>
+                <div className="calendar-date">TUE</div>
+                <div className="calendar-date">WED</div>
+                <div className="calendar-date">THU</div>
+                <div className="calendar-date">FRI</div>
+                <div className="calendar-date">SAT</div>
+            </div>
             <div id="calendar-body" className="calendar-body">
             </div>
         </div>
