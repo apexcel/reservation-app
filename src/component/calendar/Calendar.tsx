@@ -1,44 +1,29 @@
 import React, { useEffect, useState } from "react"
-import "../styles/calendar.scss"
+import "../../styles/calendar.scss"
+import CalendarNavigation from "./CalendarNavigation.tsx";
+import { 
+    createDays,
+    prevMonthDays,
+    nextMonthDays
+ } from "../../utils/dateUtils.ts"
 
-export default function Cal() {
+export default function Calendar() {
 
-    const daysInMonth = (year, month) => { return 32 - new Date(year, month, 32).getDate() };
+    const className = "simple_calendar";
 
-    const createDays = (year, month) => {
-        const days = [];
-        const calcDays = daysInMonth(year, month)
-        const newDate = new Date(year, month)
-        for (let i = 0; i < calcDays; i += 1) {
-            days.push(new Date(newDate.valueOf() + 86400000 * i))
-        }
-        return days;
-    }
-
-    const [calendar, setCalendar] = useState({
+    const [calendarState, setCalendarState] = useState({
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
         days: createDays(new Date().getFullYear(), new Date().getMonth()),
-        today: new Date().getDate()
+        today: new Date().getDate(),
+        prevDays: prevMonthDays(createDays(new Date().getFullYear(), new Date().getMonth())[0]),
+        nextDays: ''
     });
 
-    const next = () => {
-        calendar.year = (calendar.month === 11) ? calendar.year + 1 : calendar.year;
-        calendar.month = (calendar.month + 1) % 12;
-        calendar.days = createDays(calendar.year, calendar.month)
-        createCalendar(calendar.year, calendar.month);
-    }
-
-    const prev = () => {
-        calendar.year = (calendar.month === 0) ? calendar.year - 1 : calendar.year;
-        calendar.month = (calendar.month === 0) ? 11 : calendar.month - 1;
-        calendar.days = createDays(calendar.year, calendar.month)
-        createCalendar(calendar.year, calendar.month);
-    }
-
     useEffect(() => {
-        createCalendar(calendar.year, calendar.month)
-    }, [])
+        createCalendar(calendarState.year, calendarState.month)
+        console.log(calendarState)
+    }, [calendarState])
 
 
     const createCalendar = (year, month) => {
@@ -49,7 +34,7 @@ export default function Cal() {
 
         // year and month change
         const _calendarYearMonth = document.getElementById("calendar-year-month");
-        _calendarYearMonth.innerHTML = `${calendar.year} ${calendar.month + 1}`
+        _calendarYearMonth.innerHTML = `${calendarState.year} ${calendarState.month + 1}`
 
         let firstDate = 0;
         let weekBody;
@@ -58,22 +43,21 @@ export default function Cal() {
             weekBody = document.createElement("div");
             weekBody.classList.add("calendar-weeks");
 
-            for (let j = 0; j < calendar.days.length; j += 1) {
+            for (let j = 0; j < calendarState.days.length; j += 1) {
                 dateCell = document.createElement("div");
                 dateCell.classList.add("date-cell");
                 
-                console.log(j, firstDate)
-                if (firstDate >= calendar.days.length) {
+                if (firstDate >= calendarState.days.length) {
                     dateCell.appendChild(document.createTextNode("X"))
                 }
                 else {
                     if (i === 0) {
                         if (j < firstDayOfWeek) {
-                            dateCell.appendChild(document.createTextNode("B"))
+                            dateCell.appendChild(document.createTextNode(calendarState.prevDays[j].getDate()))
                         }
                         else {
-                            dateCell.appendChild(document.createTextNode(calendar.days[firstDate].getDate()))
-                            dateCell.setAttribute("aria-date", calendar.days[firstDate])
+                            dateCell.appendChild(document.createTextNode(calendarState.days[firstDate].getDate()))
+                            dateCell.setAttribute("aria-date", calendarState.days[firstDate])
                             dateCell.addEventListener("click", (ev) => {
                                 console.log(ev.srcElement.attributes[1].value)
                             });
@@ -82,8 +66,8 @@ export default function Cal() {
                     }
 
                     if (i > 0) {
-                        dateCell.appendChild(document.createTextNode(calendar.days[firstDate].getDate()))
-                        dateCell.setAttribute("aria-date", calendar.days[firstDate])
+                        dateCell.appendChild(document.createTextNode(calendarState.days[firstDate].getDate()))
+                        dateCell.setAttribute("aria-date", calendarState.days[firstDate])
                         dateCell.addEventListener("click", (ev) => {
                             console.log(ev.srcElement.attributes[1].value)
                         });
@@ -92,7 +76,7 @@ export default function Cal() {
                 }
                 weekBody.appendChild(dateCell)
 
-                if (calendar.month === new Date().getMonth() && calendar.year === new Date().getFullYear() && calendar.today === firstDate) {
+                if (calendarState.month === new Date().getMonth() && calendarState.year === new Date().getFullYear() && calendarState.today === firstDate) {
                     dateCell.classList.add("today")
                 }
                 if (j % 7 === 0){
@@ -111,10 +95,16 @@ export default function Cal() {
 
     return (
         <div id="calendar-wrapper" className="calendar-wrapper">
-            <div id="calendar-year-month" className="calendar-year-month">{calendar.year} {calendar.month + 1}</div>
-            <button onClick={prev}>prev</button>
-            <button onClick={next}>next</button>
-            <div className="calendar-date-wrapper">
+            <div id="calendar-year-month" className="calendar-year-month">{calendarState.year} {calendarState.month + 1}</div>
+            <CalendarNavigation 
+                className={className}
+                calendarState={calendarState}
+                setCalendarState={setCalendarState}
+                createCalendar={createCalendar}
+                createDays={createDays}
+                prevMonthDays={prevMonthDays}
+            />
+            <div id="calendar-date-wrapper" className="calendar-date-wrapper">
                 <div className="calendar-date">SUN</div>
                 <div className="calendar-date">MON</div>
                 <div className="calendar-date">TUE</div>

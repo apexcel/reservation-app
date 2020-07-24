@@ -5,11 +5,10 @@ import SignUp from './SignUp.tsx'
 import Header from './Header.tsx'
 import UserInformation from './UserInfomation.tsx'
 import Table from './Table.tsx'
-import Cal from './Cal.tsx'
+import Calendar from './calendar/Calendar.tsx'
 
 // styles
 import '../styles/app.scss'
-import axios from 'axios'
 
 export default function App() {
     const [logged, setLogged] = useState(false)
@@ -45,7 +44,7 @@ export default function App() {
 
     return (
         <div className='container'>
-            <Cal />
+            <Calendar />
             <Table tHeadState={tHeadState} tBodyState={tBodyState}/>
             { logged ? <Header  setLogged={setLogged} /> : ''}
             <Switch>
