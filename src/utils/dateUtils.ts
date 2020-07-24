@@ -23,9 +23,9 @@ export function prevMonthDays(firstDate: Date) {
 
 export function nextMonthDays(lastDate: Date) {
     const ret = [];
-    const day = 6 - lastDate.getDay();
+    const day = 7 + lastDate.getDay();
     for (let i = 1; i <= day; i += 1) {
-        ret.unshift(new Date(lastDate.valueOf() + 86_400_000 * i));
+        ret.push(new Date(lastDate.valueOf() + 86_400_000 * i));
     }
     return ret;
 }

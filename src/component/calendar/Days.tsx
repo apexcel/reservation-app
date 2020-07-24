@@ -1,13 +1,18 @@
 import React from 'react'
 
-export default function Days() {
+export default function Days({ className, calendarState }) {
 
-    const calcDays = (year, month) => {
-        const now = new Date();
-        
+    const createDays = () => {
+        const firstDayOfWeek = new Date(calendarState.year, calendarState.month)
+        console.log(firstDayOfWeek)
+        return (
+            <div>{firstDayOfWeek.getDate()}</div>
+        )
     }
 
     return (
-
+        <>
+        {createDays()}
+        </>
     )
 }

@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react"
 import "../../styles/calendar.scss"
-import CalendarNavigation from "./CalendarNavigation.tsx";
+import Navigation from "./Navigation.tsx";
+import DayOfWeek from "./DayOfWeek.tsx";
+import Days from "./Days.tsx";
 import { 
     createDays,
     prevMonthDays,
     nextMonthDays
- } from "../../utils/dateUtils.ts"
+} from "../../utils/dateUtils.ts"
 
 export default function Calendar() {
 
     const className = "simple_calendar";
+    const days = createDays(new Date().getFullYear(), new Date().getMonth());
 
     const [calendarState, setCalendarState] = useState({
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
-        days: createDays(new Date().getFullYear(), new Date().getMonth()),
+        days: days,
         today: new Date().getDate(),
-        prevDays: prevMonthDays(createDays(new Date().getFullYear(), new Date().getMonth())[0]),
-        nextDays: ''
+        prevDays: prevMonthDays(days[0]),
+        nextDays: nextMonthDays(days[days.length - 1])
     });
 
     useEffect(() => {
@@ -48,7 +51,7 @@ export default function Calendar() {
                 dateCell.classList.add("date-cell");
                 
                 if (firstDate >= calendarState.days.length) {
-                    dateCell.appendChild(document.createTextNode("X"))
+                    dateCell.appendChild(document.createTextNode(calendarState.nextDays[j].getDate()))
                 }
                 else {
                     if (i === 0) {
@@ -96,25 +99,21 @@ export default function Calendar() {
     return (
         <div id="calendar-wrapper" className="calendar-wrapper">
             <div id="calendar-year-month" className="calendar-year-month">{calendarState.year} {calendarState.month + 1}</div>
-            <CalendarNavigation 
+            <Navigation 
                 className={className}
                 calendarState={calendarState}
                 setCalendarState={setCalendarState}
-                createCalendar={createCalendar}
                 createDays={createDays}
                 prevMonthDays={prevMonthDays}
+                nextMonthDays={nextMonthDays}
             />
-            <div id="calendar-date-wrapper" className="calendar-date-wrapper">
-                <div className="calendar-date">SUN</div>
-                <div className="calendar-date">MON</div>
-                <div className="calendar-date">TUE</div>
-                <div className="calendar-date">WED</div>
-                <div className="calendar-date">THU</div>
-                <div className="calendar-date">FRI</div>
-                <div className="calendar-date">SAT</div>
-            </div>
+            <DayOfWeek className={className} />
             <div id="calendar-body" className="calendar-body">
             </div>
+            <Days 
+                className={className}
+                calendarState={calendarState}
+            />
         </div>
     )
 }

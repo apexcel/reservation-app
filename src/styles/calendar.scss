@@ -22,14 +22,14 @@
     flex-basis: 0;
 }
 
-.calendar-date-wrapper {
+.simple_calendar-date-wrapper {
     display: flex;
     justify-items: start;
     align-items: center;
     text-align: center;
     border-bottom: 1px solid red;
 
-    .calendar-date {
+    .simple_calendar-date {
         margin: 0.2rem;
         width: 3rem;
         max-width: 3.5rem;
