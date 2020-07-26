@@ -52,11 +52,14 @@ export default function Calendar() {
                 
                 if (firstDate >= calendarState.days.length) {
                     dateCell.appendChild(document.createTextNode(calendarState.nextDays[j].getDate()))
+                    dateCell.classList.add("adjacent-days");
                 }
                 else {
                     if (i === 0) {
+                        // TODO: 인접 이전 달 이후 달 클래스 추가해서 색상 옅게
                         if (j < firstDayOfWeek) {
                             dateCell.appendChild(document.createTextNode(calendarState.prevDays[j].getDate()))
+                            dateCell.classList.add("adjacent-days");
                         }
                         else {
                             dateCell.appendChild(document.createTextNode(calendarState.days[firstDate].getDate()))
