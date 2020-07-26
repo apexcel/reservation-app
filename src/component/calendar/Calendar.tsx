@@ -18,9 +18,6 @@ export default function Calendar() {
         currentDays: days,
     });
 
-    useEffect(() => {
-    }, [calendarState])
-
     return (
         <div id="calendar-wrapper" className="calendar-wrapper">
             <div className="calendar-year-month">{calendarState.year} {calendarState.month + 1}</div>
@@ -31,12 +28,10 @@ export default function Calendar() {
                 createMonthDays={createMonthDays}
             />
             <DayOfWeek className={className} />
-            <div id="calendar-body" className="calendar-body">
-                <Weeks
-                    className={className}
-                    calendarState={calendarState}
-                />
-            </div>
+            <Weeks
+                className={className}
+                calendarState={calendarState}
+            />
         </div>
     )
 }
