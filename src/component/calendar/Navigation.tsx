@@ -6,9 +6,7 @@ export default function Navigation({
     className,
     calendarState,
     setCalendarState,
-    createDays,
-    prevMonthDays,
-    nextMonthDays,
+    createMonthDays,
     prevLabel = '‹',
     nextLabel = '›',
 }) {
@@ -16,32 +14,24 @@ export default function Navigation({
     const next = () => {
         const year = (calendarState.month === 11) ? calendarState.year + 1 : calendarState.year;
         const month = (calendarState.month + 1) % 12;
-        const days = createDays(year, month);
-        const prevDays = prevMonthDays(days[0]);
-        const nextDays = nextMonthDays(days[days.length - 1])
+        const currentDays = createMonthDays(year, month);
         setCalendarState({
             ...calendarState,
             year: year,
             month: month,
-            days: days,
-            prevDays: prevDays,
-            nextDays: nextDays
+            currentDays: currentDays,
         });
     };
 
     const prev = () => {
         const year = (calendarState.month === 0) ? calendarState.year - 1 : calendarState.year;
         const month = (calendarState.month === 0) ? 11 : calendarState.month - 1;
-        const days = createDays(year, month);
-        const prevDays = prevMonthDays(days[0]);
-        const nextDays = nextMonthDays(days[days.length - 1])
+        const currentDays = createMonthDays(year, month);
         setCalendarState({
             ...calendarState,
             year: year,
             month: month,
-            days: days,
-            prevDays: prevDays,
-            nextDays: nextDays
+            currentDays: currentDays,
         });
     }
 

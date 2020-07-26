@@ -24,8 +24,17 @@ export function prevMonthDays(firstDate: Date) {
 export function nextMonthDays(lastDate: Date) {
     const ret = [];
     const day = 7 + lastDate.getDay();
+    // TODO: 해당 월의 마지막 길이 만큼 알맞게 생성하기
     for (let i = 1; i <= day; i += 1) {
         ret.push(new Date(lastDate.valueOf() + 86_400_000 * i));
     }
     return ret;
+}
+
+
+export function createMonthDays(year: number, month: number) {
+    const days = createDays(year, month);
+    const prevDays = prevMonthDays(days[0]);
+    const nextDays = nextMonthDays(days[days.length - 1]);
+    return [].concat(prevDays, days, nextDays);
 }

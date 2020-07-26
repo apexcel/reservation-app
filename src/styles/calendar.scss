@@ -6,16 +6,16 @@
     text-align: center;
 }
 
-.calendar-body {
+.simple_calendar-body {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     text-align: center;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     flex-basis: 1;
 }
 
-.calendar-weeks {
+.simple_calendar-weeks {
     display: flex;
     width: 100%;
     justify-content: start;
@@ -36,7 +36,7 @@
     }
 }
 
-.date-cell {
+.simple_calendar-date-cell {
     position: relative;
     margin: 0.2rem;
     padding: 0.4rem 0.8rem;
