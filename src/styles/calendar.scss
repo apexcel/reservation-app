@@ -52,7 +52,7 @@
     }
 
     &:active {
-        background-color: red;
+        background-color: #949494;
     }
 }
 
@@ -62,6 +62,10 @@
 
 .sun {
     color: #d44848;
+}
+
+.today {
+    background-color: #474747;
 }
 
 .adjacent {

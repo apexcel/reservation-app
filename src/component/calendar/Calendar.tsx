@@ -9,15 +9,14 @@ import { createMonthDays } from "../../utils/dateUtils.ts"
 export default function Calendar() {
 
     const className = "simple_calendar";
-    const days = createMonthDays(new Date().getFullYear(), new Date().getMonth());
+    const dateValues = createMonthDays(new Date().getFullYear(), new Date().getMonth());
 
     const [calendarState, setCalendarState] = useState({
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
         today: new Date().getDate(),
-        currentDays: days,
+        currentDays: dateValues,
     });
-
     return (
         <div id="calendar-wrapper" className="calendar-wrapper">
             <div className="calendar-year-month">{calendarState.year} {calendarState.month + 1}</div>
