@@ -24,8 +24,9 @@ export default function Day({ className, currentDay, onDateClick }: Day) {
     }
 
     const _onDateClick = (ev) => {
-        onDateClick.call(this, ev, currentDay.date);
+        ev.preventDefault();
         open();
+        onDateClick.call(this, ev, currentDay.date);
     };
 
     const renderDay = () => {

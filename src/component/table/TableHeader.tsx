@@ -25,7 +25,7 @@ export default function TableHeader({ className, tHeadState }: TableHeader) {
 
 
     return (
-        <div className={`${className}-header-wrapper`}>
+        <div className={`${className}-header-container`}>
             {renderTableHeader()}
         </div>
     )

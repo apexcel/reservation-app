@@ -1,18 +1,18 @@
-.table-wrapper {
+.simple__table-container {
     display: flex;
     flex-direction: column;
     border: 1px solid white;
-    width: 40%;
+    background: fixed;
 }
 
-.table-header-wrapper {
+.simple__table-header-container {
     display: flex;
     flex-direction: row;
     border: 1px solid red;
     justify-content: center;
     text-align: center;
 }
-.table-header {
+.simple__table-header {
     background-color: #aaaa75;
     border: 1px solid green;
     flex-basis: 0;
@@ -20,18 +20,18 @@
     flex-shrink: 1;
 }
 
-.table-body-wrapper {
+.simple__table-body-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
 }
-.table-body {
+.simple__table-body {
     display: flex;
 
 }
 
-.table-cell {
+.simple__table-row-cell {
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
@@ -40,9 +40,9 @@
         background-color: rgb(173, 173, 173);
     }
 }
-.table-unabled {
+.unabled {
     background-color: red;
 }
-.break-time {
+.simple__table-break-time {
     background-color: black;
 }
