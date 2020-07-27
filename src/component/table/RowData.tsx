@@ -1,20 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-export default function RowData({ className, tHeadState, tBodyState, values }) {
+export default function RowData({ className, rowState, tHeadState }) {
 
     const renderRow = () => {
-        const fields = Object.values(values)
-        return fields.map((el, idx) => 
-        <div 
-            key={idx} 
-            className={`${className}-row-cell`}>
-            {el}
-        </div>)
+        console.log(rowState)
+        let ret = [];
+        let able = true;
+        for (let i = 0; i < 2; i += 1) {
+            if (rowState[tHeadState[i].field] === "") able = false;
+            else able = true;
+            ret[i] = <div className={`${className}-row-cell ${able ? null : "unable"}`}>
+                {rowState[tHeadState[i].field]}
+            </div>
+        }
+        return ret;
     }
 
     return (
-        <>
+        <div className={`${className}-body`}>
             {renderRow()}
-        </>
+        </div>
     )
 }

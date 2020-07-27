@@ -20,17 +20,17 @@
     flex-shrink: 1;
 }
 
-.simple__table-body-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-}
 .simple__table-body {
     display: flex;
-
+    flex-direction: row;
+    flex-basis: 1;
+    flex-grow: 1;
 }
 
+.simple__table-row-cell-wrapper {
+    display: flex;
+    flex-direction: row;
+}
 .simple__table-row-cell {
     flex-basis: 0;
     flex-grow: 1;
@@ -40,7 +40,7 @@
         background-color: rgb(173, 173, 173);
     }
 }
-.unabled {
+.unable {
     background-color: red;
 }
 .simple__table-break-time {
