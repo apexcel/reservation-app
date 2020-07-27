@@ -4,8 +4,7 @@ import LoginForm from './LoginForm.tsx'
 import SignUp from './SignUp.tsx'
 import Header from './Header.tsx'
 import UserInformation from './UserInfomation.tsx'
-import Table from './Table.tsx'
-import Calendar from './calendar/Calendar.tsx'
+import Table from './table/Table.tsx'
 
 // styles
 import '../styles/app.scss'
@@ -31,22 +30,9 @@ export default function App() {
         else return false;
     }
 
-    const tHeadState = [
-        {headerName: "소정", field: "so", range: []},
-        {headerName: "현영", field: "hyun", range: []},
-    ];
-
-    const tBodyState = [
-        {so: "so1", hyun: "hy1"},
-        {so: "so2", hyun: "hy2"},
-        {so: "so3", hyun: "hy3"},
-    ];
-
     return (
         <div className='container'>
-            <Calendar />
-            <Table tHeadState={tHeadState} tBodyState={tBodyState}/>
-            { logged ? <Header  setLogged={setLogged} /> : ''}
+            { logged ? <Header setLogged={setLogged} /> : null}
             <Switch>
                 <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserInfo={setUserInfo} logged={logged} setLogged={setLogged} userInfo={userInfo} />} />
                 <Route exact path='/signup' component={() => <SignUp />} />

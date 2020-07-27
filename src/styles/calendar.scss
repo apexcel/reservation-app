@@ -1,12 +1,29 @@
-.calendar-wrapper {
-    border: 1px solid red;
+$hover-color: #626262;
+$cell-color: #d3d3d3;
+
+.simple__calendar-wrapper {
 }
 
-.calendar-year-month {
+.simple__calendar-year-month {
     text-align: center;
+    font-size: 1.4rem;
+    color: #73972f;
 }
 
-.simple_calendar-body {
+.simple__calendar-btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    & .simple__calendar-arrow-btn {
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        &:hover {
+            background-color: $hover-color;
+        }
+    }
+}
+
+.simple__calendar-body {
     display: flex;
     flex-direction: row;
     text-align: center;
@@ -15,28 +32,29 @@
     flex-basis: 1;
 }
 
-.simple_calendar-weeks {
+.simple__calendar-weeks {
     display: flex;
     width: 100%;
     justify-content: start;
     flex-basis: 0;
 }
 
-.simple_calendar-date-wrapper {
+.simple__calendar-date-wrapper {
     display: flex;
     justify-items: start;
     align-items: center;
     text-align: center;
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid #797979;
 
-    .simple_calendar-date {
+    .simple__calendar-date {
+        color: $cell-color;
         margin: 0.2rem;
         width: 3rem;
         max-width: 3.5rem;
     }
 }
 
-.simple_calendar-date-cell {
+.simple__calendar-date-cell {
     position: relative;
     margin: 0.2rem;
     padding: 0.4rem 0.8rem;
@@ -44,11 +62,11 @@
     max-width: 3.5rem;
     background-color: transparent;
     text-align: center;
-    color: #d3d3d3;
+    color: $cell-color;
     cursor: pointer;
 
     &:hover {
-        background-color: #626262;
+        background-color: $hover-color;
     }
 
     &:active {
@@ -69,5 +87,5 @@
 }
 
 .adjacent {
-    opacity: .4;
+    opacity: .3;
 }

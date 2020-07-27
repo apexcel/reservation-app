@@ -3,16 +3,24 @@ import Day from './Day.tsx'
 
 type Days = {
     className: string,
-    days: Array<Date>
+    currentDays: Array<Date>,
+    onDateClick: Function,
 }
 
 export default function Days({ 
     className, 
-    days }: Days) {
+    currentDays,
+    onDateClick,
+ }: Days) {
 
     const renderDays = () => {
-        return days.map((el, idx) => 
-        <Day key={idx} day={el} className={className} />
+        return currentDays.map((el, idx) => 
+        <Day 
+            key={idx} 
+            currentDay={el} 
+            className={className}
+            onDateClick={onDateClick}
+        />
     );
     };
 

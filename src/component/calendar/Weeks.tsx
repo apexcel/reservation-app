@@ -1,7 +1,7 @@
 import React from 'react'
 import Days from './Days.tsx'
 
-export default function Weeks({ className, calendarState }) {
+export default function Weeks({ className, calendarState, onDateClick }) {
     const renderWeeks = () => {
         let weeks = [];
         let weekLength = 7;
@@ -12,8 +12,8 @@ export default function Weeks({ className, calendarState }) {
             <Days
                 key={idx}
                 className={className}
-                calendarState={calendarState}
-                days={el}
+                currentDays={el}
+                onDateClick={onDateClick}
                 />
         )
     }

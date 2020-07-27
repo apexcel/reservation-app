@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react"
 import "../../styles/calendar.scss"
 import Navigation from "./Navigation.tsx";
 import DayOfWeek from "./DayOfWeek.tsx";
-import Days from "./Days.tsx";
 import Weeks from "./Weeks.tsx"
 import { createMonthDays } from "../../utils/dateUtils.ts"
 
-export default function Calendar() {
+export default function Calendar({ onDateClick }) {
 
-    const className = "simple_calendar";
+    const className = "simple__calendar";
     const dateValues = createMonthDays(new Date().getFullYear(), new Date().getMonth());
 
     const [calendarState, setCalendarState] = useState({
@@ -17,9 +16,10 @@ export default function Calendar() {
         today: new Date().getDate(),
         currentDays: dateValues,
     });
+
     return (
-        <div id="calendar-wrapper" className="calendar-wrapper">
-            <div className="calendar-year-month">{calendarState.year} {calendarState.month + 1}</div>
+        <div className={`${className}-wrapper`}>
+            <div className={`${className}-year-month`}>{calendarState.year} {calendarState.month + 1}</div>
             <Navigation
                 className={className}
                 calendarState={calendarState}
@@ -30,6 +30,7 @@ export default function Calendar() {
             <Weeks
                 className={className}
                 calendarState={calendarState}
+                onDateClick={onDateClick}
             />
         </div>
     )

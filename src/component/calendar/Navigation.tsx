@@ -40,14 +40,14 @@ export default function Navigation({
             <div className={`${className}-btn-wrapper`}>
                 <button
                     arai-label={prevLabel}
-                    className={`${className}-arrow-prevBtn`}
+                    className={`${className}-arrow-btn`}
                     onClick={prev}
                     type="button" >
                     {prevLabel}
                 </button>
                 <button
                     arai-label={nextLabel}
-                    className={`${className}-arrow-nextBtn`}
+                    className={`${className}-arrow-btn`}
                     onClick={next}
                     type="button" >
                     {nextLabel}
