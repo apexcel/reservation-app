@@ -4,7 +4,6 @@ interface RowData {
     className: string,
     rowState: Array<object>
     tHeadState: Array<TableHeaders>,
-    currentDay: Date,
     index: number,
     onBookingHandler: () => void
 }
@@ -18,7 +17,6 @@ export default function RowData({
     className,
     rowState,
     tHeadState,
-    currentDay,
     index,
     onBookingHandler
 }: RowData) {
@@ -26,23 +24,22 @@ export default function RowData({
     const renderRow = () => {
         //console.log(rowState);
         let ret = [];
-        let able = true;
+        let isAble = true;
+        let isBooked = false;
         for (let i = 0; i < tHeadState.length; i += 1) {
             //console.log(rowState[tHeadState[i].field]);
-            const _onBookingHandler = (ev: React.MouseEvent, rowStat = (rowState[tHeadState[i].field])) => {
+            const _onBookingHandler = (ev: React.MouseEvent, row = (rowState[tHeadState[i].field])) => {
                 ev.preventDefault();
-                if (!rowStat) {
-                    alert(`${rowStat} ${new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate(), index + 1)} 에 예약?`);
-                }
-                onBookingHandler.call(this, ev, rowStat)
+                onBookingHandler.call(this, ev, row, index)
             };
 
-            if (rowState[tHeadState[i].field] === "" || rowState[tHeadState[i].field] === undefined) able = false;
-            else able = true;
+            if (rowState[tHeadState[i].field] !== "") isBooked = true;
+            if (rowState[tHeadState[i].field] === "예약불가") isAble = false;
+            else isAble = true;
             ret[i] = (
                 <div
                     key={i}
-                    className={`${className}-row-cell ${able ? null : "unable"}`}
+                    className={`${className}-row-cell ${isAble ? `${isBooked ? `${className}-booked` : ""}` : `${className}-unable`}`}
                     onClick={_onBookingHandler}
                 >
                     {rowState[tHeadState[i].field]}

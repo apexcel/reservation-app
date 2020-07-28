@@ -35,9 +35,18 @@ export default function Modal({ visible, closeModal, currentDay }) {
             tBodyState = wedState[1];
     }
 
-    const onBookingHandler = (ev, rowState) => {
-        console.log(ev, rowState)
-        console.log(currentDay)
+    const onBookingHandler = (ev, row, index) => {
+        //console.log(ev, row, index)
+        //console.log(currentDay);
+        console.log(row)
+        const selected = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate(), index + 13);
+        console.log(selected)
+        if (row === "") {
+            confirm(`${row} ${selected.getHours()}에 예약하시겠습니까?`);
+        }
+        else {
+            confirm(`${row} ${selected.getHours()} 이미 예약 되어 있음.`);
+        }
     };
 
     return (

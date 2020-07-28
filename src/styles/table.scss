@@ -1,47 +1,79 @@
 .simple__table-container {
     display: flex;
     flex-direction: column;
-    border: 1px solid white;
     background: fixed;
 }
 
 .simple__table-header-container {
     display: flex;
     flex-direction: row;
-    border: 1px solid red;
     justify-content: center;
     text-align: center;
+    border: 1px solid #d3d3d378;
+    background-color: #7da875;
+    margin-top: 1rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 .simple__table-header {
-    background-color: #aaaa75;
-    border: 1px solid green;
+    background-color: transparent;
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
+    padding: 0.2rem;
+    cursor: default;
 }
 
+.simple__table-body-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #d3d3d378;
+    border-radius: 15px;
+}
 .simple__table-body {
     display: flex;
     flex-direction: row;
-    flex-basis: 1;
-    flex-grow: 1;
-}
-
-.simple__table-row-cell-wrapper {
-    display: flex;
-    flex-direction: row;
-}
-.simple__table-row-cell {
+    background-color: transparent;
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
-    background-color: blue;
-    &:hover {
-        background-color: rgb(173, 173, 173);
+        
+    &:nth-last-child(1) {
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+
+        & .simple__table-row-cell:nth-child(1) {
+            border-bottom-left-radius: 15px;
+        }
+        & .simple__table-row-cell:nth-last-child(1) {
+            border-bottom-right-radius: 15px;
+        }
     }
 }
-.unable {
-    background-color: red;
+.simple__table-row-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 3rem;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    background-color: #6d6d6d;
+    border-bottom: 1px solid #5a5a5a;
+    padding: 0.5rem;
+    &:hover {
+        background-color: rgb(173, 173, 173);
+        cursor: pointer;
+    }
+}
+
+.simple__table-booked {
+    pointer-events: none;
+    background-color: #27869e;
+}
+.simple__table-unable {
+    pointer-events: none;
+    background-color: #e46e6e;
 }
 .simple__table-break-time {
     background-color: black;
