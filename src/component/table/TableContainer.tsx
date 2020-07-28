@@ -2,7 +2,12 @@ import React from 'react'
 import TableHeader from './TableHeader.tsx'
 import TableBody from './TableBody.tsx'
 
-export default function TableContainer({ className, tHeadState, tBodyState }) {
+export default function TableContainer({ 
+    className, 
+    tHeadState, 
+    tBodyState,
+    currentDay,
+    onBookingHandler }) {
     return (
         <div className={`${className}-container`}>
             <TableHeader
@@ -13,6 +18,8 @@ export default function TableContainer({ className, tHeadState, tBodyState }) {
                 className={className}
                 tHeadState={tHeadState}
                 tBodyState={tBodyState}
+                currentDay={currentDay}
+                onBookingHandler={onBookingHandler}
             />
         </div>
     )

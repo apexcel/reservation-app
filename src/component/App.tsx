@@ -4,12 +4,15 @@ import LoginForm from './LoginForm.tsx'
 import SignUp from './SignUp.tsx'
 import Header from './Header.tsx'
 import UserInformation from './UserInfomation.tsx'
-import Table from './table/Table.tsx'
+import Footer from './Footer.tsx'
 
 // styles
 import '../styles/app.scss'
 
 export default function App() {
+
+    const version = "0.0.1";
+
     const [logged, setLogged] = useState(false)
     const [userInfo, setUserInfo] = useState({})
 
@@ -38,6 +41,7 @@ export default function App() {
                 <Route exact path='/signup' component={() => <SignUp />} />
                 <Route path='/userinfo' component={() => <UserInformation userInfo={userInfo}/>} />
             </Switch>
+            <Footer version={version} />
         </div>
     )
 }

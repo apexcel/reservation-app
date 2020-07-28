@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Modal from '../modal/Modal.tsx'
 interface DateValues {
     date: Date,
     day: number,
@@ -9,23 +8,12 @@ interface DateValues {
 interface Day {
     className: string,
     currentDay: DateValues
-    onDateClick: (Function) => void,
+    onDateClick: () => void,
 }
 export default function Day({ className, currentDay, onDateClick }: Day) {
 
-    const [show, setShow] = useState(false);
-
-    const open = () => {
-        setShow(true);
-    }
-
-    const close = () => {
-        setShow(false);
-    }
-
     const _onDateClick = (ev) => {
         ev.preventDefault();
-        open();
         onDateClick.call(this, ev, currentDay.date);
     };
 
@@ -64,7 +52,6 @@ export default function Day({ className, currentDay, onDateClick }: Day) {
     return (
         <>
             {renderDay()}
-            <Modal show={show} close={close} currentDay={currentDay}/>
         </>
     )
 }
