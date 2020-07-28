@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import {maxDateAtom, minDateAtom} from '../atoms/dateAtoms'
+import { atom, useRecoilValue } from 'recoil'
+import { max, min } from 'moment';
 interface DateValues {
     date: Date,
     day: number,
@@ -17,11 +20,19 @@ export default function Day({ className, currentDay, onDateClick }: Day) {
         onDateClick.call(this, ev, currentDay.date);
     };
 
+    const maxDate = useRecoilValue(maxDateAtom);
+    const minDate = useRecoilValue(minDateAtom)
+
     const renderDay = () => {
         let adjacent = false;
         let today = false;
         let sat = false;
         let sun = false;
+        if (currentDay.date > maxDate || currentDay.date < minDate) {
+            // Empty character used
+            return (<div className={`
+            ${className}-date-cell transparent`}>&#10240;</div>);
+        }
         if (currentDay.status !== "current") {
             adjacent = true;
         }

@@ -7,6 +7,10 @@ export default function Main({ userInfo }) {
     const [visible, setVisible] = useState(false);
     const [currentDay, setCurrentDay] = useState(new Date())
 
+    const now = new Date().valueOf();
+    const maxDate = new Date(now + (86400000 * 31));
+    const minDate = new Date(now - (86400000 * 1))
+
     const openModal = () => {
         setVisible(true);
     }
@@ -24,7 +28,11 @@ export default function Main({ userInfo }) {
 
     return (
         <>
-            <Calendar onDateClick={onDateClick}/>
+            <Calendar 
+                onDateClick={onDateClick} 
+                maxDate={maxDate} 
+                minDate={minDate}
+                />
             <Modal visible={visible} closeModal={closeModal} currentDay={currentDay}/>
         </>
     )
