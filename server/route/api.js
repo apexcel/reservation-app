@@ -14,9 +14,10 @@ router.post('/login_check', (req, res) => {
     const sign_in = req.body
     const query = 'SELECT * FROM users WHERE id=BINARY(?) AND pw=BINARY(?)'
     const query_data = [sign_in.user.id, sign_in.user.pw]
-    const dbconn = db.init()
-    db.conn(dbconn)
-    dbconn.query(query, query_data, (err, row) => {
+
+    const connection = db.init();
+    db.conn(connection)
+    connection.query(query, query_data, (err, row) => {
         if (err) throw err
         if (!row.length > 0) res.send({ auth: false })
         // check
@@ -30,12 +31,12 @@ router.post('/login_check', (req, res) => {
                 res.send({
                     result: row,
                     auth: true,
-                    stamp: new Date().getTime()
+                    stamp: new Date().getTime(),
                 })
             }
         }
     })
-    dbconn.end()
+    connection.end()
 })
 
 //TODO: 이미 존재하는 아이디 체크 하기
@@ -55,17 +56,47 @@ router.post('/signup', (req, res) => {
         return;
     }
 
-    const dbconn = db.init()
-    db.conn(dbconn)
-    dbconn.query(query, query_data, (err, result) => {
+    const connection = db.init();
+    db.conn(connection)
+    connection.query(query, query_data, (err, row) => {
         if (err) throw err
-        res.send(result)
+        res.send(row)
     })
-    dbconn.end()
+    connection.end()
 })
 
-router.get("/tableData", (req, res) => {
-    res.send("gi")
+router.post("/get-booked-data", (req, res) => {
+    console.log(req.body)
+
+    const connection = db.init();
+    db.conn(connection)
+    const query = "SELECT * FROM ??";
+    const query_param = `time_table${req.body.today}`
+    connection.query(query, query_param, (err, row) => {
+        if (err) throw err
+        console.log(row)
+        res.send(row)
+    })
+    connection.end()
+})
+
+router.post("/set-booked-data", (req, res) => {
+    console.log(req.body)
+    
+    const connection = db.init();
+    db.conn(connection)
+    const query = "UPDATE ?? SET booked_data = (?) WHERE time = ?;";
+    const query_param = [
+        `time_table${req.body.today}`,
+        req.body.booked_data,
+        req.body.time
+    ];
+    connection.query(query, query_param, (err, row) => {
+        if (err) throw err
+        console.log(row)
+        res.send(row)
+    })
+    connection.end()
 })
 
 module.exports = router;

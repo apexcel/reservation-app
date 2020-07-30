@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
-import axios from 'axios'
-import useInput from '../reducer/useInput.ts'
+import useInput from '../../reducer/useInput.ts'
 
-import '../styles/common.scss'
-import '../styles/signup.scss'
+import '../../styles/common.scss'
+import '../../styles/signup.scss'
 
 export default function SignUp() {
 

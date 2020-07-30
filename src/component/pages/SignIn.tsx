@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import axios from 'axios';
-import useInput from '../reducer/useInput.ts'
+import useInput from '../../reducer/useInput.ts'
 
 export default function SignIn({ setUserInfo, setLogged, isEmpty }) {
 
@@ -32,8 +32,12 @@ export default function SignIn({ setUserInfo, setLogged, isEmpty }) {
         try {
             const response = await axios.post(config.url, config.form_data).then(res => res.data)
             console.log(response)
+            // TODO:하루당 예약 횟수 제한하기
             if (response.auth) {
-                setUserInfo({ user: response.result[0], stamp: response.stamp, auth: response.auth })
+                setUserInfo({ user: response.result[0], 
+                            stamp: response.stamp, 
+                            auth: response.auth,
+                        })
                 setLogged(true)
             }
         } catch (err) {

@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../table/Table.tsx'
 import { tueState, wedState } from '../../utils/timeTables.ts'
+import { isEmpty, replacer } from '../../utils/utils.ts'
+import { UserStateDispatch } from '../App.tsx'
 import { atom, atomFamily, selector, useRecoilState, useRecoilValue } from 'recoil'
+import axios from 'axios'
+
 import '../../styles/modal.scss'
+import { table } from 'console'
 
 export default function Modal({ visible, closeModal, currentDay }) {
 
-
+    const stat = React.useContext(UserStateDispatch);
     const [tableState, setTableState] = useState({
         header: [
             { headerName: "소정", field: "so" },
@@ -27,6 +32,10 @@ export default function Modal({ visible, closeModal, currentDay }) {
         ]
     })
 
+    useEffect(() => {
+        getBookedData()
+    }, [])
+
     switch (currentDay.getDay()) {
         case 2:
             tableState.header = tueState[0];
@@ -37,20 +46,67 @@ export default function Modal({ visible, closeModal, currentDay }) {
             tableState.body = wedState[1];
     }
 
+    // TODO: DB에서 데이터 불러오기
     const onBookingHandler = async (ev, row, index, headField) => {
-        //console.log(ev, row, index)
+        console.log(tableState)
+        console.log(ev, row, index, headField)
         const selected = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate(), index + 13);
         console.log(selected)
-        if (row === "") {
+        if (isEmpty(row)) {
             const ans = confirm(`${row} ${selected.getHours()}에 예약하시겠습니까?`);
             if (ans) {
-                const newTableBodyState = tableState.body
-                newTableBodyState[index][headField] = "Booked";
-                await setTableState({ ...tableState, body: newTableBodyState });
-                console.log(tableState.body)
+                tableState.body[index][headField] = stat.user.id;
+                await setBookedData(index, headField, tableState.body[index]);
+                await getBookedData()
             }
         }
     };
+
+
+    const getBookedData = async () => {
+        const today = "" + currentDay.getFullYear() + (currentDay.getMonth() + 1) + currentDay.getDate();
+        const config = {
+            url: "http://localhost:9000/api/get-booked-data",
+            data: { today: today }
+        }
+        const result = await axios.post(config.url, config.data)
+
+        let returnObj = {};
+        for (let j = 0; j < tableState.header.length; j += 1) {
+            const fieldName = tableState.header[j].field;
+            Object.defineProperty(returnObj, fieldName, {
+                value: "",
+                writable: true,
+                enumerable: true
+            });
+        }
+
+        let newTableBodyState = [];
+        for (let i = 0; i < result.data.length; i += 1) {
+            if (result.data[i].booked_data === null || result.data[i].booked_data === undefined) {
+                newTableBodyState[i] = returnObj;
+            }
+            else {
+                newTableBodyState[i] = JSON.parse(result.data[i].booked_data);
+            }
+            setTableState({ ...tableState, body: newTableBodyState })
+        }
+        return;
+    }
+
+    const setBookedData = async (index, headField, newTableState) => {
+        const today = "" + currentDay.getFullYear() + (currentDay.getMonth() + 1) + currentDay.getDate();
+        const config = {
+            url: "http://localhost:9000/api/set-booked-data",
+            data: { 
+                today: today,
+                id: stat.user.id,
+                booked_data: JSON.stringify(newTableState),
+                time: (index + 1)
+            }
+        }
+        await axios.post(config.url, config.data);
+    }
 
     return (
         <>

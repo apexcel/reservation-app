@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import Calendar from './calendar/Calendar.tsx'
-import Modal from './modal/Modal.tsx'
+import Calendar from '../calendar/Calendar.tsx'
+import Modal from '../modal/Modal.tsx'
+import {UserStateDispatch} from '../App.tsx'
 
 export default function Main({ userInfo }) {
+
+    const stat = React.useContext(UserStateDispatch);
+    console.log("context:", stat)
 
     const [visible, setVisible] = useState(false);
     const [currentDay, setCurrentDay] = useState(new Date())
