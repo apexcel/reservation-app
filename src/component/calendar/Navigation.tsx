@@ -1,6 +1,4 @@
 import React from 'react'
-//import { prevMonthDays } from '../../utils/dateUtils.ts'
-
 
 export default function Navigation({
     className,

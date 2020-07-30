@@ -28,9 +28,9 @@ export default function RowData({
         let isBooked = false;
         for (let i = 0; i < tHeadState.length; i += 1) {
             //console.log(rowState[tHeadState[i].field]);
-            const _onBookingHandler = (ev: React.MouseEvent, row = (rowState[tHeadState[i].field])) => {
+            const _onBookingHandler = (ev: React.MouseEvent, row = rowState[tHeadState[i].field]) => {
                 ev.preventDefault();
-                onBookingHandler.call(this, ev, row, index)
+                onBookingHandler.call(this, ev, row, index, tHeadState[i].field)
             };
 
             if (rowState[tHeadState[i].field] !== "") isBooked = true;
