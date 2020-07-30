@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const router = express.Router()
 const cors = require('cors')
-const db = require('./db')
+const db = require('../db')
 const path = require('path')
 
 router.use(cors())

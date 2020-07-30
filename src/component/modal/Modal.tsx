@@ -3,7 +3,6 @@ import Table from '../table/Table.tsx'
 import { tueState, wedState } from '../../utils/timeTables.ts'
 import { atom, atomFamily, selector, useRecoilState, useRecoilValue } from 'recoil'
 import '../../styles/modal.scss'
-import { table } from 'console'
 
 export default function Modal({ visible, closeModal, currentDay }) {
 
@@ -38,44 +37,35 @@ export default function Modal({ visible, closeModal, currentDay }) {
             tableState.body = wedState[1];
     }
 
-    const onBookingHandler = async (ev, row, index, tHeadStatus) => {
+    const onBookingHandler = async (ev, row, index, headField) => {
         //console.log(ev, row, index)
-        //console.log(currentDay);
-        console.log(index)
-        console.log(row)
-        console.log(tHeadStatus)
         const selected = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate(), index + 13);
         console.log(selected)
         if (row === "") {
             const ans = confirm(`${row} ${selected.getHours()}에 예약하시겠습니까?`);
             if (ans) {
-            const newTableBodyState = tableState.body
-            newTableBodyState[index][tHeadStatus] = "Booked";
-            await setTableState({...tableState, body: newTableBodyState});
-            console.log(tableState.body)
+                const newTableBodyState = tableState.body
+                newTableBodyState[index][headField] = "Booked";
+                await setTableState({ ...tableState, body: newTableBodyState });
+                console.log(tableState.body)
             }
-        }
-        else {
-            confirm(`${row} ${selected.getHours()} 이미 예약 되어 있음.`);
         }
     };
 
     return (
         <>
             {visible ?
-                <div>
-                    <div className="modal">
-                        <button onClick={closeModal}>closeModal</button>
-                        {currentDay.getFullYear()}
-                        {currentDay.getMonth() + 1}
-                        {currentDay.getDate()}
-                        <Table
-                            tHeadState={tableState.header}
-                            tBodyState={tableState.body}
-                            currentDay={currentDay}
-                            onBookingHandler={onBookingHandler}
-                        />
-                    </div>
+                <div className="modal">
+                    <button onClick={closeModal}>closeModal</button>
+                    {currentDay.getFullYear()}
+                    {currentDay.getMonth() + 1}
+                    {currentDay.getDate()}
+                    <Table
+                        tHeadState={tableState.header}
+                        tBodyState={tableState.body}
+                        currentDay={currentDay}
+                        onBookingHandler={onBookingHandler}
+                    />
                 </div> : null}
         </>
     )

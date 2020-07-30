@@ -15,7 +15,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // route
-const api = require('./api')
+const api = require('./route/api')
 app.use('/api', api)
 
 // env
