@@ -7,13 +7,16 @@ export const userInfoAtom = atom({
     default: {}
 });
 
-export const currentBookedList = atom({
-    key: 'currentBookedList',
-    default: []
+export const getBookedParamsAtom = atom({
+    key: 'getBookedParamsAtom',
+    default: new Date(),
 })
 
-export const getBookedList = selector({
+export const getBookedListSelector = selector({
     key: 'getBookedList',
     get: ({ get }) => {
+        const params = get(getBookedParamsAtom);
+        const date = getBookedParamsAtom.date;
+
     }
 })

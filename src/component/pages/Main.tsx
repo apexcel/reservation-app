@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import Calendar from '../calendar/Calendar.tsx'
 import Modal from '../modal/Modal.tsx'
+import { createObjectForTableBody } from '../../utils/tableUtils.ts'
+import { getBookedParamsAtom } from '../atoms/globalAtoms'
+import { tableHeadStateAtom, tableBodyStateAtom } from '../atoms/tableAtoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import axios from 'axios'
 
 export default function Main() {
+
+    const getBookedParams = useRecoilValue(getBookedParamsAtom);
+    const tableHead = useRecoilValue(tableHeadStateAtom);
+    const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
 
     const [visible, setVisible] = useState(false);
     const [currentDay, setCurrentDay] = useState(new Date())
@@ -19,14 +28,34 @@ export default function Main() {
         setVisible(false);
     }
 
-    const onDateClick = (ev, currentDate) => {
+    const onDateClick = async (ev, currentDate) => {
         console.log(ev, currentDate)
         setCurrentDay(currentDate);
+        await getBooked(currentDate)
         openModal();
     }
 
-    const getBooked = async () => {
+    const getBooked = async (_currentDate) => {
+        const selectedDate: string = "" + _currentDate.getFullYear() + (_currentDate.getMonth() + 1) + _currentDate.getDate();
+        console.log(selectedDate)
+        const config = {
+            url: "http://localhost:9000/api/get-booked-data",
+            data: { date: selectedDate }
+        }
+        const result = await axios.post(config.url, config.data)
+        
+        let defaultBodyList = createObjectForTableBody(tableHead);
+        let newTableBody = [];
 
+        for (let i = 0; i < result.data.length; i += 1) {
+            if (result.data[i].booked_data === null || result.data[i].booked_data === undefined) {
+                newTableBody[i] = defaultBodyList;
+            }
+            else {
+                newTableBody[i] = JSON.parse(result.data[i].booked_data);
+            }
+        }
+        setTableBody(newTableBody)
     }
 
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../table/Table.tsx'
 import { isEmpty, replacer } from '../../utils/utils.ts'
-import { atom, atomFamily, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { tableBodyStateAtom, tableHeadStateAtom, selectedTableRowItem, filterdTableBodyState } from '../atoms/tableAtoms'
-import { userInfoAtom } from '../atoms/globalAtoms'
+import { atom, atomFamily, selector, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { tableBodyStateAtom, tableHeadStateAtom } from '../atoms/tableAtoms'
+import { userInfoAtom, getBookedParamsAtom } from '../atoms/globalAtoms'
 import axios from 'axios'
 
 import '../../styles/modal.scss'
@@ -14,6 +14,7 @@ export default function Modal({ visible, closeModal, currentDay }) {
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
     const [userState, setUserState] = useRecoilState(userInfoAtom)
     const [selectedDateTime, setSelectedDateTime] = useState(new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate()));
+    const setBookedParams = useSetRecoilState(getBookedParamsAtom);
 
     useEffect(() => {
         setTableHead([
@@ -21,14 +22,16 @@ export default function Modal({ visible, closeModal, currentDay }) {
             { name: "현영", field: "hyun" },
             { name: "상정", field: "jung" },
         ]);
-        getBookedData(selectedDateTime)
+        // getBookedData(selectedDateTime)
     }, [])
 
     const onBookingHandler = async (ev, row, index, headField) => {
         console.log("onBookingHandler");
         const selectedDate = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate(), index + 13);
         setSelectedDateTime(selectedDate);
-        await getBookedData(selectedDateTime);
+        setBookedParams(selectedDate)
+
+        // await getBookedData(selectedDateTime);
         console.log(ev, row, index, headField)
         if (isEmpty(row)) {
             const ans = confirm(`${row} ${selectedDate.getHours()}에 예약하시겠습니까?`);
@@ -40,34 +43,34 @@ export default function Modal({ visible, closeModal, currentDay }) {
                 console.log(updatedTableBody)
                 console.log(tableBody)
                 await setBookedData(index, headField, updatedTableBody[index], selectedDate);
-                await getBookedData(selectedDate)
+                // await getBookedData(selectedDate)
             }
         }
     };
 
 
-    const getBookedData = async (selectedDate) => {
-        const selected = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
-        console.log("getBookedDate", selected)
-        const config = {
-            url: "http://localhost:9000/api/get-booked-data",
-            data: { date: selected }
-        }
-        const result = await axios.post(config.url, config.data)
-        //console.log(result)
-        let defaultBodyList = createObjectForTableBody(tableHead);
+    // const getBookedData = async (selectedDate) => {
+    //     const selected = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
+    //     console.log("getBookedDate", selected)
+    //     const config = {
+    //         url: "http://localhost:9000/api/get-booked-data",
+    //         data: { date: selected }
+    //     }
+    //     const result = await axios.post(config.url, config.data)
+    //     //console.log(result)
+    //     let defaultBodyList = createObjectForTableBody(tableHead);
 
-        let newTableBodyState = [];
-        for (let i = 0; i < result.data.length; i += 1) {
-            if (result.data[i].booked_data === null || result.data[i].booked_data === undefined) {
-                newTableBodyState[i] = defaultBodyList;
-            }
-            else {
-                newTableBodyState[i] = JSON.parse(result.data[i].booked_data);
-            }
-        }
-        setTableBody(newTableBodyState)
-    };
+    //     let newTableBodyState = [];
+    //     for (let i = 0; i < result.data.length; i += 1) {
+    //         if (result.data[i].booked_data === null || result.data[i].booked_data === undefined) {
+    //             newTableBodyState[i] = defaultBodyList;
+    //         }
+    //         else {
+    //             newTableBodyState[i] = JSON.parse(result.data[i].booked_data);
+    //         }
+    //     }
+    //     setTableBody(newTableBodyState)
+    // };
 
     const setBookedData = async (index, headField, newTableState, selectedDate) => {
         const _currentDate = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();

@@ -11,7 +11,7 @@ export default function Days({
     className, 
     currentDays,
     onDateClick,
- }: Days) {
+}: Days) {
 
     const renderDays = () => {
         return currentDays.map((el, idx) => 
