@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import RowData from './RowData.tsx'
+import RowData from './TableRow.tsx'
 
 export default function TableBody({ 
     className, 
@@ -14,7 +14,7 @@ export default function TableBody({
             key={idx} 
             index={idx}
             className={className}
-            rowState={el} 
+            rowItem={el} 
             tHeadState={tHeadState}
             currentDay={currentDay}
             onBookingHandler={onBookingHandler}

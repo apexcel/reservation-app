@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react'
 import Calendar from '../calendar/Calendar.tsx'
 import Modal from '../modal/Modal.tsx'
 import { createObjectForTableBody } from '../../utils/tableUtils.ts'
-import { getBookedParamsAtom } from '../atoms/globalAtoms'
 import { tableHeadStateAtom, tableBodyStateAtom } from '../atoms/tableAtoms'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import axios from 'axios'
 
 export default function Main() {
 
-    const getBookedParams = useRecoilValue(getBookedParamsAtom);
     const tableHead = useRecoilValue(tableHeadStateAtom);
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
 
@@ -43,7 +41,8 @@ export default function Main() {
             data: { date: selectedDate }
         }
         const result = await axios.post(config.url, config.data)
-        
+        console.log(result)
+
         let defaultBodyList = createObjectForTableBody(tableHead);
         let newTableBody = [];
 

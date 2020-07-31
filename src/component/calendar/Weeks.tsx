@@ -14,7 +14,7 @@ export default function Weeks({ className, calendarState, onDateClick }) {
                 className={className}
                 currentDays={el}
                 onDateClick={onDateClick}
-                />
+            />
         )
     }
 
