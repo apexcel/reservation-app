@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Calendar from '../calendar/Calendar.tsx'
 import Modal from '../modal/Modal.tsx'
-import {UserStateDispatch} from '../App.tsx'
 
-export default function Main({ userInfo }) {
-
-    const stat = React.useContext(UserStateDispatch);
-    console.log("context:", stat)
+export default function Main() {
 
     const [visible, setVisible] = useState(false);
     const [currentDay, setCurrentDay] = useState(new Date())
@@ -29,15 +25,23 @@ export default function Main({ userInfo }) {
         openModal();
     }
 
+    const getBooked = async () => {
+
+    }
+
 
     return (
         <>
-            <Calendar 
-                onDateClick={onDateClick} 
-                maxDate={maxDate} 
+            <Calendar
+                onDateClick={onDateClick}
+                maxDate={maxDate}
                 minDate={minDate}
-                />
-            <Modal visible={visible} closeModal={closeModal} currentDay={currentDay}/>
+            />
+            <Modal
+                visible={visible}
+                closeModal={closeModal}
+                currentDay={currentDay}
+            />
         </>
     )
 }

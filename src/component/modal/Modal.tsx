@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../table/Table.tsx'
-import { tueState, wedState } from '../../utils/timeTables.ts'
 import { isEmpty, replacer } from '../../utils/utils.ts'
-import { UserStateDispatch } from '../App.tsx'
 import { atom, atomFamily, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { tableBodyStateAtom, tableHeadStateAtom } from '../atoms/tableAtoms'
+import { tableBodyStateAtom, tableHeadStateAtom, selectedTableRowItem, filterdTableBodyState } from '../atoms/tableAtoms'
+import { userInfoAtom } from '../atoms/globalAtoms'
 import axios from 'axios'
 
 import '../../styles/modal.scss'
@@ -13,10 +12,7 @@ export default function Modal({ visible, closeModal, currentDay }) {
 
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom)
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
-
-    const stat = React.useContext(UserStateDispatch);
-
-
+    const [userState, setUserState] = useRecoilState(userInfoAtom)
     const [selectedDateTime, setSelectedDateTime] = useState(new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate()));
 
     useEffect(() => {
@@ -25,26 +21,26 @@ export default function Modal({ visible, closeModal, currentDay }) {
             { name: "현영", field: "hyun" },
             { name: "상정", field: "jung" },
         ]);
-        setTableBody([
-            {so: "s0", hyun: "h0", jung: "j0"}
-        ])
         getBookedData(selectedDateTime)
     }, [])
-    console.log(tableHead)
-    console.log(tableBody)
+
     const onBookingHandler = async (ev, row, index, headField) => {
         console.log("onBookingHandler");
         const selectedDate = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate(), index + 13);
         setSelectedDateTime(selectedDate);
-        getBookedData(selectedDateTime);
-        console.log(tableBody)
+        await getBookedData(selectedDateTime);
         console.log(ev, row, index, headField)
         if (isEmpty(row)) {
             const ans = confirm(`${row} ${selectedDate.getHours()}에 예약하시겠습니까?`);
             if (ans) {
-                tableBody[index][headField] = stat.user.id;
-                setBookedData(index, headField, tableBody[index], selectedDate);
-                getBookedData(selectedDate)
+                let updatedTableBody = await tableBody.map((el, idx) => {
+                    return index === idx ? {...tableBody[idx], [headField]: userState.user.id} : el
+                });
+                setTableBody(updatedTableBody)
+                console.log(updatedTableBody)
+                console.log(tableBody)
+                await setBookedData(index, headField, updatedTableBody[index], selectedDate);
+                await getBookedData(selectedDate)
             }
         }
     };
@@ -58,21 +54,13 @@ export default function Modal({ visible, closeModal, currentDay }) {
             data: { date: selected }
         }
         const result = await axios.post(config.url, config.data)
-        console.log(result)
-        let returnObj = {};
-        for (let j = 0; j < tableHead.length; j += 1) {
-            const fieldName = tableHead[j].field;
-            Object.defineProperty(returnObj, fieldName, {
-                value: "",
-                writable: true,
-                enumerable: true
-            });
-        }
+        //console.log(result)
+        let defaultBodyList = createObjectForTableBody(tableHead);
 
         let newTableBodyState = [];
         for (let i = 0; i < result.data.length; i += 1) {
             if (result.data[i].booked_data === null || result.data[i].booked_data === undefined) {
-                newTableBodyState[i] = returnObj;
+                newTableBodyState[i] = defaultBodyList;
             }
             else {
                 newTableBodyState[i] = JSON.parse(result.data[i].booked_data);
@@ -87,13 +75,13 @@ export default function Modal({ visible, closeModal, currentDay }) {
             url: "http://localhost:9000/api/set-booked-data",
             data: { 
                 date: _currentDate,
-                id: stat.user.id,
+                id: userState.user.id,
                 booked_data: JSON.stringify(newTableState),
                 time: (index + 1)
             }
         }
         const date = await axios.post(config.url, config.data);
-        console.log(date)
+        //console.log(date)
     }
 
     return (
@@ -113,4 +101,17 @@ export default function Modal({ visible, closeModal, currentDay }) {
                 </div> : null}
         </>
     )
+}
+
+function createObjectForTableBody(tableHead) {
+    let obj = {};
+    for (let i = 0; i < tableHead.length; i += 1) {
+        const fieldName = tableHead[i].field;
+        Object.defineProperty(obj, fieldName, {
+            value: "",
+            writable: true,
+            enumerable: true
+        });
+    }
+    return obj;
 }

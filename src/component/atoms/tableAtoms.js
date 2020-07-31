@@ -1,18 +1,33 @@
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-
-export const tableBodyStateAtom = atom({
-    key: 'tableState',
-    default: []
-});
+import { atom, atomFamily, selector } from 'recoil'
+import {userInfoAtom} from './globalAtoms'
 
 export const tableHeadStateAtom = atom({
     key: 'tableHeadStateAtom',
-    default: []
+    default: [{
+        name: "",
+        field: ""
+    }]
 });
 
-export const bookedUser = selector({
-    key: 'bookedUser',
-    get: ({ get }) => {
-        const table = useRecoilValue(table)
+export const tableBodyStateAtom = atom({
+    key: 'tableBodyStateAtom',
+    default: [{}]
+});
+
+export const selectedTableRowItem = atom({
+    key: 'selectedTableRowItem',
+    default: {
+        index: 0,
+        field: ""
     }
+});
+
+export const filterdTableBodyState = selector({
+    key: 'filterdTableBodyState',
+    default: {},
+    get: ({ get }) => {
+        const tableBodyState = get(tableBodyStateAtom);
+        const selected = get(selectedTableRowItem);
+        return tableBodyState[selected.index][selected.field];
+    },
 })

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { userInfoAtom } from './atoms/globalAtoms'
+import { atom, useRecoilState } from 'recoil'
 import LoginForm from './pages/LoginForm.tsx'
 import SignUp from './pages/SignUp.tsx'
 import Header from './pages/Header.tsx'
@@ -9,25 +11,21 @@ import Footer from './pages/Footer.tsx'
 // styles
 import '../styles/app.scss'
 
-export const UserStateDispatch = React.createContext(null);
-
 export default function App() {
 
     const version = "0.0.1";
-
+    const [userState, setUserState] = useRecoilState(userInfoAtom)
     const [logged, setLogged] = useState(false)
-    const [userInfo, setUserInfo] = useState({})
-
 
     useEffect(() => {
-        if (!isEmpty(sessionStorage.getItem('userInfo'))) {
-            setUserInfo(JSON.parse(sessionStorage.getItem('userInfo')));
+        if (!isEmpty(sessionStorage.getItem('userState'))) {
+            setUserState(JSON.parse(sessionStorage.getItem('userState')));
             setLogged(true);
         }
     }, [])
 
     useEffect(() => {
-        if (logged) sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
+        if (logged) sessionStorage.setItem('userState', JSON.stringify(userState));
         else sessionStorage.clear();
     }, [logged])
 
@@ -40,11 +38,8 @@ export default function App() {
         <div className='container'>
             { logged ? <Header setLogged={setLogged} /> : null}
             <Switch>
-                <UserStateDispatch.Provider value={userInfo}>
-                <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserInfo={setUserInfo} logged={logged} setLogged={setLogged} userInfo={userInfo} />} />
+                <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserState={setUserState} logged={logged} setLogged={setLogged} userState={userState} />} />
                 <Route exact path='/signup' component={() => <SignUp />} />
-                <Route path='/userinfo' component={() => <UserInformation userInfo={userInfo}/>} />
-                </UserStateDispatch.Provider>
             </Switch>
             <Footer version={version} />
         </div>

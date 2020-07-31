@@ -4,13 +4,13 @@ import SignIn from './SignIn.tsx'
 
 import '../../styles/loginform.scss'
 
-export default function LoginForm({ setLogged, logged, setUserInfo, isEmpty, userInfo }) {
+export default function LoginForm({ setLogged, logged, setUserState, isEmpty, userState }) {
 
     return (
         <>
             { logged 
-                ? <Main setLogged={setLogged} setUserInfo={setUserInfo} userInfo={userInfo}/> 
-                : <SignIn isEmpty={isEmpty} setUserInfo={setUserInfo} setLogged={setLogged}/> }
+                ? <Main /> 
+                : <SignIn setLogged={setLogged}/> }
         </>
     )
 }

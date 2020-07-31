@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { useRecoilState } from 'recoil'
+import { userInfoAtom } from '../atoms/globalAtoms'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { isEmpty } from '../../utils/utils.ts'
 import axios from 'axios';
 import useInput from '../../reducer/useInput.ts'
 
-export default function SignIn({ setUserInfo, setLogged, isEmpty }) {
+export default function SignIn({ setLogged }) {
+
+    const [userState, setUserState] = useRecoilState(userInfoAtom);
 
     const [{ id, pw }, onChangeInput, reset] = useInput({
         id: '', pw: ''
     });
-
-    useEffect(() => {
-    }, [])
 
     useEffect(() => {
         console.log({ id, pw })
@@ -34,10 +36,11 @@ export default function SignIn({ setUserInfo, setLogged, isEmpty }) {
             console.log(response)
             // TODO:하루당 예약 횟수 제한하기
             if (response.auth) {
-                setUserInfo({ user: response.result[0], 
-                            stamp: response.stamp, 
-                            auth: response.auth,
-                        })
+                setUserState({
+                    user: response.result[0],
+                    stamp: response.stamp,
+                    auth: response.auth,
+                })
                 setLogged(true)
             }
         } catch (err) {
