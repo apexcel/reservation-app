@@ -6,9 +6,8 @@ interface TableHeader {
 }
 
 interface Columns {
-    headerName: string,
+    name: string,
     field: string,
-    range: Array<number>
 }
 
 export default function TableHeader({ className, tHeadState }: TableHeader) {
@@ -22,7 +21,6 @@ export default function TableHeader({ className, tHeadState }: TableHeader) {
             <div key={idx} className={`${className}-header`}>{el}</div>
         )
     }
-
 
     return (
         <div className={`${className}-header-container`}>

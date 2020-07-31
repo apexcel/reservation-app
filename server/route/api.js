@@ -71,7 +71,7 @@ router.post("/get-booked-data", (req, res) => {
     const connection = db.init();
     db.conn(connection)
     const query = "SELECT * FROM ??";
-    const query_param = `time_table${req.body.today}`
+    const query_param = `time_table${req.body.date}`
     connection.query(query, query_param, (err, row) => {
         if (err) throw err
         console.log(row)
@@ -87,7 +87,7 @@ router.post("/set-booked-data", (req, res) => {
     db.conn(connection)
     const query = "UPDATE ?? SET booked_data = (?) WHERE time = ?;";
     const query_param = [
-        `time_table${req.body.today}`,
+        `time_table${req.body.date}`,
         req.body.booked_data,
         req.body.time
     ];

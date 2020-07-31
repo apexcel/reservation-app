@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import {maxDateAtom, minDateAtom} from '../atoms/dateAtoms'
+import {maxDateAtom, minDateAtom} from '../atoms/calendarAtoms'
 import { atom, useRecoilValue } from 'recoil'
-import { max, min } from 'moment';
+
 interface DateValues {
     date: Date,
     day: number,

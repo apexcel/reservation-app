@@ -23,9 +23,9 @@ export default function Main({ userInfo }) {
         setVisible(false);
     }
 
-    const onDateClick = (ev, val) => {
-        //console.log(ev, val)
-        setCurrentDay(val);
+    const onDateClick = (ev, currentDate) => {
+        console.log(ev, currentDate)
+        setCurrentDay(currentDate);
         openModal();
     }
 

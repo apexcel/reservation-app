@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { atom, useRecoilState, useRecoilValue } from "recoil"
-import { maxDateAtom, minDateAtom } from '../atoms/dateAtoms'
+import { maxDateAtom, minDateAtom } from '../atoms/calendarAtoms'
 import Navigation from "./Navigation.tsx";
 import DayOfWeek from "./DayOfWeek.tsx";
 import Weeks from "./Weeks.tsx"
@@ -21,6 +21,7 @@ export default function Calendar({ onDateClick, maxDate, minDate, }: Calendar) {
 
     const [maxDateState, setMaxDateState] = useRecoilState(maxDateAtom);
     const [minDateState, setMinDateState] = useRecoilState(minDateAtom);
+
     useEffect(() => {
         if (maxDate) setMaxDateState(maxDate);
         if (minDate) setMinDateState(minDate);
@@ -32,7 +33,6 @@ export default function Calendar({ onDateClick, maxDate, minDate, }: Calendar) {
         today: new Date().getDate(),
         currentDays: createMonthDays(new Date().getFullYear(), new Date().getMonth()),
     });
-
 
     return (
         <div className={`${className}-wrapper`}>

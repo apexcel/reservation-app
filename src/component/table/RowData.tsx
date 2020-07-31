@@ -22,7 +22,7 @@ export default function RowData({
 }: RowData) {
 
     const renderRow = () => {
-        console.log(rowState);
+        //console.log(rowState);
         let ret = [];
         let isAble = true;
         let canBooked = false;
