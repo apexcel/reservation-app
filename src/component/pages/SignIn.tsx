@@ -14,12 +14,8 @@ export default function SignIn({ setLogged }) {
         id: '', pw: ''
     });
 
-    useEffect(() => {
-        console.log({ id, pw })
-    })
-
-    const onSignIn = async (e) => {
-        e.preventDefault();
+    const onSignIn = async (ev) => {
+        ev.preventDefault();
         if (isEmpty(id) || isEmpty(pw)) {
             return;
         }
@@ -31,6 +27,7 @@ export default function SignIn({ setLogged }) {
                 stamp: new Date().getTime()
             }
         };
+        
         try {
             const response = await axios.post(config.url, config.form_data).then(res => res.data)
             console.log(response)

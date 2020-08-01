@@ -23,9 +23,8 @@ export default function Modal({ visible, closeModal, currentDay }) {
     }, [])
 
     const onBookingHandler = async (ev, row, index, headField) => {
-        console.log("onBookingHandler");
+        //console.log(ev, row, index, headField)
         const selectedDate = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate(), index + 13);
-        console.log(ev, row, index, headField)
         if (isEmpty(row)) {
             const ans = confirm(`${row} ${selectedDate.getHours()}에 예약하시겠습니까?`);
             if (ans) {
@@ -33,8 +32,6 @@ export default function Modal({ visible, closeModal, currentDay }) {
                     return index === idx ? {...tableBody[idx], [headField]: userState.user.id} : el
                 });
                 setTableBody(updatedTableBody)
-                console.log(updatedTableBody)
-                console.log(tableBody)
                 await setBookedData(index, headField, updatedTableBody[index], selectedDate);
             }
         }

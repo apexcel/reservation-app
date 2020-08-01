@@ -4,7 +4,7 @@ import SignIn from './SignIn.tsx'
 
 import '../../styles/loginform.scss'
 
-export default function LoginForm({ setLogged, logged, setUserState, isEmpty, userState }) {
+export default function LoginForm({ setLogged, logged }) {
 
     return (
         <>
