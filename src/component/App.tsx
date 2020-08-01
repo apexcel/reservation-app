@@ -5,8 +5,9 @@ import { atom, useRecoilState } from 'recoil'
 import LoginForm from './pages/LoginForm.tsx'
 import SignUp from './pages/SignUp.tsx'
 import Header from './pages/Header.tsx'
-import UserInformation from './pages/UserInfomation.tsx'
 import Footer from './pages/Footer.tsx'
+import Profile from './pages/Profile.tsx'
+import ErrorPage from './pages/ErrorPage.tsx'
 
 // styles
 import '../styles/app.scss'
@@ -36,10 +37,14 @@ export default function App() {
 
     return (
         <div className='container'>
-            { logged ? <Header setLogged={setLogged} /> : null}
+            {logged ? <Header setLogged={setLogged} /> : null}
             <Switch>
                 <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserState={setUserState} logged={logged} setLogged={setLogged} userState={userState} />} />
                 <Route exact path='/signup' component={() => <SignUp />} />
+                {logged ? 
+                    <Route exact path='/profile' component={() => <Profile userState={userState}/>} /> 
+                    : <ErrorPage /> 
+                }
             </Switch>
             <Footer version={version} />
         </div>

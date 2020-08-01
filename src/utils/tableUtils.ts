@@ -1,9 +1,16 @@
-interface TableBody {
+import { isEmpty } from './utils.ts'
+
+interface TableHead {
     name: string,
     field: string
 }
 
-export function createObjectForTableBody(tableHeadState: TableBody[]) {
+interface DBValues {
+    time: number,
+    booked_data: string | null | undefined
+}
+
+export function createEmptyTableRow(tableHeadState: TableHead[]) {
     let obj = {};
     for (let i = 0; i < tableHeadState.length; i += 1) {
         const fieldName = tableHeadState[i].field;
@@ -14,4 +21,10 @@ export function createObjectForTableBody(tableHeadState: TableBody[]) {
         });
     }
     return obj;
+}
+
+export function fulfillEmptyObject(dataList: Array<DBValues>, emptyTableBody: object) {
+    return dataList.map((el, idx) => {
+        return (isEmpty(el.booked_data)) ? emptyTableBody : JSON.parse(el.booked_data);
+    });
 }

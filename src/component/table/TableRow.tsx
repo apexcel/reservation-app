@@ -1,12 +1,12 @@
 import React from 'react'
 import { isEmpty } from '../../utils/utils.ts'
 
-interface TableRow {
+interface TableRowProps {
     className: string,
     rowItem: Array<object>
     tHeadState: Array<Columns>,
     index: number,
-    onBookingHandler: () => void
+    onTableRowClick: () => void
 }
 
 interface Columns {
@@ -19,8 +19,8 @@ export default function TableRow({
     rowItem,
     tHeadState,
     index,
-    onBookingHandler
-}: TableRow) {
+    onTableRowClick
+}: TableRowProps) {
 
     const renderRow = () => {
         let ret = [];
@@ -30,9 +30,9 @@ export default function TableRow({
 
         for (let i = 0; i < tHeadState.length; i += 1) {
             //console.log(rowItem[tHeadState[i].field]);
-            const _onBookingHandler = (ev: React.MouseEvent, row = rowItem[tHeadState[i].field]) => {
+            const _onTableRowClick = (ev: React.MouseEvent, rowIndex = index, currentTableRowValue = rowItem[tHeadState[i].field]) => {
                 ev.preventDefault();
-                onBookingHandler.call(this, ev, row, index, tHeadState[i].field)
+                onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i])
             };
 
             if (!isEmpty(rowItem[tHeadState[i].field])) isAble = false;
@@ -43,7 +43,7 @@ export default function TableRow({
             ret[i] = (
                 <div
                     key={i}
-                    onClick={_onBookingHandler}
+                    onClick={_onTableRowClick}
                     className={`${className}-row-cell ${isAble ? `${canBooked ? "" : `${className}-booked`}` : `${className}-unable`} ${dinner ? `${className}-break-time`: ""}`}
                 >
                     {rowItem[tHeadState[i].field]}

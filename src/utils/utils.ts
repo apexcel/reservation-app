@@ -1,4 +1,4 @@
-export function isEmpty<T>(obj: T) {
+export function isEmpty(obj) {
     if (obj === null || obj === undefined || obj.toString() === '' || 
         (obj !== null && typeof obj === 'object' && !Object.keys(obj).length) ||
         (typeof obj === 'function' && !obj.length)) {
@@ -7,7 +7,7 @@ export function isEmpty<T>(obj: T) {
     return false
 }
 
-export function replacer<T>(key: T, value: T) {
+export function replacer(key, value) {
     if (value === undefined) {
         return null;
     }

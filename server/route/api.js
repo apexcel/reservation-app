@@ -10,7 +10,7 @@ router.use(bodyParser.json())
 
 
 // Sign In Check
-router.post('/login_check', (req, res) => {
+router.post('/login-check', (req, res) => {
     const sign_in = req.body
     const query = 'SELECT * FROM users WHERE id=BINARY(?) AND pw=BINARY(?)'
     const query_data = [sign_in.user.id, sign_in.user.pw]
@@ -63,6 +63,11 @@ router.post('/signup', (req, res) => {
         res.send(row)
     })
     connection.end()
+});
+
+router.post("/user-info", (req, res) => {
+    console.log(req.body)
+    res.send('user-info response')
 })
 
 router.post("/get-booked-data", (req, res) => {

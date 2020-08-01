@@ -5,8 +5,7 @@ export default function TableBody({
     className, 
     tHeadState, 
     tBodyState, 
-    currentDay,
-    onBookingHandler }) {
+    onTableRowClick }) {
 
     const renderTableBody = () => {
         return tBodyState.map((el ,idx) => 
@@ -16,8 +15,7 @@ export default function TableBody({
             className={className}
             rowItem={el} 
             tHeadState={tHeadState}
-            currentDay={currentDay}
-            onBookingHandler={onBookingHandler}
+            onTableRowClick={onTableRowClick}
             />)
     }
 

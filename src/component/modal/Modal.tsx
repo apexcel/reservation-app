@@ -8,7 +8,13 @@ import axios from 'axios'
 
 import '../../styles/modal.scss'
 
-export default function Modal({ visible, closeModal, currentDay }) {
+interface ModalProps {
+    visible: boolean,
+    closeModal: () => void,
+    selectedDateState: Date
+}
+
+export default function Modal({ visible, closeModal, selectedDateState }: ModalProps) {
 
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom)
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
@@ -22,22 +28,33 @@ export default function Modal({ visible, closeModal, currentDay }) {
         ]);
     }, [])
 
-    const onBookingHandler = async (ev, row, index, headField) => {
-        //console.log(ev, row, index, headField)
-        const selectedDate = new Date(currentDay.getFullYear(), currentDay.getMonth(), currentDay.getDate(), index + 13);
-        if (isEmpty(row)) {
-            const ans = confirm(`${row} ${selectedDate.getHours()}에 예약하시겠습니까?`);
+    const updateTableBodyState = (index, field) => {
+        return (tableBody.map((el, idx) => {
+            return index === idx ? {...tableBody[idx], [field]: userState.user.id} : el
+        }))
+    };
+
+    const onTableRowClick = async (ev, rowIndex, currentTableRowValue, selectedHeadState) => {
+        //console.log(ev, currentTableRowValue, rowIndex, selectedHeadState)
+        const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIndex + 13);
+
+        // 예약
+        if (isEmpty(currentTableRowValue)) {
+            const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);
             if (ans) {
-                let updatedTableBody = await tableBody.map((el, idx) => {
-                    return index === idx ? {...tableBody[idx], [headField]: userState.user.id} : el
-                });
-                setTableBody(updatedTableBody)
-                await setBookedData(index, headField, updatedTableBody[index], selectedDate);
+                const updated = await updateTableBodyState(rowIndex, selectedHeadState.field)
+                setTableBody(updated)
+                await setBookedData(rowIndex, updated[rowIndex], selectedDate);
             }
+        }
+        // 예약 취소
+        if (currentTableRowValue === userState.user.id) {
+            const ans = confirm(`예약 취소 하시겠습니까?`)
+
         }
     };
 
-    const setBookedData = async (index, headField, newTableState, selectedDate) => {
+    const setBookedData = async (rowIndex, newTableState, selectedDate) => {
         const _currentDate = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
         const config = {
             url: "http://localhost:9000/api/set-booked-data",
@@ -45,11 +62,10 @@ export default function Modal({ visible, closeModal, currentDay }) {
                 date: _currentDate,
                 id: userState.user.id,
                 booked_data: JSON.stringify(newTableState),
-                time: (index + 1)
+                time: (rowIndex + 1)
             }
         }
-        const date = await axios.post(config.url, config.data);
-        //console.log(date)
+        await axios.post(config.url, config.data);
     }
 
     return (
@@ -57,14 +73,13 @@ export default function Modal({ visible, closeModal, currentDay }) {
             {visible ?
                 <div className="modal">
                     <button onClick={closeModal}>closeModal</button>
-                    {currentDay.getFullYear()}
-                    {currentDay.getMonth() + 1}
-                    {currentDay.getDate()}
+                    {selectedDateState.getFullYear()}
+                    {selectedDateState.getMonth() + 1}
+                    {selectedDateState.getDate()}
                     <Table
                         tHeadState={tableHead}
                         tBodyState={tableBody}
-                        currentDay={currentDay}
-                        onBookingHandler={onBookingHandler}
+                        onTableRowClick={onTableRowClick}
                     />
                 </div> : null}
         </>

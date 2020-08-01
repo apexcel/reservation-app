@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { useRecoilState } from 'recoil'
 import { userInfoAtom } from '../atoms/globalAtoms'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { isEmpty } from '../../utils/utils.ts'
 import axios from 'axios';
 import useInput from '../../reducer/useInput.ts'
@@ -17,17 +17,17 @@ export default function SignIn({ setLogged }) {
     const onSignIn = async (ev) => {
         ev.preventDefault();
         if (isEmpty(id) || isEmpty(pw)) {
-            return;
+            return
         }
 
         const config = {
-            url: 'http://localhost:9000/api/login_check',
+            url: 'http://localhost:9000/api/login-check',
             form_data: {
                 user: { id, pw },
                 stamp: new Date().getTime()
             }
         };
-        
+
         try {
             const response = await axios.post(config.url, config.form_data).then(res => res.data)
             console.log(response)
@@ -41,7 +41,6 @@ export default function SignIn({ setLogged }) {
                 setLogged(true)
             }
         } catch (err) {
-            // 503에러 페이지
             throw err;
         }
 

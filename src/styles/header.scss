@@ -1,0 +1,25 @@
+.main-top-header {
+    position: absolute;
+    top: 0;
+    
+}
+
+.main-top-nav {
+    display: flex;
+    flex-direction: row;
+}
+
+.main-header-link {
+    color: #acacac;
+    font-size: 1.1rem;
+    text-decoration: none;
+    margin: 0.5rem;
+
+    &:hover {
+        color: #ffffff;
+    }
+}
+
+.main-header-about-user {
+    
+}

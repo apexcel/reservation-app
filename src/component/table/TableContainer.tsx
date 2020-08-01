@@ -6,8 +6,7 @@ export default function TableContainer({
     className, 
     tHeadState, 
     tBodyState,
-    currentDay,
-    onBookingHandler }) {
+    onTableRowClick }) {
     return (
         <div className={`${className}-container`}>
             <TableHeader
@@ -18,8 +17,7 @@ export default function TableContainer({
                 className={className}
                 tHeadState={tHeadState}
                 tBodyState={tBodyState}
-                currentDay={currentDay}
-                onBookingHandler={onBookingHandler}
+                onTableRowClick={onTableRowClick}
             />
         </div>
     )

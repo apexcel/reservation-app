@@ -5,8 +5,7 @@ import TableContainer from './TableContainer.tsx'
 export default function Table({ 
     tHeadState, 
     tBodyState, 
-    onBookingHandler,
-    currentDay
+    onTableRowClick,
  }) {
     const className = "simple__table";
 
@@ -16,8 +15,7 @@ export default function Table({
                 className={className}
                 tHeadState={tHeadState}
                 tBodyState={tBodyState}
-                currentDay={currentDay}
-                onBookingHandler={onBookingHandler}
+                onTableRowClick={onTableRowClick}
             />
         </div>
 
