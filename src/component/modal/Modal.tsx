@@ -30,7 +30,7 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
 
     const updateTableBodyState = (index, field) => {
         return (tableBody.map((el, idx) => {
-            return index === idx ? {...tableBody[idx], [field]: userState.user.id} : el
+            return index === idx ? { ...tableBody[idx], [field]: userState.user.id } : el
         }))
     };
 
@@ -50,7 +50,19 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
         // 예약 취소
         if (currentTableRowValue === userState.user.id) {
             const ans = confirm(`예약 취소 하시겠습니까?`)
-
+            if (ans) {
+                let removed = tableBody.map((el, idx) => {
+                    if (el[selectedHeadState.field] === userState.user.id && rowIndex === idx) {
+                        console.log("true", el, idx)
+                        return { ...el, [selectedHeadState.field]: "" };
+                    }
+                    else {
+                        return el;
+                    }
+                });
+                setTableBody(removed);
+                await setBookedData(rowIndex, removed[rowIndex], selectedDate);
+            }
         }
     };
 
@@ -58,7 +70,7 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
         const _currentDate = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
         const config = {
             url: "http://localhost:9000/api/set-booked-data",
-            data: { 
+            data: {
                 date: _currentDate,
                 id: userState.user.id,
                 booked_data: JSON.stringify(newTableState),
