@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import RowData from './TableRow.tsx'
 
 export default function TableBody({ 
@@ -6,6 +6,8 @@ export default function TableBody({
     tHeadState, 
     tBodyState, 
     onTableRowClick }) {
+
+    console.log(tHeadState)
 
     const renderTableBody = () => {
         return tBodyState.map((el ,idx) => 

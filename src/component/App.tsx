@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
-import { userInfoAtom } from './atoms/globalAtoms'
+import { userInfoAtom } from './atoms/globalAtoms.ts'
 import { atom, useRecoilState } from 'recoil'
 import LoginForm from './pages/LoginForm.tsx'
 import SignUp from './pages/SignUp.tsx'

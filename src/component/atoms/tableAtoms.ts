@@ -12,3 +12,8 @@ export const tableBodyStateAtom = atom({
     key: 'tableBodyStateAtom',
     default: [{}]
 });
+
+export const tableRowStateAtom = (date) => atom({
+    key: `tableRowStateAtom-${date}`,
+    default: "date"
+})

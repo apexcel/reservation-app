@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Calendar from '../calendar/Calendar.tsx'
 import Modal from '../modal/Modal.tsx'
 import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
-import { tableHeadStateAtom, tableBodyStateAtom } from '../atoms/tableAtoms'
-import { userInfoAtom } from '../atoms/globalAtoms'
+import { tableHeadStateAtom, tableBodyStateAtom } from '../atoms/tableAtoms.ts'
+import { userInfoAtom } from '../atoms/globalAtoms.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import axios from 'axios'
 
@@ -15,10 +15,12 @@ export default function Main() {
     const [visible, setVisible] = useState(false);
     const [selectedDateState, setSelectedDateState] = useState(new Date());
 
+    // Calendar
     const now = new Date().valueOf();
     const maxDate = new Date(now + (86400000 * 31));
     const minDate = new Date(now - (86400000 * 1))
 
+    // Modal
     const openModal = () => setVisible(true);
     const closeModal = () => setVisible(false);
 

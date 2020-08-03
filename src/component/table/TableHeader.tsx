@@ -1,6 +1,6 @@
 import React from 'react'
 
-interface TableHeader {
+interface TableHeaderProps {
     className: string,
     tHeadState: Array<Columns>
 }
@@ -8,9 +8,10 @@ interface TableHeader {
 interface Columns {
     name: string,
     field: string,
+    range?: Array<number>
 }
 
-export default function TableHeader({ className, tHeadState }: TableHeader) {
+export default function TableHeader({ className, tHeadState }: TableHeaderProps) {
 
     const renderTableHeader = () => {
         let headerNames = [];

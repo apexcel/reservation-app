@@ -1,37 +1,26 @@
 import React from 'react'
+import { useRecoilValue } from 'recoil'
+import { nextMonthSelector, prevMonthSelector  } from '../atoms/calendarAtoms.ts'
+
+interface NavigationProps {
+    className: string,
+    setCalendarState: (adjacentMonth) => void,
+    prevLabel: string,
+    nextLabel: string
+}
 
 export default function Navigation({
     className,
-    calendarState,
     setCalendarState,
-    createMonthDays,
     prevLabel = '‹',
     nextLabel = '›',
-}) {
+}: NavigationProps) {
 
-    const next = () => {
-        const year = (calendarState.month === 11) ? calendarState.year + 1 : calendarState.year;
-        const month = (calendarState.month + 1) % 12;
-        const currentDays = createMonthDays(year, month);
-        setCalendarState({
-            ...calendarState,
-            year: year,
-            month: month,
-            currentDays: currentDays,
-        });
-    };
+    const nextMonth = useRecoilValue(nextMonthSelector);
+    const prevMonth = useRecoilValue(prevMonthSelector);
 
-    const prev = () => {
-        const year = (calendarState.month === 0) ? calendarState.year - 1 : calendarState.year;
-        const month = (calendarState.month === 0) ? 11 : calendarState.month - 1;
-        const currentDays = createMonthDays(year, month);
-        setCalendarState({
-            ...calendarState,
-            year: year,
-            month: month,
-            currentDays: currentDays,
-        });
-    }
+    const next = () => setCalendarState(nextMonth);
+    const prev = () => setCalendarState(prevMonth);
 
     const renderButtons = () => {
         return (

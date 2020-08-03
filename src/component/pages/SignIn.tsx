@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { useRecoilState } from 'recoil'
-import { userInfoAtom } from '../atoms/globalAtoms'
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil'
+import { userInfoAtom } from '../atoms/globalAtoms.ts'
 import { isEmpty } from '../../utils/utils.ts'
-import axios from 'axios';
 import useInput from '../../reducer/useInput.ts'
+import axios from 'axios';
 
 export default function SignIn({ setLogged }) {
 

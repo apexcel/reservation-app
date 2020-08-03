@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../table/Table.tsx'
 import { isEmpty } from '../../utils/utils.ts'
-import { atom, atomFamily, selector, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { tableBodyStateAtom, tableHeadStateAtom } from '../atoms/tableAtoms'
-import { userInfoAtom } from '../atoms/globalAtoms'
+import { atom, atomFamily, selector, useRecoilState, useRecoilValue } from 'recoil'
+import { tableBodyStateAtom, tableHeadStateAtom } from '../atoms/tableAtoms.ts'
+import { baseURL, userInfoAtom } from '../atoms/globalAtoms.ts'
 import axios from 'axios'
 
 import '../../styles/modal.scss'
@@ -19,10 +19,11 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom)
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
     const [userState, setUserState] = useRecoilState(userInfoAtom)
+    const baseUrl = useRecoilValue(baseURL);
 
     useEffect(() => {
         setTableHead([
-            { name: "소정", field: "so" },
+            { name: "소정", field: "so", range: [0, 5] },
             { name: "현영", field: "hyun" },
             { name: "상정", field: "jung" },
         ]);
@@ -69,7 +70,7 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
     const setBookedData = async (rowIndex, newTableState, selectedDate) => {
         const _currentDate = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
         const config = {
-            url: "http://localhost:9000/api/set-booked-data",
+            url: `${baseUrl}/api/set-booked-data`,
             data: {
                 date: _currentDate,
                 id: userState.user.id,
