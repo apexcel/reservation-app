@@ -31,7 +31,7 @@ export default function SignUp() {
                 let classList = document.getElementById(Object.keys(signUpForm)[idx]).classList;
                 el ? (classList.remove("empty-warn")): (classList.add("empty-warn"));
             });
-            // axios.post('http://localhost:9000/api/signup', signUpForm).then(res => console.log(res))
+            // axios.post('http://localhost:9000/api/login/sign-up', signUpForm).then(res => console.log(res))
         }
         catch (err) {
             // redirect 503 error page;

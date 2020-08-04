@@ -6,7 +6,6 @@ const User = require('../database/mongo/user')
 const TableHeader = require('../database/mongo/tableHeader')
 const mysqlConn = require('../database/mysql/mysqlConn');
 const mongoConn = require('../database/mongo/mongoConn');
-const { json } = require('body-parser');
 
 router.post('/sign-in', (req, res) => {
     const query = 'SELECT * FROM users WHERE id=BINARY(?) AND pw=BINARY(?)'
@@ -62,13 +61,12 @@ router.post('/sign-up', (req, res) => {
 
 router.get('/test', async (req, res) => {
     mongoConn.conn();
-    mongoose.connection;
     console.log("called1");
     let obj = await TableHeader.find({}, (err, res) => {
         if (err) throw err;
     });
 
-    console.log(obj[0])
+    console.log(obj)
 
     //console.log("Log", a);
     mongoConn.disconn();

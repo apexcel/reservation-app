@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilState } from 'recoil'
-import { userInfoAtom } from '../atoms/globalAtoms.ts'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { userInfoAtom, baseURLAtom } from '../atoms/globalAtoms.ts'
 import { isEmpty } from '../../utils/utils.ts'
 import useInput from '../../reducer/useInput.ts'
 import axios from 'axios';
@@ -9,6 +9,7 @@ import axios from 'axios';
 export default function SignIn({ setLogged }) {
 
     const [userState, setUserState] = useRecoilState(userInfoAtom);
+    const baseUrl = useRecoilValue(baseURLAtom);
 
     const [{ id, pw }, onChangeInput, reset] = useInput({
         id: '', pw: ''
@@ -17,11 +18,11 @@ export default function SignIn({ setLogged }) {
     const onSignIn = async (ev) => {
         ev.preventDefault();
         if (isEmpty(id) || isEmpty(pw)) {
-            return
+            return;
         }
 
         const config = {
-            url: 'http://localhost:9000/api/login-check',
+            url: `${baseUrl}/api/login/sign-in`,
             form_data: {
                 user: { id, pw },
                 stamp: new Date().getTime()

@@ -3,7 +3,7 @@ import Table from '../table/Table.tsx'
 import { isEmpty } from '../../utils/utils.ts'
 import { atom, atomFamily, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { tableBodyStateAtom, tableHeadStateAtom } from '../atoms/tableAtoms.ts'
-import { baseURL, userInfoAtom } from '../atoms/globalAtoms.ts'
+import { baseURLAtom, userInfoAtom } from '../atoms/globalAtoms.ts'
 import axios from 'axios'
 
 import '../../styles/modal.scss'
@@ -19,15 +19,16 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom)
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
     const [userState, setUserState] = useRecoilState(userInfoAtom)
-    const baseUrl = useRecoilValue(baseURL);
+    const baseUrl = useRecoilValue(baseURLAtom);
 
     useEffect(() => {
+        // TODO: 요일별로 헤더 바뀌게 하기
         setTableHead([
             { name: "소정", field: "so", range: [0, 5] },
             { name: "현영", field: "hyun" },
-            { name: "상정", field: "jung" },
-        ]);
-    }, [])
+            { name: "상정", field: "jung", range: [5, 10] },
+        ])
+    }, []);
 
     const updateTableBodyState = (index, field) => {
         return (tableBody.map((el, idx) => {
@@ -70,7 +71,7 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
     const setBookedData = async (rowIndex, newTableState, selectedDate) => {
         const _currentDate = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
         const config = {
-            url: `${baseUrl}/api/set-booked-data`,
+            url: `${baseUrl}/api/reservation/set-booked-data`,
             data: {
                 date: _currentDate,
                 id: userState.user.id,

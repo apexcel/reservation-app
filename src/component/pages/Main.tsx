@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import Calendar from '../calendar/Calendar.tsx'
 import Modal from '../modal/Modal.tsx'
+import Admin from './admin/Admin.tsx'
 import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
 import { tableHeadStateAtom, tableBodyStateAtom } from '../atoms/tableAtoms.ts'
-import { userInfoAtom } from '../atoms/globalAtoms.ts'
+import { userInfoAtom, baseURLAtom } from '../atoms/globalAtoms.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import axios from 'axios'
 
 export default function Main() {
     const tableHead = useRecoilValue(tableHeadStateAtom);
+    const baseUrl = useRecoilValue(baseURLAtom);
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
     const [userState, setUserState] = useRecoilState(userInfoAtom);
 
@@ -34,7 +36,7 @@ export default function Main() {
     const getBookedList = async (selectedDate) => {
         const _selectedDate: string = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
         const config = {
-            url: "http://localhost:9000/api/get-booked-data",
+            url: `${baseUrl}/api/reservation/get-booked-data`,
             data: { date: _selectedDate }
         }
         const result = await axios.post(config.url, config.data)
@@ -45,9 +47,11 @@ export default function Main() {
         setTableBody(newTableBody)
     };
 
+    axios.get(`${baseUrl}/api/login/test`).then(res => console.log(res))
 
     return (
         <>
+            <Admin/>
             <Calendar
                 onDateClick={onDateClick}
                 maxDate={maxDate}

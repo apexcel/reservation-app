@@ -33,7 +33,7 @@ export default function TableRow({
         let ret = [];
 
         for (let i = 0; i < tHeadState.length; i += 1) {
-            console.log(rowItem)
+            //console.log(rowItem)
             //console.log(logs(i))
 
             console.log(tHeadState[i]);
