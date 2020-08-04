@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mysqlConn = require('../database/mysql/mysqlConn');
 
-router.post("/get-booked-data", (req, res) => {
+router.post("/get-booked-data", (req, resp) => {
     console.log(req.body)
 
     const connection = mysqlConn.init();
@@ -12,12 +12,12 @@ router.post("/get-booked-data", (req, res) => {
     connection.query(query, query_param, (err, row) => {
         if (err) throw err
         console.log(row)
-        res.send(row)
+        resp.send(row)
     })
     connection.end()
 });
 
-router.post("/set-booked-data", (req, res) => {
+router.post("/set-booked-data", (req, resp) => {
     console.log(req.body)
     
     const connection = mysqlConn.init();
@@ -32,7 +32,7 @@ router.post("/set-booked-data", (req, res) => {
     connection.query(query, query_param, (err, row) => {
         if (err) throw err
         console.log(row)
-        res.send(row)
+        resp.send(row)
     })
     connection.end()
 });

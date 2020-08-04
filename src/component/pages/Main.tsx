@@ -47,7 +47,7 @@ export default function Main() {
         setTableBody(newTableBody)
     };
 
-    axios.get(`${baseUrl}/api/login/test`).then(res => console.log(res))
+    axios.get(`${baseUrl}/api/table/headers`).then(res => console.log(res))
 
     return (
         <>

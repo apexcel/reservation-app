@@ -23,6 +23,9 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
 
     useEffect(() => {
         // TODO: 요일별로 헤더 바뀌게 하기
+        // 선택한 날짜의 요일 getDay 가져와서 헤더 설정
+        // 헤더는 mongoose
+        // 테이블 데이터는 mysql
         setTableHead([
             { name: "소정", field: "so", range: [0, 5] },
             { name: "현영", field: "hyun" },
