@@ -7,6 +7,8 @@ db.conn(connection);
 const now = new Date();
 const TABLE_NAME = "time_table";
 //TODO: 0시 정각에 테이블 생성 하도록하기
+// crontab 이용해서 node 명령어로 실행하게 하기
+// 당일분 csv파일로 생성하도록 하기
 function generateTable(tableName) {
     const now = new Date().valueOf();
     for (let i = 1; i <= 31; i += 1) {
