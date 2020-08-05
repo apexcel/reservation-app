@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../database/mysql/mysqlConn');
 
 const COLUMN_LENGTH = 10;
 const connection = db.init();
