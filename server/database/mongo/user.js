@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     id: { type: String, required: true },
     password: { type: String, required: true, trim: true },
-    dob: { type: Date },
+    dob: { type: Date, required: true },
     lessons: [lessonSchema],
     reservations: [reservationSchema]
 });

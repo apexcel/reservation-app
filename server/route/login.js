@@ -13,7 +13,7 @@ router.post('/sign-in', (req, resp) => {
     connection.query(query, query_data, (err, row) => {
         if (err) throw err
         if (!row.length > 0) resp.send({ auth: false })
-        
+
         // check
         let check_list;
         for (const key in row) {
@@ -57,10 +57,22 @@ router.post('/sign-up', (req, resp) => {
 });
 
 
-router.get('/sign-in2', async (req, resp) => {
+router.post('/sign-up-mongoose', async (req, resp) => {
+    // TODO: Have to do refactor
+    console.log(req.body)
     mongoConn.conn();
-    mongoConn.disconn();
-});
+    const query = {
+        id: req.body.id,
+        name: (req.body.first_name + req.body.last_name).trim(),
+        password: req.body.pw,
+        dob: req.body.dob,
+    }
+    // TODO: 해당 날짜 가져와서 booked lessons 확인
+    // 카운터 차감
 
+    await new User(query).save();
+    mongoConn.disconn();
+    resp.status(200);
+});
 
 module.exports = router;

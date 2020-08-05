@@ -8,6 +8,7 @@ import Header from './pages/Header.tsx'
 import Footer from './pages/Footer.tsx'
 import Profile from './pages/Profile.tsx'
 import ErrorPage from './pages/ErrorPage.tsx'
+import Enroll from './pages/admin/Enroll.tsx'
 
 // styles
 import '../styles/app.scss'
@@ -38,6 +39,7 @@ export default function App() {
     return (
         <div className='container'>
             {logged ? <Header setLogged={setLogged} /> : null}
+            <Enroll />
             <Switch>
                 <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserState={setUserState} logged={logged} setLogged={setLogged} userState={userState} />} />
                 <Route exact path='/signup' component={() => <SignUp />} />

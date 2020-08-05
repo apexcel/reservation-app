@@ -14,8 +14,8 @@ export const minDateAtom = atom({
 export const dateRangeAtom = atom({
     key: 'dateRangeAtom',
     default: {
-        start: null,
-        end: null
+        start: new Date(),
+        end: new Date()
     }
 })
 
@@ -59,4 +59,5 @@ export const prevMonthSelector = selector({
             currentDays: currentDays,
         };
     }
-})
+});
+

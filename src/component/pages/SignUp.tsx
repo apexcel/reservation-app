@@ -1,5 +1,8 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react'
-import useInput from '../../reducer/useInput.ts'
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { atom, useRecoilState, useRecoilValue } from 'recoil'
+import { baseURLAtom } from '../atoms/globalAtoms.ts'
+import useInput from '../../reducer/useInput.ts';
+import axios from 'axios';
 
 import '../../styles/common.scss'
 import '../../styles/signup.scss'
@@ -17,10 +20,11 @@ export default function SignUp() {
     }
 
     const [signUpForm, onChangeInput, reset] = useInput(initForm)
+    const baseUrl = useRecoilValue(baseURLAtom);
 
-    useEffect(() => {
-        console.log(signUpForm)
-    })
+        useEffect(() => {
+            console.log(signUpForm)
+        })
 
 
     const onSignUp = (e) => {
@@ -29,9 +33,10 @@ export default function SignUp() {
             const firstEmptyItem = Object.values(signUpForm).map(el => el !== '');
             firstEmptyItem.map((el, idx) => {
                 let classList = document.getElementById(Object.keys(signUpForm)[idx]).classList;
-                el ? (classList.remove("empty-warn")): (classList.add("empty-warn"));
+                el ? (classList.remove("empty-warn")) : (classList.add("empty-warn"));
             });
-            // axios.post('http://localhost:9000/api/login/sign-up', signUpForm).then(res => console.log(res))
+            //axios.post('http://localhost:9000/api/login/sign-up', signUpForm).then(res => console.log(res))
+            axios.post(`${baseUrl}/api/login/sign-up-mongoose`, signUpForm).then(res => console.log(res))
         }
         catch (err) {
             // redirect 503 error page;

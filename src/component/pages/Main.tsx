@@ -60,6 +60,11 @@ export default function Main() {
                 onDateClick={onDateClick}
                 maxDate={maxDate}
                 minDate={minDate}
+                // TODO: Date-range
+                dateRange={
+                    {start: new Date(),
+                    end: new Date(new Date().valueOf() + 10 * 86400000)}
+                }
             />
             <Modal
                 visible={visible}

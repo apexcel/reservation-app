@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { maxDateAtom, minDateAtom } from '../atoms/calendarAtoms.ts'
+import { maxDateAtom, minDateAtom, dateRangeAtom } from '../atoms/calendarAtoms.ts'
 import { atom, useRecoilValue } from 'recoil'
 
 interface DateValues {
@@ -24,13 +24,23 @@ export default function Day({
     };
 
     const maxDate = useRecoilValue(maxDateAtom);
-    const minDate = useRecoilValue(minDateAtom)
+    const minDate = useRecoilValue(minDateAtom);
+    //TODO: Date-ranges
+    // const dateRange = useRecoilValue(dateRangeAtom);
 
     const renderDay = () => {
+        //console.log(currentDay)
         let adjacent = currentDay.status !== "current" ? true : false;
         let today = false;
         let sat = currentDay.day === 6 ? true : false;
         let sun = currentDay.day === 0 ? true : false;
+
+
+        // TODO: Date-range 구간 Refactor
+        // if (currentDay.date.getDate() > dateRange.start.getDate() && currentDay.date.getDate() < dateRange.end.getDate()) {
+        //     return (<div className={`
+        //     ${className}-date-cell date-range`}>{currentDay.date.getDate()}</div>);
+        // }
 
         if (maxDate && currentDay.date > maxDate) {
             return (<div className={`

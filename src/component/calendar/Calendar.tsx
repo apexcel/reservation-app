@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { atom, useRecoilState, useRecoilValue } from "recoil"
-import { maxDateAtom, minDateAtom, calendarStateAtom } from '../atoms/calendarAtoms.ts'
+import { maxDateAtom, minDateAtom, calendarStateAtom, dateRangeAtom } from '../atoms/calendarAtoms.ts'
 import Navigation from "./Navigation.tsx";
 import DayOfWeek from "./DayOfWeek.tsx";
 import Weeks from "./Weeks.tsx"
@@ -25,12 +25,14 @@ export default function Calendar({
 
     const [maxDateState, setMaxDateState] = useRecoilState(maxDateAtom);
     const [minDateState, setMinDateState] = useRecoilState(minDateAtom);
+    const [dateRangeState, setDateRangeState] = useRecoilState(dateRangeAtom);
 
     useEffect(() => {
         if (maxDate) setMaxDateState(maxDate);
         if (minDate) setMinDateState(minDate);
+        if (dateRange) setDateRangeState(dateRange)
     }, [])
-
+    
     const [calendarState, setCalendarState] = useRecoilState(calendarStateAtom);
     
     return (

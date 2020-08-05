@@ -13,7 +13,7 @@ export default function Header({ setLogged }) {
         <header className='man-top-header'>
             <nav className='main-top-nav'>
                 <Link className='main-header-link' to='/'>Main</Link>
-                <Link className='main-header-link' to='profile'>Profile: Working on</Link>
+                <Link className='main-header-link' to='/profile'>Profile: Working on</Link>
                 <div className='main-header-about-user'>
                     <button type='button' onClick={logout}>logout</button>
                 </div>
