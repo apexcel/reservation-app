@@ -7,8 +7,6 @@ export default function TableBody({
     tBodyState, 
     onTableRowClick }) {
 
-    console.log(tHeadState)
-
     const renderTableBody = () => {
         return tBodyState.map((el ,idx) => 
         <RowData 

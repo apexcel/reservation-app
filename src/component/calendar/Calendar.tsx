@@ -27,7 +27,6 @@ export default function Calendar({
     const [minDateState, setMinDateState] = useRecoilState(minDateAtom);
 
     useEffect(() => {
-        console.log(dateRange)
         if (maxDate) setMaxDateState(maxDate);
         if (minDate) setMinDateState(minDate);
     }, [])

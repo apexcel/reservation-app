@@ -56,4 +56,11 @@ router.post('/sign-up', (req, resp) => {
     connection.end()
 });
 
+
+router.get('/sign-in2', async (req, resp) => {
+    mongoConn.conn();
+    mongoConn.disconn();
+});
+
+
 module.exports = router;

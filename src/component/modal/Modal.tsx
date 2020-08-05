@@ -3,7 +3,7 @@ import Table from '../table/Table.tsx'
 import { isEmpty } from '../../utils/utils.ts'
 import { atom, atomFamily, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { tableBodyStateAtom, tableHeadStateAtom } from '../atoms/tableAtoms.ts'
-import { baseURLAtom, userInfoAtom } from '../atoms/globalAtoms.ts'
+import { baseURLAtom, userInfoAtom, getTableHeadersEachDay, currentSelectedDateAtom } from '../atoms/globalAtoms.ts'
 import axios from 'axios'
 
 import '../../styles/modal.scss'
@@ -21,18 +21,6 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
     const [userState, setUserState] = useRecoilState(userInfoAtom)
     const baseUrl = useRecoilValue(baseURLAtom);
 
-    useEffect(() => {
-        // TODO: 요일별로 헤더 바뀌게 하기
-        // 선택한 날짜의 요일 getDay 가져와서 헤더 설정
-        // 헤더는 mongoose
-        // 테이블 데이터는 mysql
-        setTableHead([
-            { name: "소정", field: "so", range: [0, 5] },
-            { name: "현영", field: "hyun" },
-            { name: "상정", field: "jung", range: [5, 10] },
-        ])
-    }, []);
-
     const updateTableBodyState = (index, field) => {
         return (tableBody.map((el, idx) => {
             return index === idx ? { ...tableBody[idx], [field]: userState.user.id } : el
@@ -42,7 +30,6 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
     const onTableRowClick = async (ev, rowIndex, currentTableRowValue, selectedHeadState) => {
         //console.log(ev, currentTableRowValue, rowIndex, selectedHeadState)
         const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIndex + 13);
-
         // 예약
         if (isEmpty(currentTableRowValue)) {
             const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);

@@ -4,18 +4,19 @@ import Modal from '../modal/Modal.tsx'
 import Admin from './admin/Admin.tsx'
 import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
 import { tableHeadStateAtom, tableBodyStateAtom } from '../atoms/tableAtoms.ts'
-import { userInfoAtom, baseURLAtom } from '../atoms/globalAtoms.ts'
+import { userInfoAtom, baseURLAtom, currentSelectedDateAtom, getTableHeadersEachDay } from '../atoms/globalAtoms.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import axios from 'axios'
 
 export default function Main() {
-    const tableHead = useRecoilValue(tableHeadStateAtom);
-    const baseUrl = useRecoilValue(baseURLAtom);
+
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
-    const [userState, setUserState] = useRecoilState(userInfoAtom);
+    const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom);
+    const baseUrl = useRecoilValue(baseURLAtom);
+    const getHeaders = useRecoilValue(getTableHeadersEachDay);
 
     const [visible, setVisible] = useState(false);
-    const [selectedDateState, setSelectedDateState] = useState(new Date());
+    const [selectedDateState, setSelectedDateState] = useRecoilState(currentSelectedDateAtom);
 
     // Calendar
     const now = new Date().valueOf();
@@ -26,10 +27,15 @@ export default function Main() {
     const openModal = () => setVisible(true);
     const closeModal = () => setVisible(false);
 
+    useEffect(() => {
+        setTableHead(getHeaders);
+    }, [selectedDateState])
+
     const onDateClick = async (ev, selectedDate) => {
-        console.log(ev, selectedDate);
-        setSelectedDateState(selectedDate);
-        await getBookedList(selectedDate);
+        //console.log(ev, selectedDate);
+        await setSelectedDateState(selectedDate);
+        setTableHead(getHeaders);
+        getBookedList(selectedDate);
         openModal();
     };
 
@@ -46,8 +52,6 @@ export default function Main() {
         let newTableBody = fulfillEmptyObject(result.data, emptyTableRow);
         setTableBody(newTableBody)
     };
-
-    axios.get(`${baseUrl}/api/table/headers`).then(res => console.log(res))
 
     return (
         <>

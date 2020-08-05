@@ -25,6 +25,7 @@ export default function TableRow({
     onTableRowClick
 }: TableRowProps) {
 
+    //TODO: 각 Row별로 State 만들기
     function logs(idx) {
         const [id, setId] = useRecoilState(tableRowStateAtom(idx))
     }
@@ -35,8 +36,8 @@ export default function TableRow({
         for (let i = 0; i < tHeadState.length; i += 1) {
             //console.log(rowItem)
             //console.log(logs(i))
+            //console.log(tHeadState[i]);
 
-            console.log(tHeadState[i]);
             const _onTableRowClick = (ev: React.MouseEvent, rowIndex = index, currentTableRowValue = rowItem[tHeadState[i].field]) => {
                 ev.preventDefault();
                 onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i])
