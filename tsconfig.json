@@ -15,7 +15,7 @@
     },
     "include": [
         "./src/**/*.tsx",
-        "@type", "src/component/App.tsx", "../tulib/src/calendar/Calendar.ts", "src/reducer/useInput.ts"
+        "@type", "src/components/App.tsx", "../tulib/src/calendar/Calendar.ts", "src/reducer/useInput.ts"
     ],
     "exclude": [
         "node_modules",

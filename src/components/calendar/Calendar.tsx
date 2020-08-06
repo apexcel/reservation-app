@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { atom, useRecoilState, useRecoilValue } from "recoil"
-import { maxDateAtom, minDateAtom, calendarStateAtom, dateRangeAtom } from '../atoms/calendarAtoms.ts'
+import { useRecoilState } from "recoil"
+import { maxDateAtom, minDateAtom, calendarStateAtom, dateRangeAtom } from '../../atoms/calendarAtoms.ts'
 import Navigation from "./Navigation.tsx";
 import DayOfWeek from "./DayOfWeek.tsx";
 import Weeks from "./Weeks.tsx"
-import { createMonthDays } from "../../utils/dateUtils.ts"
 
 import "../../styles/calendar.scss"
 

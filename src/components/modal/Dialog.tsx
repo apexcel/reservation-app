@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../table/Table.tsx'
 import { isEmpty } from '../../utils/utils.ts'
-import { atom, atomFamily, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { tableBodyStateAtom, tableHeadStateAtom } from '../atoms/tableAtoms.ts'
-import { baseURLAtom, userInfoAtom, getTableHeadersEachDay, currentSelectedDateAtom } from '../atoms/globalAtoms.ts'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { tableBodyStateAtom, tableHeadStateAtom } from '../../atoms/tableAtoms.ts'
+import { baseURLAtom, userStateAtom } from '../../atoms/globalAtoms.ts'
 import axios from 'axios'
 
-import '../../styles/modal.scss'
+import '../../styles/dialog.scss'
 
 interface ModalProps {
     visible: boolean,
@@ -18,12 +18,12 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
 
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom)
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
-    const [userState, setUserState] = useRecoilState(userInfoAtom)
-    const baseUrl = useRecoilValue(baseURLAtom);
+    const [userState, setUserState] = useRecoilState(userStateAtom)
+    const baseURL = useRecoilValue(baseURLAtom);
 
     const updateTableBodyState = (index, field) => {
         return (tableBody.map((el, idx) => {
-            return index === idx ? { ...tableBody[idx], [field]: userState.user.id } : el
+            return index === idx ? { ...tableBody[idx], [field]: userState.fullname } : el
         }))
     };
 
@@ -40,11 +40,11 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
             }
         }
         // 예약 취소
-        if (currentTableRowValue === userState.user.id) {
+        if (currentTableRowValue === userState.fullname) {
             const ans = confirm(`예약 취소 하시겠습니까?`)
             if (ans) {
                 let removed = tableBody.map((el, idx) => {
-                    if (el[selectedHeadState.field] === userState.user.id && rowIndex === idx) {
+                    if (el[selectedHeadState.field] === userState.fullname && rowIndex === idx) {
                         console.log("true", el, idx)
                         return { ...el, [selectedHeadState.field]: "" };
                     }
@@ -61,10 +61,9 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
     const setBookedData = async (rowIndex, newTableState, selectedDate) => {
         const _currentDate = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
         const config = {
-            url: `${baseUrl}/api/reservation/set-booked-data`,
+            url: `${baseURL}/api/reservation/set-booked-data`,
             data: {
                 date: _currentDate,
-                id: userState.user.id,
                 booked_data: JSON.stringify(newTableState),
                 time: (rowIndex + 1)
             }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { maxDateAtom, minDateAtom, dateRangeAtom } from '../atoms/calendarAtoms.ts'
+import { maxDateAtom, minDateAtom, dateRangeAtom } from '../../atoms/calendarAtoms.ts'
 import { atom, useRecoilValue } from 'recoil'
 
 interface DateValues {

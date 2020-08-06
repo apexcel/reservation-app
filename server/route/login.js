@@ -4,69 +4,40 @@ const mysqlConn = require('../database/mysql/mysqlConn');
 const mongoConn = require('../database/mongo/mongoConn');
 const User = require('../database/mongo/user')
 
-router.post('/sign-in', (req, resp) => {
-    const query = 'SELECT * FROM users WHERE id=BINARY(?) AND pw=BINARY(?)'
-    const query_data = [req.body.user.id, req.body.user.pw]
+router.post('/sign-in', async (req, resp) => {
+    mongoConn.conn()
+    const query = {
+        username: req.body.username,
+        password: req.body.password,
+    };
 
-    const connection = mysqlConn.init();
-    mysqlConn.conn(connection)
-    connection.query(query, query_data, (err, row) => {
-        if (err) throw err
-        if (!row.length > 0) resp.send({ auth: false })
+    const matchUser = await User.findOne(query, (err, res) => {
+        if (err) throw err;
+    });
 
-        // check
-        let check_list;
-        for (const key in row) {
-            check_list = Object.values(row[key])
-            if ((!check_list.filter(el => el.length > 0).length > 0) || check_list === null || check_list === undefined || check_list === '') {
-                resp.send({ auth: false, })
-            }
-            else {
-                resp.send({
-                    result: row,
-                    auth: true,
-                    stamp: new Date().getTime(),
-                })
-            }
-        }
-    })
-    connection.end()
-});
-
-router.post('/sign-up', (req, resp) => {
-    let query = 'INSERT INTO users VALUES(?, ?, ?, ?, ?)'
-    let query_data = [
-        req.body.id,
-        req.body.pw,
-        (req.body.last_name + req.body.first_name),
-        req.body.dob.replace(/-/g, ''),
-        req.body.tel]
-
-    if (query_data.filter(el => (el !== '' && el !== null && el !== undefined)).length < 5) {
-        resp.status(400);
-        return;
+    if (matchUser !== null) {
+        resp.send({
+            username: matchUser.username,
+            fullname: matchUser.fullname,
+            dob: matchUser.dob,
+            lessons: matchUser.lessons,
+            reservations: matchUser.reservations,
+            stamp: new Date().getTime()
+        })
     }
-
-    const connection = mysqlConn.init();
-    mysqlConn.conn(connection)
-    connection.query(query, query_data, (err, row) => {
-        if (err) throw err
-        resp.send(row)
-    })
-    connection.end()
+    mongoConn.disconn()
 });
 
-
-router.post('/sign-up-mongoose', async (req, resp) => {
-    // TODO: Have to do refactor
+router.post('/sign-up', async (req, resp) => {
     console.log(req.body)
     mongoConn.conn();
     const query = {
-        id: req.body.id,
-        name: (req.body.first_name + req.body.last_name).trim(),
-        password: req.body.pw,
+        username: req.body.username,
+        fullname: req.body.fullname,
+        password: req.body.password,
         dob: req.body.dob,
-    }
+        tel: req.body.tel
+    };
     // TODO: 해당 날짜 가져와서 booked lessons 확인
     // 카운터 차감
 

@@ -5,8 +5,8 @@ export const baseURLAtom = atom({
     default: "http://localhost:9000"
 })
 
-export const userInfoAtom = atom({
-    key: 'userInfoAtom',
+export const userStateAtom = atom({
+    key: 'userStateAtom',
     default: {}
 });
 

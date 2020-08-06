@@ -1,19 +1,13 @@
 const mysql = require('mysql')
-const cfg = require('./config')
+const config = require('./config')
 
-function init() {
-    return mysql.createConnection(cfg.db)
-}
+const pool = mysql.createPool(config.db);
 
-function conn(init) {
-    init.connect((err) => {
+function getConn(callback) {
+    pool.getConnection((err, conn) => {
         if (err) throw err;
-        console.log('DB Connected');
+        callback(conn)
     })
 }
 
-module.exports = {
-    init: init,
-    conn: conn
-}
-
+module.exports = getConn;

@@ -2,11 +2,15 @@ const express = require('express')
 const router = express.Router();
 const mysqlConn = require('../database/mysql/mysqlConn');
 const mongoConn = require('../database/mongo/mongoConn');
-const User = require('../database/mongo/user')
+const User = require('../database/mongo/user');
 
-router.get('/lessons', async (req, resp) => {
-    console.log(req.body)
-    resp.status(200);
+router.get('/:name', async (req, resp) => {
+    console.log(req.params)
+    mongoConn.conn();
+    const query = await User.findOne({'name': req.params.name})
+    mongoConn.disconn()
+    console.log(query)
+    resp.end();
 })
 
 router.post('/update-lessons', async (req, resp) => {

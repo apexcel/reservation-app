@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil'
-import { createMonthDays } from "../../utils/dateUtils.ts"
+import { createMonthDays } from "../utils/dateUtils.ts"
 
 export const maxDateAtom = atom({
     key: 'maxDateAtom',

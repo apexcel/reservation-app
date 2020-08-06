@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
-import App from './component/App.tsx'
+import App from './components/App.tsx'
 
 ReactDOM.render(
             <BrowserRouter>

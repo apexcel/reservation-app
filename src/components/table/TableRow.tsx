@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { isEmpty } from '../../utils/utils.ts'
-import { tableRowStateAtom } from '../atoms/tableAtoms.ts'
+import { tableRowStateAtom } from '../../atoms/tableAtoms.ts'
 
 interface TableRowProps {
     className: string,

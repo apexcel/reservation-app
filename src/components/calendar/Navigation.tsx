@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRecoilValue } from 'recoil'
-import { nextMonthSelector, prevMonthSelector  } from '../atoms/calendarAtoms.ts'
+import { nextMonthSelector, prevMonthSelector  } from '../../atoms/calendarAtoms.ts'
 
 interface NavigationProps {
     className: string,

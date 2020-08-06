@@ -14,8 +14,8 @@ const reservationSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    id: { type: String, required: true },
+    fullname: { type: String, required: true },
+    username: { type: String, required: true },
     password: { type: String, required: true, trim: true },
     dob: { type: Date, required: true },
     lessons: [lessonSchema],

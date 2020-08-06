@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Calendar from '../calendar/Calendar.tsx'
-import Modal from '../modal/Modal.tsx'
-import Admin from './admin/Admin.tsx'
+import Dialog from '../modal/Dialog.tsx'
 import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
-import { tableHeadStateAtom, tableBodyStateAtom } from '../atoms/tableAtoms.ts'
-import { userInfoAtom, baseURLAtom, currentSelectedDateAtom, getTableHeadersEachDay } from '../atoms/globalAtoms.ts'
+import { tableHeadStateAtom, tableBodyStateAtom } from '../../atoms/tableAtoms.ts'
+import { baseURLAtom, currentSelectedDateAtom, getTableHeadersEachDay } from '../../atoms/globalAtoms.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import axios from 'axios'
 
@@ -12,7 +11,7 @@ export default function Main() {
 
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom);
-    const baseUrl = useRecoilValue(baseURLAtom);
+    const baseURL = useRecoilValue(baseURLAtom);
     const getHeaders = useRecoilValue(getTableHeadersEachDay);
 
     const [visible, setVisible] = useState(false);
@@ -23,11 +22,12 @@ export default function Main() {
     const maxDate = new Date(now + (86400000 * 31));
     const minDate = new Date(now - (86400000 * 1))
 
-    // Modal
+    // Dialog
     const openModal = () => setVisible(true);
     const closeModal = () => setVisible(false);
 
     useEffect(() => {
+        axios.get(`${baseURL}/api/reservation/find`)
         setTableHead(getHeaders);
     }, [selectedDateState])
 
@@ -42,7 +42,7 @@ export default function Main() {
     const getBookedList = async (selectedDate) => {
         const _selectedDate: string = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
         const config = {
-            url: `${baseUrl}/api/reservation/get-booked-data`,
+            url: `${baseURL}/api/reservation/get-booked-data`,
             data: { date: _selectedDate }
         }
         const result = await axios.post(config.url, config.data)
@@ -55,7 +55,6 @@ export default function Main() {
 
     return (
         <>
-            <Admin/>
             <Calendar
                 onDateClick={onDateClick}
                 maxDate={maxDate}
@@ -66,7 +65,7 @@ export default function Main() {
                     end: new Date(new Date().valueOf() + 10 * 86400000)}
                 }
             />
-            <Modal
+            <Dialog
                 visible={visible}
                 closeModal={closeModal}
                 selectedDateState={selectedDateState}

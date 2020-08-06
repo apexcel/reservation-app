@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
-import { userInfoAtom } from './atoms/globalAtoms.ts'
 import { atom, useRecoilState } from 'recoil'
-import LoginForm from './pages/LoginForm.tsx'
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { userStateAtom } from '../atoms/globalAtoms.ts'
+import { isEmpty } from '../utils/utils.ts'
+
 import SignUp from './pages/SignUp.tsx'
 import Header from './pages/Header.tsx'
 import Footer from './pages/Footer.tsx'
-import Profile from './pages/Profile.tsx'
+import Profile from './pages/user/Profile.tsx'
 import ErrorPage from './pages/ErrorPage.tsx'
-import Enroll from './pages/admin/Enroll.tsx'
+import Main from './pages/Main.tsx'
+import SignIn from './pages/SignIn.tsx'
 
 // styles
 import '../styles/app.scss'
@@ -16,7 +18,7 @@ import '../styles/app.scss'
 export default function App() {
 
     const version = "0.0.1";
-    const [userState, setUserState] = useRecoilState(userInfoAtom)
+    const [userState, setUserState] = useRecoilState(userStateAtom)
     const [logged, setLogged] = useState(false)
 
     useEffect(() => {
@@ -31,22 +33,21 @@ export default function App() {
         else sessionStorage.clear();
     }, [logged])
 
-    const isEmpty = (obj) => {
-        if (obj === '' || obj === null || obj === undefined || (obj !== null && typeof obj === 'object' && !Object.keys(obj).length)) return true;
-        else return false;
+    const IndexPage = () => {
+        return logged ? <Main /> : <SignIn setLogged={setLogged} />
+    }
+
+    const ProfilePage = () => {
+        return logged ? <Profile userState={userState}/> : <ErrorPage />
     }
 
     return (
         <div className='container'>
             {logged ? <Header setLogged={setLogged} /> : null}
-            <Enroll />
             <Switch>
-                <Route exact path='/' component={() => <LoginForm isEmpty={isEmpty} setUserState={setUserState} logged={logged} setLogged={setLogged} userState={userState} />} />
+                <Route exact path='/' render={IndexPage} />
+                <Route exact path='/profile' render={ProfilePage} />
                 <Route exact path='/signup' component={() => <SignUp />} />
-                {logged ? 
-                    <Route exact path='/profile' component={() => <Profile userState={userState}/>} /> 
-                    : <ErrorPage /> 
-                }
             </Switch>
             <Footer version={version} />
         </div>
