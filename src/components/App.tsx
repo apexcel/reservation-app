@@ -39,19 +39,21 @@ export default function App() {
     }
 
     const ProfilePage = () => {
-        return logged ? <Profile userState={userState}/> : <ErrorPage />
+        return logged ? <Profile userState={userState} /> : <ErrorPage />
     }
 
     return (
-        <div className='container'>
-            {logged ? <Header setLogged={setLogged} userState={userState} /> : null}
-            <Switch>
-                <Route exact path='/' component={IndexPage} />
-                <Route path='/profile' component={ProfilePage} />
-                <Route path='/signup' component={() => <SignUp />} />
-                <Redirect to='/' />
-            </Switch>
+        <>
+            <div className='container'>
+                {logged ? <Header setLogged={setLogged} userState={userState} /> : null}
+                <Switch>
+                    <Route exact path='/' component={IndexPage} />
+                    <Route path='/profile' component={ProfilePage} />
+                    <Route path='/signup' component={() => <SignUp />} />
+                    <Redirect to='/' />
+                </Switch>
+            </div>
             <Footer version={version} />
-        </div>
+        </>
     )
 }

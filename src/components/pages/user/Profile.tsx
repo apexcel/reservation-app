@@ -50,7 +50,10 @@ export default function Profile({ userState }) {
             bookedTime.push(Object.values(el)[0])
         });
 
+        
         bookedTime.map((el, idx) => {
+            console.log(bookedDate[idx].slice(0, 4))
+            console.log(bookedDate[idx].slice(4))
             el.map((el2, idx2) => {
                 const emptyObj = {};
                 //console.log(idx, el2.time, JSON.parse(el2.booked_data))
@@ -64,7 +67,8 @@ export default function Profile({ userState }) {
                         enumerable: true
                     },
                     'reservation': {
-                        value: JSON.parse(el2.booked_data)
+                        value: JSON.parse(el2.booked_data),
+                        enumerable: true
                     }
                 });
                 finalList.push(item);
@@ -82,15 +86,14 @@ export default function Profile({ userState }) {
     }
 
     const renderReservations = () => {
-        const teacher = findTeacher()
-        console.log(teacher)
+        const teacher = findTeacher();
         return refined.map((el, idx) =>
             <div key={idx}>
                 <span>{el.date} </span>
                 <span>{el.time}시</span>
                 <span>{teacher[idx]}</span>
             </div>
-        )
+        );
     }
 
     return (

@@ -54,12 +54,18 @@ export default function SignIn({ setLogged }) {
 
     return (
         <form className='form-wrapper'>
-            <fieldset>
-                <legend>DILETTANTE</legend>
+            <fieldset className='sign-in-fieldset'>
+                <legend className='legend-title'>
+                    <h1>Dilettante</h1>
+                </legend>
                 <Input id='username' name='username' onChangeInput={onChangeInput} type='text' placeHolder='Username' />
                 <Input id='password' name='password' onChangeInput={onChangeInput} type='text' placeHolder='Password' />
-                <button className='btn-primary' type='button' onClick={onSignIn}>Sign in</button>
-                <button className='btn-primary' type='button'><Link to='/signup'>Sign up</Link></button>
+                <div className='btn-field'>
+                    <button className='btn-primary' type='button' onClick={onSignIn}>Sign in</button>
+                </div>
+                <Link to='/signup'>
+                    <button className='btn-primary' type='button'>Sign up</button>
+                </Link>
             </fieldset>
         </form>
     );
