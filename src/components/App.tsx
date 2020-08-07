@@ -13,12 +13,11 @@ import Main from './pages/Main.tsx'
 import SignIn from './pages/SignIn.tsx'
 
 // styles
-import '../styles/app.scss'
+import '../styles/layout.scss'
 
 export default function App() {
     console.log(useHistory().location)
 
-    const version = "0.0.1";
     const [userState, setUserState] = useRecoilState(userStateAtom)
     const [logged, setLogged] = useState(false)
 
@@ -53,7 +52,7 @@ export default function App() {
                     <Redirect to='/' />
                 </Switch>
             </div>
-            <Footer version={version} />
+            <Footer />
         </>
     )
 }
