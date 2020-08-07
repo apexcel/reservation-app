@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { atom, useRecoilState } from 'recoil'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Switch, Redirect, useHistory } from 'react-router-dom'
 import { userStateAtom } from '../atoms/globalAtoms.ts'
 import { isEmpty } from '../utils/utils.ts'
 
@@ -16,6 +16,7 @@ import SignIn from './pages/SignIn.tsx'
 import '../styles/app.scss'
 
 export default function App() {
+    console.log(useHistory().location)
 
     const version = "0.0.1";
     const [userState, setUserState] = useRecoilState(userStateAtom)
@@ -43,11 +44,12 @@ export default function App() {
 
     return (
         <div className='container'>
-            {logged ? <Header setLogged={setLogged} /> : null}
+            {logged ? <Header setLogged={setLogged} userState={userState} /> : null}
             <Switch>
-                <Route exact path='/' render={IndexPage} />
-                <Route exact path='/profile' render={ProfilePage} />
-                <Route exact path='/signup' component={() => <SignUp />} />
+                <Route exact path='/' component={IndexPage} />
+                <Route path='/profile' component={ProfilePage} />
+                <Route path='/signup' component={() => <SignUp />} />
+                <Redirect to='/' />
             </Switch>
             <Footer version={version} />
         </div>

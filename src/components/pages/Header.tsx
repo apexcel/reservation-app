@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 
 import '../../styles/header.scss'
 
-export default function Header({ setLogged }) {
+export default function Header({ setLogged, userState }) {
+
     const logout = (e) => {
         e.preventDefault();
         setLogged(false);
@@ -13,7 +14,7 @@ export default function Header({ setLogged }) {
         <header className='man-top-header'>
             <nav className='main-top-nav'>
                 <Link className='main-header-link' to='/'>Main</Link>
-                <Link className='main-header-link' to='/profile'>Profile: Working on</Link>
+                <Link className='main-header-link' to='/profile'>Profile</Link>
                 <div className='main-header-about-user'>
                     <button type='button' onClick={logout}>logout</button>
                 </div>

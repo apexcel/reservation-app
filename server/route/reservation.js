@@ -1,91 +1,79 @@
+const { response } = require('express');
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql')
 const getConn = require('../database/mysql/mysqlConn');
 
-
-router.post("/get-booked-data", (req, resp) => {
+router.post("/get-booked-data", async (req, resp) => {
     console.log(req.body)
-
-    const connection = mysqlConn.init();
-    mysqlConn.conn(connection)
-    const query = "SELECT * FROM ??";
-    const query_param = `time_table${req.body.date}`
-    connection.query(query, query_param, (err, row) => {
-        if (err) throw err
-        console.log(row)
-        resp.send(row)
-    })
-    connection.end()
+    await getConn((conn) => {
+        const query = "SELECT * FROM ??";
+        const queryParams = `time_table${req.body.date}`
+        conn.query(query, queryParams, (err, row) => {
+            if (err) throw err;
+            console.log(row)
+            resp.send(row)
+            conn.release()
+        });
+    });
 });
 
-router.post("/set-booked-data", (req, resp) => {
+router.post("/set-booked-data", async (req, resp) => {
     console.log(req.body)
+    await getConn((conn) => {
+        const query = "UPDATE ?? SET booked_data = (?) WHERE time = ?;";
+        const queryParams = [
+            `time_table${req.body.date}`,
+            req.body.booked_data,
+            req.body.time
+        ];
 
-    const connection = mysqlConn.init();
-    mysqlConn.conn(connection)
-    const query = "UPDATE ?? SET booked_data = (?) WHERE time = ?;";
-    const query_param = [
-        `time_table${req.body.date}`,
-        req.body.booked_data,
-        req.body.time
-    ];
-
-    connection.query(query, query_param, (err, row) => {
-        if (err) throw err
-        console.log(row)
-        resp.send(row)
-    })
-    connection.end()
+        conn.query(query, queryParams, (err, row) => {
+            if (err) throw err
+            console.log(row)
+            resp.send(row)
+        })
+        conn.release();
+    });
 });
 
-router.get('/find', async (req, resp) => {
-
-    // function save(rs) {
-    //     getConn(async (conn) => {
-    //         console.log(rs)
-    //         console.log(rs[0])
-    //         const query = 'SELECT * FROM ?? WHERE booked_data LIKE ?';
-    //         const query_param = [rs[24], '%신상현%']
-    //         return conn.query(query, query_param, (err, res) => {
-    //             if (err) throw err;
-    //             console.log(res)
-    //         })
-    //     })
-    // }
-
+router.post('/find', async (req, resp) => {
     await getConn(async (conn) => {
         const query = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME=?';
-        const query_param = 'booked_data'
+        const queryParams = 'booked_data'
 
-        await conn.query(query, query_param, (err, res) => {
+        await conn.query(query, queryParams, async (err, res) => {
             if (err) throw err;
-            const vals = res.map((el, idx) => el['TABLE_NAME']);
-
-            const query = 'SELECT * FROM ?? WHERE booked_data LIKE ?';
-            const query_param = [vals[24], '%신상현%']
-            return conn.query(query, query_param, (err, res) => {
-                if (err) throw err;
-                console.log(res)
-            })
-
-            save(vals);
+            const tableNames = res.map((el, idx) => el['TABLE_NAME']);
+            searchBookedUser(tableNames);
         })
-
         conn.release();
     })
 
-    // connection.query(query, query_param, async (err, res, fields) => {
-    //     if (err) throw err;
-    //     return await res.map((el, idx) => {
-    //         el['TABLE_NAME']
-    //     })
-    // })
+    function searchBookedUser(_tableNames) {
+        getConn(async (conn) => {
+            let resultSet = [];
+            for (let i = 0; i < _tableNames.length; i += 1) {
+                const query2 = 'SELECT * FROM ?? WHERE booked_data LIKE ?';
+                await conn.query(query2, ([_tableNames[i], `%${req.body.fullname}%`]), (err, res) => {
+                    if (err) throw err;
+                    if (res !== null && res.length > 0) {
+                        const emptyObj = {};
+                        Object.defineProperty(emptyObj, _tableNames[i], {
+                            value: res,
+                            writable: false,
+                            enumerable: true
+                        });
+                        resultSet.push(emptyObj);
+                    }
+                    if (i === _tableNames.length - 1) {
+                        resp.send(resultSet);
+                        conn.release();
+                    }
+                })
+            }
+        })
+    }
 
-    //connection.end();
-    resp.send('end')
 })
-
-
 
 module.exports = router;

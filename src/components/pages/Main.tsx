@@ -27,7 +27,6 @@ export default function Main() {
     const closeModal = () => setVisible(false);
 
     useEffect(() => {
-        axios.get(`${baseURL}/api/reservation/find`)
         setTableHead(getHeaders);
     }, [selectedDateState])
 

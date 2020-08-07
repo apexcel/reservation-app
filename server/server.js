@@ -7,9 +7,11 @@ const bodyParser = require('body-parser')
 // static
 const frontend = path.join(__dirname, '..', 'dist/')
 app.use(express.static(frontend))
-app.get('/', (req, res) => {
-    res.sendFile(frontend)
-})
+
+app.get('*', (req, resp) => {
+    resp.sendFile(frontend)
+});
+
 // libs
 app.use(cors())
 app.use(bodyParser.json())
