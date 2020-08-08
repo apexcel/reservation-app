@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { baseURLAtom, userStateAtom } from '../../../atoms/globalAtoms.ts'
 import axios from 'axios'
-import { isMainThread } from 'worker_threads';
 
 export default function Profile({ userState }) {
 
     const baseURL = useRecoilValue(baseURLAtom);
     const setUserState = useSetRecoilState(userStateAtom);
-    const [reservations, setReservations] = useState([])
+    const [reservations, setReservations] = useState([]);
     const [refined, setRefined] = useState([]);
 
     useEffect(() => {
@@ -20,7 +19,8 @@ export default function Profile({ userState }) {
                 });
             }
         }
-        console.log("profile useEffect")
+
+        console.log("pofile useEffect")
         return () => {
             isMounted = false;
         }
@@ -79,19 +79,31 @@ export default function Profile({ userState }) {
     }
 
     const findTeacher = () => {
+        // TODO: 첫번째 요소만 반환하므로 동일한 시간대에 다른 사람 예약해도 나오지 않음
         return refined.map((el, idx) => {
-            const index = Object.values(el.reservation).findIndex(name => name !== "");
-            return Object.keys(el.reservation)[index];
+            const match = Object.values(el.reservation).map((el2, idx2) => {
+                return el2 === userState.fullname ? Object.keys(el.reservation)[idx2] : null;
+            });
+            return match.find(name => name !== null);
         })
     }
+    
 
     const renderReservations = () => {
+        //TODO: 날짜에 알맞게 Teacher name 가져오는 새로운 방법 생각하기
+        // State를 이용한 방법을 이용하는 쪽으로
+        const teacherNames = {
+            so: '소정',
+            hyun: '현영',
+            jung: '상정'
+        }
         const teacher = findTeacher();
+        console.log(teacher)
         return refined.map((el, idx) =>
             <div key={idx}>
                 <span>{el.date} </span>
                 <span>{el.time}시</span>
-                <span>{teacher[idx]}</span>
+                <span>{teacherNames[teacher[idx]]}</span>
             </div>
         );
     }

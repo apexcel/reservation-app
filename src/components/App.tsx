@@ -39,7 +39,7 @@ export default function App() {
     }
 
     const ProfilePage = () => {
-        return logged ? <Profile userState={userState} /> : <ErrorPage />
+        return logged ? <Profile userState={userState} /> : <Redirect to='/' />
     }
 
     return (

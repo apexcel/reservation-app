@@ -3,7 +3,7 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 export const baseURLAtom = atom({
     key: 'baseURL',
     default: "http://localhost:9000"
-})
+});
 
 export const userStateAtom = atom({
     key: 'userStateAtom',
@@ -13,7 +13,7 @@ export const userStateAtom = atom({
 export const currentSelectedDateAtom = atom({
     key: 'currentSelectedDateAtom',
     default: new Date()
-})
+});
 
 export const getTableHeadersEachDay = selector({
     key: 'getTableHeadersEachDay',
@@ -55,4 +55,4 @@ export const getTableHeadersEachDay = selector({
                 return [];
         }
     }
-})
+});
