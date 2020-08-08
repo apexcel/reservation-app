@@ -74,7 +74,7 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
     return (
         <>
             {visible ?
-                <div className="modal">
+                <div className="dialog">
                     <button onClick={closeModal}>closeModal</button>
                     {selectedDateState.getFullYear()}
                     {selectedDateState.getMonth() + 1}

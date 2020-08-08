@@ -31,7 +31,7 @@ export default function TableRow({
     }
 
     const renderRow = () => {
-        let ret = [];
+        let rows = [];
 
         for (let i = 0; i < tHeadState.length; i += 1) {
             //console.log(rowItem)
@@ -43,27 +43,36 @@ export default function TableRow({
                 onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i])
             };
 
-            let isAble = isEmpty(rowItem[tHeadState[i].field]) ? true : false;
-            let canBook = isEmpty(rowItem[tHeadState[i].field]) ? true : false;
-            let dinner = (index === 5) ? true : false;
-            let checker = false;
+            const classNames = [
+                `${className}-row-cell`,
+            ]
+            let isClickable = true;
+
+            isEmpty(rowItem[tHeadState[i].field]) ? classNames.push(`${className}-not-booked`) : classNames.push(`${className}-booked`);
+            index === 5 ? classNames.push(`${className}-break-time`) : null;
             if (tHeadState[i].range) {
                 if (tHeadState[i].range[0] <= index && tHeadState[i].range[1] > index) {
-                    checker = true;
+                    classNames.push(`${className}-unable`)
+                    isClickable = false;
                 }
             }
 
-            ret[i] = (
-                <div
-                    key={i}
-                    onClick={_onTableRowClick}
-                    className={`${className}-row-cell ${checker ? 'checked' : 'false'} ${isAble ? `${canBook ? "" : `${className}-booked`}` : `${className}-unable`} ${dinner ? `${className}-break-time`: ""}`}
-                >
-                    {rowItem[tHeadState[i].field]}
-                </div>
-            )
+            const children = rowItem[tHeadState[i].field]
+            rows[i] = row(i, children, classNames, (isClickable ? _onTableRowClick : null))
         }
-        return ret;
+        return rows;
+    }
+
+    const row = (key, children, classNames, onClick) => {
+        const className = ''.concat(classNames.join(' '));
+        return (
+            <div
+                key={key}
+                className={className}
+                onClick={onClick ? onClick : null}>
+                {children}
+            </div>
+        )
     }
 
     return (

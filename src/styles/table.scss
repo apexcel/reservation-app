@@ -67,7 +67,10 @@
 }
 
 .simple__table-booked {
-    background-color: #27869e;
+    background-color: #293ba1;
+}
+.simple__table-not-booked {
+    background-color: #646464;
 }
 .simple__table-unable {
     background-color: #e46e6e;
@@ -78,8 +81,4 @@
 }
 .transparent {
     color: transparent;
-}
-
-.checked {
-    background-color: red !important;
 }
