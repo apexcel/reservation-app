@@ -17,9 +17,10 @@ import '../styles/layout.scss'
 
 export default function App() {
     console.log(useHistory().location)
-
+    
     const [userState, setUserState] = useRecoilState(userStateAtom)
     const [logged, setLogged] = useState(false)
+    console.log(userState)
 
     useEffect(() => {
         if (!isEmpty(sessionStorage.getItem('userState'))) {

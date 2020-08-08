@@ -16,13 +16,15 @@ router.post('/sign-in', async (req, resp) => {
     });
 
     if (matchUser !== null) {
+        const isAdmin = (matchUser.username === 'admin' && matchUser.fullname === 'admin') ? true : false;
         resp.send({
             username: matchUser.username,
             fullname: matchUser.fullname,
             dob: matchUser.dob,
             lessons: matchUser.lessons,
             reservations: matchUser.reservations,
-            stamp: new Date().getTime()
+            stamp: new Date().getTime(),
+            isAdmin: isAdmin
         })
     }
     mongoConn.disconn()
@@ -31,18 +33,32 @@ router.post('/sign-in', async (req, resp) => {
 router.post('/sign-up', async (req, resp) => {
     console.log(req.body)
     mongoConn.conn();
-    const query = {
+    const userInfo = {
         username: req.body.username,
         fullname: req.body.fullname,
         password: req.body.password,
         dob: req.body.dob,
         tel: req.body.tel
     };
+
+    const query = {
+        fullname: req.body.fullname,
+        dob: req.body.dob,
+        tel: req.bod.tel
+    };
+
+    const options = {
+        upsert: true,
+        new: true,
+        setDefaultOnInsert: true
+    };
     // TODO: 해당 날짜 가져와서 booked lessons 확인
     // 카운터 차감
 
-    await new User(query).save();
-    mongoConn.disconn();
+    await User.findOneAndUpdate(query, userInfo, options, (err, res) => {
+        if (err) throw err;
+        mongoConn.disconn();
+    })
     resp.status(200);
 });
 

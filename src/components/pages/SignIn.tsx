@@ -40,9 +40,10 @@ export default function SignIn({ setLogged }) {
                     username: resp.username,
                     fullname: resp.fullname,
                     dob: resp.dob,
-                    lessons: resp.dob,
+                    lessons: resp.lessons,
                     reservations: resp.reservations,
                     stamp: resp.stamp,
+                    isAdmin: resp.isAdmin
                 })
                 setLogged(true)
             }

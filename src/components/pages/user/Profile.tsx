@@ -24,7 +24,7 @@ export default function Profile({ userState }) {
         return () => {
             isMounted = false;
         }
-    })
+    }, [])
 
     useEffect(() => {
         refinedUserReservations()
