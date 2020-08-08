@@ -59,7 +59,7 @@ export default function SignIn({ setLogged }) {
                     <h1>Dilettante</h1>
                 </legend>
                 <Input id='username' name='username' onChangeInput={onChangeInput} type='text' placeHolder='Username' />
-                <Input id='password' name='password' onChangeInput={onChangeInput} type='text' placeHolder='Password' />
+                <Input id='password' name='password' onChangeInput={onChangeInput} type='password' placeHolder='Password' />
                 <div className='btn-field'>
                     <button className='btn-primary' type='button' onClick={onSignIn}>Sign in</button>
                 </div>

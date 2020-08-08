@@ -8,13 +8,13 @@ import axios from 'axios'
 
 import '../../styles/dialog.scss'
 
-interface ModalProps {
-    visible: boolean,
-    closeModal: () => void,
+interface DialogProps {
+    isDialogVisible: boolean,
+    closeDialog: () => void,
     selectedDateState: Date
 }
 
-export default function Modal({ visible, closeModal, selectedDateState }: ModalProps) {
+export default function Dialog({ isDialogVisible, closeDialog, selectedDateState }: DialogProps) {
 
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom)
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
@@ -71,14 +71,30 @@ export default function Modal({ visible, closeModal, selectedDateState }: ModalP
         await axios.post(config.url, config.data);
     }
 
+
+    const renderDialogHeader = () => {
+        const dow = ['일', '월', '화', '수', '목', '금', '토'];
+        return (
+            <div className='dialog-header'>
+                <div className='dialog-close-btn' onClick={closeDialog}>
+                    <div className='cross-line'></div>
+                    <div className='cross-line'></div>
+                </div>
+                <div className='dialog-selected-date'>
+                    <span>{selectedDateState.getFullYear()}</span>
+                    <span>{selectedDateState.getMonth() + 1}</span>
+                    <span>{selectedDateState.getDate()}</span>
+                    <span>{dow[selectedDateState.getDay()]}</span>
+                </div>
+            </div>
+        )
+    };
+
     return (
         <>
-            {visible ?
-                <div className="dialog">
-                    <button onClick={closeModal}>closeModal</button>
-                    {selectedDateState.getFullYear()}
-                    {selectedDateState.getMonth() + 1}
-                    {selectedDateState.getDate()}
+            {isDialogVisible ?
+                <div className='dialog'>
+                    {renderDialogHeader()}
                     <Table
                         tHeadState={tableHead}
                         tBodyState={tableBody}

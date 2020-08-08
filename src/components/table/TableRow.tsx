@@ -48,8 +48,11 @@ export default function TableRow({
             ]
             let isClickable = true;
 
+            // row가 비어있는지 확인
             isEmpty(rowItem[tHeadState[i].field]) ? classNames.push(`${className}-not-booked`) : classNames.push(`${className}-booked`);
+            // 저녁시간 확인
             index === 5 ? classNames.push(`${className}-break-time`) : null;
+            // unabled table range 확인
             if (tHeadState[i].range) {
                 if (tHeadState[i].range[0] <= index && tHeadState[i].range[1] > index) {
                     classNames.push(`${className}-unable`)
@@ -73,7 +76,7 @@ export default function TableRow({
                 {children}
             </div>
         )
-    }
+    };
 
     return (
         <div className={`${className}-body`}>

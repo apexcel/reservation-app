@@ -14,7 +14,7 @@ export default function Main() {
     const baseURL = useRecoilValue(baseURLAtom);
     const getHeaders = useRecoilValue(getTableHeadersEachDay);
 
-    const [visible, setVisible] = useState(false);
+    const [isDialogVisible, setIsDialogVisible] = useState(false);
     const [selectedDateState, setSelectedDateState] = useRecoilState(currentSelectedDateAtom);
 
     // Calendar
@@ -23,8 +23,8 @@ export default function Main() {
     const minDate = new Date(now - (86400000 * 1))
 
     // Dialog
-    const openModal = () => setVisible(true);
-    const closeModal = () => setVisible(false);
+    const openDialog = () => setIsDialogVisible(true);
+    const closeDialog = () => setIsDialogVisible(false);
 
     useEffect(() => {
         setTableHead(getHeaders);
@@ -35,7 +35,7 @@ export default function Main() {
         await setSelectedDateState(selectedDate);
         setTableHead(getHeaders);
         getBookedList(selectedDate);
-        openModal();
+        openDialog();
     };
 
     //TODO: DB에서 가져올 때 날짜 변환 쉽도록 Date형식으로 보내주기
@@ -66,8 +66,8 @@ export default function Main() {
                 }
             />
             <Dialog
-                visible={visible}
-                closeModal={closeModal}
+                isDialogVisible={isDialogVisible}
+                closeDialog={closeDialog}
                 selectedDateState={selectedDateState}
             />
         </>
