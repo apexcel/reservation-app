@@ -48,7 +48,7 @@ export default function TableRow({
             let dinner = (index === 5) ? true : false;
             let checker = false;
             if (tHeadState[i].range) {
-                if (tHeadState[i].range[0] < index && tHeadState[i].range[1] > index) {
+                if (tHeadState[i].range[0] <= index && tHeadState[i].range[1] > index) {
                     checker = true;
                 }
             }
