@@ -63,9 +63,11 @@ export default function SignIn({ setLogged }) {
                 <div className='btn-field'>
                     <button className='btn-primary' type='button' onClick={onSignIn}>Sign in</button>
                 </div>
-                <Link to='/signup'>
-                    <button className='btn-primary' type='button'>Sign up</button>
-                </Link>
+                <div className='btn-field'>
+                    <Link to='/signup'>
+                        <button className='btn-primary' type='button'>Sign up</button>
+                    </Link>
+                </div>
             </fieldset>
         </form>
     );

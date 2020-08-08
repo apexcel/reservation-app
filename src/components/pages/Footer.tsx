@@ -18,14 +18,20 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className='footer-right'>
-                    <div className='footer-item'>
-                        <span>경기 수원시 영통구 영통로217번길 21</span>
+                    <div className='footer-item right-item'>
+                        <SVG name='location_marker' width={20} height={20} color='#ffffff' />
+                        <span className='footer-desc'>경기 수원시 영통구 영통로217번길 21</span>
                     </div>
-                    <div className='footer-item'>
-                        Tel: 010-8800-4825
+                    <div className='footer-item right-item'>
+                        <SVG name='call' width={18} height={18} color='#ffffff' />
+                        <span className='footer-desc'>+82 01088004825</span>
                     </div>
-                    <div className='footer-item'>
-                        Copyrights oogie826
+                    <div className='footer-item right-item'>
+                        <SVG name='time' width={19} height={19} color='#ffffff' />
+                        <span className='footer-desc'>PM 13:00 ~ 23:00 / Monday off.</span>
+                    </div>
+                    <div className='footer-item right-item'>
+                        <span>Dev & Designed by <a href='https://github.com/oogie826' target='_blank'>oogie826</a></span>
                     </div>
                 </div>
             </section>

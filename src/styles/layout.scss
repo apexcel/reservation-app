@@ -33,11 +33,13 @@ html, body {
     overflow: hidden;
 }
 
+// Header
 header {
     position: fixed;
     top: 0;
 }
 
+// Footer
 footer {
     position: static;
     display: block;
@@ -53,18 +55,13 @@ footer {
         flex-direction: row;
         flex-grow: 1;
         flex-basis: 1;
-        padding: 3rem;
+        padding: 3rem 10rem 3rem 10rem;
     }
 
     .footer-title {
         margin-bottom: 2rem;
-        font-size: 1.2rem;
-    }
-
-    .footer-right {
-        border: 1px solid green;
-        height: 100%;
-        width: 50%;
+        font-family: 'Caveat', cursive;
+        font-size: 2rem;
     }
 
     .footer-left {
@@ -77,17 +74,53 @@ footer {
         width: 50%;
     }
 
+    .footer-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        width: 50%;
+        font-size: 0.9rem;
+        .right-item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 2px 0px 10px 0;
+            a {
+                text-decoration: none;
+                color: #7c7c7c;
+                &:hover {
+                    color: #df6f25;
+                }
+            }
+        }
+        .footer-desc {
+            margin-left: 5px;
+        }
+    }
+
+
     .footer-item {
-
+        a { margin-right: 2rem; }
         svg {
-            margin: 5px 2rem 0 0;
+            &:hover path {
+                animation: svgPathColorFill;
+                animation-duration: 10s;
+                animation-iteration-count: infinite;
+                animation-timing-function: ease-in-out;
+            }
         }
+    }
 
-        span {
-            display: block;
-        }
+    @keyframes svgPathColorFill {
+        0% { fill: #d4246d; }
+        25% { fill: #cf8525; }
+        50% { fill: #67ce22; }
+        75% { fill: #3328cf; }
+        100% { fill: #ca2750; }
     }
 }
 
+// Fonts Import
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Text&family=Open+Sans:ital,wght@0,300;0,400;0,600;1,300;1,600&display=swap');
