@@ -1,7 +1,6 @@
 import React from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { isEmpty } from '../../utils/utils.ts'
-import { tableRowStateAtom } from '../../atoms/tableAtoms.ts'
 
 interface TableRowProps {
     className: string,
@@ -25,12 +24,7 @@ export default function TableRow({
     onTableRowClick
 }: TableRowProps) {
 
-    //TODO: 각 Row별로 State 만들기
-    function logs(idx) {
-        const [id, setId] = useRecoilState(tableRowStateAtom(idx))
-    }
-
-    const renderRow = () => {
+    const renderRows = () => {
         let rows = [];
 
         for (let i = 0; i < tHeadState.length; i += 1) {
@@ -42,11 +36,11 @@ export default function TableRow({
                 ev.preventDefault();
                 onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i])
             };
-
             const classNames = [
                 `${className}-row-cell`,
             ]
             let isClickable = true;
+            const children = rowItem[tHeadState[i].field]
 
             // row가 비어있는지 확인
             isEmpty(rowItem[tHeadState[i].field]) ? classNames.push(`${className}-not-booked`) : classNames.push(`${className}-booked`);
@@ -60,7 +54,6 @@ export default function TableRow({
                 }
             }
 
-            const children = rowItem[tHeadState[i].field]
             rows[i] = row(i, children, classNames, (isClickable ? _onTableRowClick : null))
         }
         return rows;
@@ -80,7 +73,7 @@ export default function TableRow({
 
     return (
         <div className={`${className}-body`}>
-            {renderRow()}
+            {renderRows()}
         </div>
     )
 }

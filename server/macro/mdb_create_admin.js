@@ -11,7 +11,8 @@ async function createDefaultAdmin() {
         fullname: 'admin',
         username: 'admin',
         password: 'pwd0815',
-        dob: new Date()
+        dob: new Date(),
+        tel: 'Default Value'
     }
     const options = {
         upsert: true,

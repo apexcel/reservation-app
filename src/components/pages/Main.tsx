@@ -59,7 +59,8 @@ export default function Main() {
                 onDateClick={onDateClick}
                 maxDate={maxDate}
                 minDate={minDate}
-                // TODO: Date-range
+                // TODO: Date-range 사용하기
+                // TODO: 공휴일이나 어드민이 특정날짜 할 수 있게 하기
                 dateRange={
                     {start: new Date(),
                     end: new Date(new Date().valueOf() + 10 * 86400000)}

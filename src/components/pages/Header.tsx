@@ -13,6 +13,7 @@ export default function Header({ setLogged, userState }) {
     return (
         <header className='man-top-header'>
             <nav className='main-top-nav'>
+                { userState.isAdmin ? <Link to='/admin'>Admin</Link> : null}
                 <Link className='main-header-link' to='/'>Main</Link>
                 <Link className='main-header-link' to='/profile'>Profile</Link>
                 <div className='main-header-about-user'>

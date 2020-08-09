@@ -42,9 +42,9 @@ router.post('/sign-up', async (req, resp) => {
     };
 
     const query = {
+        username: req.body.username,
         fullname: req.body.fullname,
-        dob: req.body.dob,
-        tel: req.bod.tel
+        tel: req.body.tel
     };
 
     const options = {
@@ -57,8 +57,8 @@ router.post('/sign-up', async (req, resp) => {
 
     await User.findOneAndUpdate(query, userInfo, options, (err, res) => {
         if (err) throw err;
-        mongoConn.disconn();
     })
+    mongoConn.disconn();
     resp.status(200);
 });
 

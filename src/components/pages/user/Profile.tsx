@@ -110,10 +110,10 @@ export default function Profile({ userState }) {
 
     return (
         <div>
-            <p>{userState.username}</p>
-            <p>{userState.fullname}</p>
+            <p>Your username: {userState.username}</p>
+            <p>Your realname: {userState.fullname}</p>
             <p>남은횟수와 레슨권 기간</p>
-            <p>최근 예약 날짜</p>
+            <p>Recent Booked dates</p>
             {renderReservations()}
         </div>
     )
