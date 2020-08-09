@@ -72,6 +72,17 @@ footer {
         justify-content: space-between;
         height: 100%;
         width: 50%;
+        .left-item {
+            a { margin-right: 2rem; }
+            svg {
+                &:hover path {
+                    animation: svgPathColorFill;
+                    animation-duration: 10s;
+                    animation-iteration-count: infinite;
+                    animation-timing-function: ease-in-out;
+                }
+            }
+        }
     }
 
     .footer-right {
@@ -101,15 +112,7 @@ footer {
 
 
     .footer-item {
-        a { margin-right: 2rem; }
-        svg {
-            &:hover path {
-                animation: svgPathColorFill;
-                animation-duration: 10s;
-                animation-iteration-count: infinite;
-                animation-timing-function: ease-in-out;
-            }
-        }
+
     }
 
     @keyframes svgPathColorFill {

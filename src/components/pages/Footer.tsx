@@ -10,7 +10,7 @@ export default function Footer() {
                     <div className='footer-title'>
                     <span>Dilettante</span>
                     </div>
-                    <div className='footer-item'>
+                    <div className='footer-item left-item'>
                         <a href='https://cafe.naver.com/purples6bha' target='_blank'><SVG name='cafe' width={32} height={32} color='#ffffff' /></a>
                         <a href='https://blog.naver.com/dltt_music' target='_blank'><SVG name='blog' width={32} height={32} color='#ffffff' /></a>
                         <a href='http://www.dlttmusic.com/' target='_blank'><SVG name='homepage' width={32} height={32} color='#ffffff' /></a>
