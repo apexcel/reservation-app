@@ -11,12 +11,12 @@ export default function Header({ setLogged, userState }) {
     }
 
     return (
-        <header className='man-top-header'>
-            <nav className='main-top-nav'>
-                { userState.isAdmin ? <Link to='/admin'>Admin</Link> : null}
-                <Link className='main-header-link' to='/'>Main</Link>
-                <Link className='main-header-link' to='/profile'>Profile</Link>
-                <div className='main-header-about-user'>
+        <header className='main-top-header'>
+            <nav className='main-nav'>
+                { userState.isAdmin ? <Link className='main-nav-link' to='/admin'>Admin</Link> : null}
+                <Link className='main-nav-link' to='/'>Main</Link>
+                <Link className='main-nav-link' to='/profile'>Profile</Link>
+                <div className='main-nav-about-user'>
                     <button type='button' onClick={logout}>logout</button>
                 </div>
             </nav>

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Link, Switch, Route, useHistory } from 'react-router-dom'
-import { baseURLAtom, userInfoAtom } from '../../../atoms/globalAtoms.ts'
+import { baseURLAtom, userStateAtom } from '../../../atoms/globalAtoms.ts'
 import axios from 'axios'
 
 export default function SearchUser() {
 
-    const userState = useRecoilValue(userInfoAtom);
+    const userState = useRecoilValue(userStateAtom);
     const baseURL = useRecoilValue(baseURLAtom);
     const [searchUser, setSearchUser] = useState(null);
 

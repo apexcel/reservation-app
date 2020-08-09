@@ -8,10 +8,10 @@ import SignUp from './pages/SignUp.tsx'
 import Header from './pages/Header.tsx'
 import Footer from './pages/Footer.tsx'
 import Profile from './pages/user/Profile.tsx'
-import ErrorPage from './pages/ErrorPage.tsx'
 import Main from './pages/Main.tsx'
 import SignIn from './pages/SignIn.tsx'
 import Admin from './pages/admin/Admin.tsx'
+import ErrorPage from './pages/ErrorPage.tsx'
 
 // styles
 import '../styles/layout.scss'
@@ -40,6 +40,10 @@ export default function App() {
         return logged ? <Profile userState={userState} /> : <Redirect to='/' />
     }
 
+    const AdminPage = () => {
+        return logged && userState.isAdmin ? <Admin /> : <ErrorPage httpStatus={401} />
+    }
+
     return (
         <>
             <div className='container'>
@@ -48,7 +52,7 @@ export default function App() {
                     <Route exact path='/' component={IndexPage} />
                     <Route path='/profile' component={ProfilePage} />
                     <Route path='/signup' component={() => <SignUp />} />
-                    <Route path='/admin' component={() => <Admin />} />
+                    <Route path='/admin' component={AdminPage} />
                     <Redirect to='/' />
                 </Switch>
             </div>
