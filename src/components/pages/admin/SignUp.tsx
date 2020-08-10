@@ -1,15 +1,15 @@
 import React, {useEffect } from 'react';
 import { useRecoilValue } from 'recoil'
-import { baseURLAtom } from '../../atoms/globalAtoms.ts'
-import { isEmpty } from '../../utils/utils.ts'
-import useInput from '../../reducer/useInput.ts';
+import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
+import { isEmpty } from '../../../utils/utils.ts'
+import useInput from '../../../reducer/useInput.ts';
 import axios from 'axios';
 
-import Input from '../modal/Input.tsx'
-import SelectOption from '../modal/SelectOption.tsx';
+import Input from '../../modal/Input.tsx'
+import SelectOption from '../../modal/SelectOption.tsx';
 
-import '../../styles/common.scss'
-import '../../styles/signup.scss'
+import '../../../styles/common.scss'
+import '../../../styles/signup.scss'
 
 export default function SignUp() {
 
@@ -35,7 +35,7 @@ export default function SignUp() {
     const signUpAPI = async (ev) => {
         ev.preventDefault();
         const config = {
-            url: `${baseURL}/api/login/sign-up`,
+            url: `${baseURL}/api/userinfo/sign-up`,
             data: {
                 username: signUpForm.username,
                 password: signUpForm.password,

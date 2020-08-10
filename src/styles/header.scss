@@ -1,7 +1,7 @@
 .main-top-header {
     position: absolute;
     top: 0;
-    
+    z-index: 999;
 }
 
 .main-nav {
@@ -9,7 +9,7 @@
     flex-direction: row;
 }
 
-.main-nav-link {
+.link {
     color: #acacac;
     font-size: 1.1rem;
     text-decoration: none;

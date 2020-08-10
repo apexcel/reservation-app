@@ -13,9 +13,9 @@ export default function Header({ setLogged, userState }) {
     return (
         <header className='main-top-header'>
             <nav className='main-nav'>
-                { userState.isAdmin ? <Link className='main-nav-link' to='/admin'>Admin</Link> : null}
-                <Link className='main-nav-link' to='/'>Main</Link>
-                <Link className='main-nav-link' to='/profile'>Profile</Link>
+                { userState.isAdmin ? <Link className='link' to='/admin'>Admin</Link> : null}
+                <Link className='link' to='/'>Main</Link>
+                <Link className='link' to='/profile'>Profile</Link>
                 <div className='main-nav-about-user'>
                     <button type='button' onClick={logout}>logout</button>
                 </div>

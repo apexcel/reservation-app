@@ -40,11 +40,11 @@ export default function Dialog({ isDialogVisible, closeDialog, selectedDateState
             }
         }
         // 예약 취소
-        if (currentTableRowValue === userState.fullname) {
+        if ((currentTableRowValue === userState.fullname) || (!isEmpty(currentTableRowValue) && userState.isAdmin === true)) {
             const ans = confirm(`예약 취소 하시겠습니까?`)
             if (ans) {
                 let removed = tableBody.map((el, idx) => {
-                    if (el[selectedHeadState.field] === userState.fullname && rowIndex === idx) {
+                    if (el[selectedHeadState.field] === currentTableRowValue && rowIndex === idx) {
                         console.log("true", el, idx)
                         return { ...el, [selectedHeadState.field]: "" };
                     }

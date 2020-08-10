@@ -8,7 +8,7 @@ export default function Footer() {
             <section className='footer-section'>
                 <div className='footer-left'>
                     <div className='footer-title'>
-                    <span>Dilettante</span>
+                    <a href='/'>Dilettante</a>
                     </div>
                     <div className='footer-item left-item'>
                         <a href='https://cafe.naver.com/purples6bha' target='_blank'><SVG name='cafe' width={32} height={32} color='#ffffff' /></a>

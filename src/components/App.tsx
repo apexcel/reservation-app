@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect, useHistory } fr
 import { userStateAtom } from '../atoms/globalAtoms.ts'
 import { isEmpty } from '../utils/utils.ts'
 
-import SignUp from './pages/SignUp.tsx'
+import SignUp from './pages/admin/SignUp.tsx'
 import Header from './pages/Header.tsx'
 import Footer from './pages/Footer.tsx'
 import Profile from './pages/user/Profile.tsx'
@@ -37,7 +37,7 @@ export default function App() {
     }
 
     const ProfilePage = () => {
-        return logged ? <Profile userState={userState} /> : <Redirect to='/' />
+        return logged ? <Profile userState={userState} /> : <ErrorPage httpStatus={401} />
     }
 
     const AdminPage = () => {
@@ -51,7 +51,6 @@ export default function App() {
                 <Switch>
                     <Route exact path='/' component={IndexPage} />
                     <Route path='/profile' component={ProfilePage} />
-                    <Route path='/signup' component={() => <SignUp />} />
                     <Route path='/admin' component={AdminPage} />
                     <Redirect to='/' />
                 </Switch>

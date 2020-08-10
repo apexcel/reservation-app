@@ -23,7 +23,7 @@ export default function SignIn({ setLogged }) {
         }
 
         const config = {
-            url: `${baseURL}/api/login/sign-in`,
+            url: `${baseURL}/api/userinfo/sign-in`,
             data: {
                 username: username,
                 password: password,
@@ -47,10 +47,10 @@ export default function SignIn({ setLogged }) {
                 })
                 setLogged(true)
             }
-        } catch (err) {
+        }
+        catch (err) {
             throw err;
         }
-
     }
 
     return (
@@ -63,11 +63,6 @@ export default function SignIn({ setLogged }) {
                 <Input id='password' name='password' onChangeInput={onChangeInput} type='password' placeHolder='Password' />
                 <div className='btn-field'>
                     <button className='btn-primary' type='button' onClick={onSignIn}>Sign in</button>
-                </div>
-                <div className='btn-field'>
-                    <Link to='/signup'>
-                        <button className='btn-primary' type='button'>Sign up</button>
-                    </Link>
                 </div>
             </fieldset>
         </form>
