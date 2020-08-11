@@ -6,6 +6,10 @@ function reducer(state, action) {
             return {
                 ...state, [action.name]: action.value
             };
+        case "CHECKBOX_CHANGE":
+            return {
+                ...state, [action.name]: !action.value
+            }
         case "RESET":
             return Object.keys(state).reduce((acc, current) => {
                 acc[current] = '';
@@ -19,14 +23,20 @@ function reducer(state, action) {
 function useInput(initialForm) {
     const [form, dispatch] = useReducer(reducer, initialForm);
 
-    const onChangeInput = useCallback(e => {
-        const { name, value } = e.target;
+    const onChangeInput = useCallback(ev => {
+        const { name, value } = ev.target;
         dispatch({ type: "CHANGE", name, value });
+    }, []);
+
+    const onChangeCheck = useCallback(ev => {
+        const { name, value } = ev.target;
+        let check = (value === 'on') ? true : false;
+        dispatch({ type: "CHECKBOX_CHANGE", name, check });
     }, []);
 
     const reset = useCallback(() => dispatch({ type: "RESET" }), []);
 
-    return [form, onChangeInput, reset];
+    return [form, onChangeInput, onChangeCheck, reset];
 }
 
 export default useInput;

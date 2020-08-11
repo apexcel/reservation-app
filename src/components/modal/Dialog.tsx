@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../table/Table.tsx'
 import { isEmpty } from '../../utils/utils.ts'
+import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { tableBodyStateAtom, tableHeadStateAtom } from '../../atoms/tableAtoms.ts'
 import { baseURLAtom, userStateAtom } from '../../atoms/globalAtoms.ts'
 import axios from 'axios'
+
+import socketio from 'socket.io-client'
+const io = socketio.connect('http://localhost:9000');
 
 import '../../styles/dialog.scss'
 
@@ -27,6 +31,13 @@ export default function Dialog({ isDialogVisible, closeDialog, selectedDateState
         }))
     };
 
+    useEffect(() => {
+        io.on('set', (table) => {
+            console.log(table)
+            setTableBody(table)
+        })
+    }, [])
+
     const onTableRowClick = async (ev, rowIndex, currentTableRowValue, selectedHeadState) => {
         //console.log(ev, currentTableRowValue, rowIndex, selectedHeadState)
         const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIndex + 13);
@@ -37,6 +48,7 @@ export default function Dialog({ isDialogVisible, closeDialog, selectedDateState
                 const updated = await updateTableBodyState(rowIndex, selectedHeadState.field)
                 setTableBody(updated)
                 await setBookedData(rowIndex, updated[rowIndex], selectedDate);
+                io.emit('get', {table: updated})
             }
         }
         // 예약 취소
@@ -54,6 +66,7 @@ export default function Dialog({ isDialogVisible, closeDialog, selectedDateState
                 });
                 setTableBody(removed);
                 await setBookedData(rowIndex, removed[rowIndex], selectedDate);
+                io.emit('get', {table: removed})
             }
         }
     };

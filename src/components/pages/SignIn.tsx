@@ -12,7 +12,7 @@ export default function SignIn({ setLogged }) {
     const [userState, setUserState] = useRecoilState(userStateAtom);
     const baseURL = useRecoilValue(baseURLAtom);
 
-    const [{ username, password }, onChangeInput, reset] = useInput({
+    const [{ username, password }, onChangeInput] = useInput({
         username: '', password: ''
     });
 

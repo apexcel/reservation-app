@@ -23,9 +23,10 @@ export default function SignUp() {
         dob_mm: '',
         dob_dd: '',
         tel: '',
+        is_admin: false
     }
 
-    const [signUpForm, onChangeInput, reset] = useInput(initForm)
+    const [signUpForm, onChangeInput, onChangeCheck, reset] = useInput(initForm)
     const baseURL = useRecoilValue(baseURLAtom);
 
     useEffect(() => {
@@ -160,6 +161,15 @@ export default function SignUp() {
                     type='tel'
                     maxLength={11}
                 />
+
+                <Input
+                    onChangeInput={onChangeCheck}
+                    name='is_admin'
+                    id='is_admin'
+                    labelTitle='Is Admin'
+                    type='checkbox'
+                />
+
                 <div className='btn-area'><button type="button" onClick={signUpAPI} className='btn_primary'>Sign Up</button></div>
             </fieldset>
         </form>

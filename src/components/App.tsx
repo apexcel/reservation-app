@@ -3,6 +3,7 @@ import { atom, useRecoilState } from 'recoil'
 import { BrowserRouter as Router, Route, Link, Switch, Redirect, useHistory } from 'react-router-dom'
 import { userStateAtom } from '../atoms/globalAtoms.ts'
 import { isEmpty } from '../utils/utils.ts'
+import socketio from 'socket.io-client'
 
 import SignUp from './pages/admin/SignUp.tsx'
 import Header from './pages/Header.tsx'
@@ -16,11 +17,19 @@ import ErrorPage from './pages/ErrorPage.tsx'
 // styles
 import '../styles/layout.scss'
 
+const socket = socketio.connect('http://localhost:9000');
+
 export default function App() {
     const [userState, setUserState] = useRecoilState(userStateAtom)
     const [logged, setLogged] = useState(false)
 
     useEffect(() => {
+        socket.emit('connection')
+        socket.on('send', (msg) => {
+            console.log(msg)
+            socket.disconnect()
+        })
+
         if (!isEmpty(sessionStorage.getItem('userState'))) {
             setUserState(JSON.parse(sessionStorage.getItem('userState')));
             setLogged(true);
@@ -46,8 +55,8 @@ export default function App() {
 
     return (
         <>
-            <div className='container'>
-                {logged ? <Header setLogged={setLogged} userState={userState} /> : null}
+            {logged ? <Header setLogged={setLogged} userState={userState} /> : null}
+                <div className='container'>
                 <Switch>
                     <Route exact path='/' component={IndexPage} />
                     <Route path='/profile' component={ProfilePage} />

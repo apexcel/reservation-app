@@ -1,16 +1,14 @@
-const { response } = require('express');
 const express = require('express');
 const router = express.Router();
 const getConn = require('../database/mysql/mysqlConn');
 
 router.post("/get-booked-data", async (req, resp) => {
-    console.log(req.body)
+    //console.log(req.body)
     await getConn((conn) => {
         const query = "SELECT * FROM ??";
         const queryParams = `time_table${req.body.date}`
         conn.query(query, queryParams, (err, row) => {
             if (err) throw err;
-            console.log(row)
             resp.send(row)
             conn.release()
         });
@@ -73,7 +71,6 @@ router.post('/find', async (req, resp) => {
             }
         })
     }
-
 })
 
 module.exports = router;

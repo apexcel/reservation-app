@@ -37,7 +37,7 @@ export default function SearchUser() {
     }
 
     return (
-        <>
+        <div>
             <Route path='/search/:name' component={SearchedUser} />
             <form>
                 <fieldset>
@@ -50,6 +50,6 @@ export default function SearchUser() {
                     </button>
                 </fieldset>
             </form>
-        </>
+        </div>
     )
 }

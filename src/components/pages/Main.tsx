@@ -6,6 +6,8 @@ import { tableHeadStateAtom, tableBodyStateAtom } from '../../atoms/tableAtoms.t
 import { baseURLAtom, currentSelectedDateAtom, getTableHeadersEachDay } from '../../atoms/globalAtoms.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import axios from 'axios'
+import socketio from 'socket.io-client'
+const io = socketio.connect('http://localhost:9000');
 
 export default function Main() {
 
@@ -28,13 +30,13 @@ export default function Main() {
 
     useEffect(() => {
         setTableHead(getHeaders);
+        getBookedList(selectedDateState);
     }, [selectedDateState])
 
     const onDateClick = async (ev, selectedDate) => {
         //console.log(ev, selectedDate);
         await setSelectedDateState(selectedDate);
-        setTableHead(getHeaders);
-        getBookedList(selectedDate);
+        getBookedList(selectedDateState);
         openDialog();
     };
 
@@ -44,12 +46,12 @@ export default function Main() {
         const config = {
             url: `${baseURL}/api/reservation/get-booked-data`,
             data: { date: _selectedDate }
-        }
+        };
         const result = await axios.post(config.url, config.data)
         console.log(result)
 
-        let emptyTableRow = createEmptyTableRow(tableHead);
-        let newTableBody = fulfillEmptyObject(result.data, emptyTableRow);
+        const emptyTableRow = createEmptyTableRow(tableHead);
+        const newTableBody = fulfillEmptyObject(result.data, emptyTableRow);
         setTableBody(newTableBody)
     };
 
@@ -62,8 +64,10 @@ export default function Main() {
                 // TODO: Date-range 사용하기
                 // TODO: 공휴일이나 어드민이 특정날짜 할 수 있게 하기
                 dateRange={
-                    {start: new Date(),
-                    end: new Date(new Date().valueOf() + 10 * 86400000)}
+                    {
+                        start: new Date(),
+                        end: new Date(new Date().valueOf() + 10 * 86400000)
+                    }
                 }
             />
             <Dialog
