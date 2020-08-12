@@ -16,7 +16,7 @@ router.get('/:name', async (req, resp) => {
 router.post('/update-lessons', async (req, resp) => {
     console.log(req.body);
     mongoConn.conn();
-    // TODO: req에 유저 데이터도 같이 가져오기
+    // TODO: req에 유저 데이터도 같이 가져오기 lessons 같은 것들
     // 같이 가져와서 업데이트하기
     const userData = {
         userId: userId,

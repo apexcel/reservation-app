@@ -16,9 +16,6 @@ router.post('/sign-in', async (req, resp) => {
     });
 
     if (matchUser !== null) {
-        console.log(matchUser)
-        //TODO: matchUser isAdmin 으로 변경
-        //const isAdmin = (matchUser.username === 'admin' && matchUser.fullname === 'admin') ? true : false;
         resp.send({
             username: matchUser.username,
             fullname: matchUser.fullname,

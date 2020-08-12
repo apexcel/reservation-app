@@ -11,7 +11,7 @@ export default function Searched({ username }) {
     console.log(username)
 
     useEffect(() => {
-        const fetchFromAPI = async () => {
+        const callUserInfoAPI = async () => {
             setIsLoading(true);
             try {
                 const result = await axios.get(`${baseURL}/api/userinfo/${username}`).then(res => setWillSearch(res.data));
@@ -23,7 +23,7 @@ export default function Searched({ username }) {
             setIsLoading(false);
         }
         if (username) {
-            fetchFromAPI();
+            callUserInfoAPI();
         }
         console.log(willSearch)
     }, [username])
@@ -32,6 +32,12 @@ export default function Searched({ username }) {
         console.log(willSearch)
     }, [willSearch])
 
+
+    // TODO:User Lessons update method
+    const updateUserLessons = () => {
+
+    }
+
     const renderData = () => {
         console.log(willSearch.fullname)
         return (
@@ -39,7 +45,9 @@ export default function Searched({ username }) {
                 <div>
                     {willSearch.username}
                 </div>
+                <div>
                     {willSearch.fullname}
+                </div>
                 <div>
                     {willSearch.dob}
                 </div>
@@ -51,6 +59,9 @@ export default function Searched({ username }) {
                 </div>
                 <div>
                     {willSearch.reservations}
+                </div>
+                <div>
+                    Update User Lessons
                 </div>
             </div>
         )
