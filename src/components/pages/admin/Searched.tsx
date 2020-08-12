@@ -14,7 +14,7 @@ export default function Searched({ username }) {
         const fetchFromAPI = async () => {
             setIsLoading(true);
             try {
-                const result = await axios.get(`${baseURL}/api/userinfo/find/${username}`).then(res => setWillSearch(res.data));
+                const result = await axios.get(`${baseURL}/api/userinfo/${username}`).then(res => setWillSearch(res.data));
                 console.log(result)
             }
             catch (err) {
@@ -56,6 +56,7 @@ export default function Searched({ username }) {
         )
     }
 
+    //TODO: 해당 유저 info 및 lesson 등 기타 업데이트 가능하도록
     return (
         <>
             {isLoading ? 'loading...' :

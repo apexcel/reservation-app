@@ -1,7 +1,6 @@
 import React, {useEffect } from 'react';
 import { useRecoilValue } from 'recoil'
 import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
-import { useHistory } from 'react-router-dom';
 import { isEmpty } from '../../../utils/utils.ts'
 import useInput from '../../../reducer/useInput.ts';
 import axios from 'axios';
@@ -29,7 +28,6 @@ export default function SignUp() {
 
     const [signUpForm, onChangeInput, onChangeCheck] = useInput(initForm)
     const baseURL = useRecoilValue(baseURLAtom);
-    const histoty = useHistory();
 
     useEffect(() => {
         console.log(signUpForm)

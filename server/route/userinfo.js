@@ -18,7 +18,7 @@ router.post('/sign-in', async (req, resp) => {
     if (matchUser !== null) {
         console.log(matchUser)
         //TODO: matchUser isAdmin 으로 변경
-        const isAdmin = (matchUser.username === 'admin' && matchUser.fullname === 'admin') ? true : false;
+        //const isAdmin = (matchUser.username === 'admin' && matchUser.fullname === 'admin') ? true : false;
         resp.send({
             username: matchUser.username,
             fullname: matchUser.fullname,
@@ -26,7 +26,7 @@ router.post('/sign-in', async (req, resp) => {
             lessons: matchUser.lessons,
             reservations: matchUser.reservations,
             stamp: new Date().getTime(),
-            isAdmin: isAdmin
+            isAdmin: matchUser.isAdmin,
         })
     }
     mongoConn.disconn()
@@ -65,7 +65,7 @@ router.post('/sign-up', async (req, resp) => {
     resp.status(200);
 });
 
-router.get('/find/:name', async (req, resp) => {
+router.get('/:name', async (req, resp) => {
     console.log('param: ', req.params)
     mongoConn.conn();
     const result = await User.findOne({ 'username': req.params.name })

@@ -41,7 +41,6 @@ export default function Main() {
         openDialog();
     };
 
-    //TODO: DB에서 가져올 때 날짜 변환 쉽도록 Date형식으로 보내주기
     const getBookedList = async (selectedDate) => {
         const _selectedDate = genTableName(selectedDate);
         const config = {
