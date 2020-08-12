@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../table/Table.tsx'
 import { isEmpty } from '../../utils/utils.ts'
-import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { tableBodyStateAtom, tableHeadStateAtom } from '../../atoms/tableAtoms.ts'
 import { baseURLAtom, userStateAtom } from '../../atoms/globalAtoms.ts'

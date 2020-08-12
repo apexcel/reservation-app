@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 const mysqlConn = require('../database/mysql/mysqlConn');
 const mongoConn = require('../database/mongo/mongoConn');
-const User = require('../database/mongo/user');
+const User = require('../database/mongo/schema/user');
 
 router.get('/:name', async (req, resp) => {
     console.log(req.params)

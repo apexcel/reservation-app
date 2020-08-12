@@ -1,6 +1,7 @@
 import React, {useEffect } from 'react';
 import { useRecoilValue } from 'recoil'
 import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
+import { useHistory } from 'react-router-dom';
 import { isEmpty } from '../../../utils/utils.ts'
 import useInput from '../../../reducer/useInput.ts';
 import axios from 'axios';
@@ -16,33 +17,35 @@ export default function SignUp() {
     const initForm = {
         username: '',
         password: '',
-        password_check: '',
-        first_name: '',
-        last_name: '',
-        dob_yy: '',
-        dob_mm: '',
-        dob_dd: '',
+        passwordCheck: '',
+        firstname: '',
+        lastname: '',
+        dobYear: '',
+        dobMonth: '',
+        dobDate: '',
         tel: '',
-        is_admin: false
+        isAdmin: false,
     }
 
-    const [signUpForm, onChangeInput, onChangeCheck, reset] = useInput(initForm)
+    const [signUpForm, onChangeInput, onChangeCheck] = useInput(initForm)
     const baseURL = useRecoilValue(baseURLAtom);
+    const histoty = useHistory();
 
     useEffect(() => {
         console.log(signUpForm)
     })
 
-    const signUpAPI = async (ev) => {
+    const callSignUpAPI = async (ev) => {
         ev.preventDefault();
         const config = {
             url: `${baseURL}/api/userinfo/sign-up`,
             data: {
                 username: signUpForm.username,
                 password: signUpForm.password,
-                fullname: signUpForm.last_name + signUpForm.first_name,
-                dob: new Date(signUpForm.dob_yy, signUpForm.dob_mm - 1, signUpForm.dob_dd),
-                tel: signUpForm.tel
+                fullname: signUpForm.lastname + signUpForm.firstname,
+                dob: new Date(signUpForm.dobYear, signUpForm.dobMonth - 1, signUpForm.dobDate),
+                tel: signUpForm.tel,
+                isAdmin: signUpForm.isAdmin
             }
         };
 
@@ -52,21 +55,22 @@ export default function SignUp() {
                 let classList = document.getElementById(Object.keys(signUpForm)[idx]).classList;
                 el ? (classList.remove("empty-warn")) : (classList.add("empty-warn"));
             });
-            //axios.post('http://localhost:9000/api/login/sign-up', signUpForm).then(res => console.log(res))
-            await axios.post(config.url, config.data).then(res => console.log(res))
+            axios.post(config.url, config.data).then(res => console.log(res))
         }
         catch (err) {
             // redirect 503 error page;
             throw err;
         }
+        finally {
+            const userPower = signUpForm.isAdmin ? 'Admin' : '일반회원';
+            alert(`${signUpForm.lastname}${signUpForm.firstname}의 ${userPower} 등록이 되었습니다.`)
+            window.location.replace(`/admin`)
+        }
     }
 
-    const isAbleId = () => {
-
-    }
 
     const isSamePassword = () => {
-        if (signUpForm.password === signUpForm.password_check) return true;
+        if (signUpForm.password === signUpForm.passwordCheck) return true;
         return false;
     }
 
@@ -76,7 +80,7 @@ export default function SignUp() {
         <form className='signup-form'>
             <fieldset className='signup-fieldset'>
                 <Input
-                    onChangeInput={onChangeInput}
+                    onChange={onChangeInput}
                     name='username'
                     id='username'
                     labelTitle='Username'
@@ -85,7 +89,7 @@ export default function SignUp() {
                 />
 
                 <Input
-                    onChangeInput={onChangeInput}
+                    onChange={onChangeInput}
                     name='password'
                     id='password'
                     labelTitle='Password'
@@ -94,9 +98,9 @@ export default function SignUp() {
                 />
 
                 <Input
-                    onChangeInput={onChangeInput}
-                    name='password_check'
-                    id='password_check'
+                    onChange={onChangeInput}
+                    name='passwordCheck'
+                    id='passwordCheck'
                     labelTitle='Password Check'
                     type='password'
                     maxLength={40}
@@ -105,18 +109,18 @@ export default function SignUp() {
                 {/* Name */}
                 <div className='name-box'>
                     <Input
-                        onChangeInput={onChangeInput}
-                        name='first_name'
-                        id='first_name'
+                        onChange={onChangeInput}
+                        name='firstname'
+                        id='firstname'
                         labelTitle='First Name'
                         type='text'
                         maxLength={40}
                     />
 
                     <Input
-                        onChangeInput={onChangeInput}
-                        name='last_name'
-                        id='last_name'
+                        onChange={onChangeInput}
+                        name='lastname'
+                        id='lastname'
                         labelTitle='Last Name'
                         type='text'
                         maxLength={40}
@@ -127,26 +131,26 @@ export default function SignUp() {
 
                 <div className='dob-box'>
                     <Input
-                        onChangeInput={onChangeInput}
-                        name='dob_yy'
-                        id='dob_yy'
+                        onChange={onChangeInput}
+                        name='dobYear'
+                        id='dobYear'
                         labelTitle='Year'
                         type='text'
                         maxLength={4}
                     />
 
                     <SelectOption
-                        onChangeInput={onChangeInput}
-                        name='dob_mm'
-                        id='dob_mm'
+                        onChange={onChangeInput}
+                        name='dobMonth'
+                        id='dobMonth'
                         labelTitle='Month'
                         optionArray={['Month', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
                     />
 
                     <Input
-                        onChangeInput={onChangeInput}
-                        name='dob_dd'
-                        id='dob_dd'
+                        onChange={onChangeInput}
+                        name='dobDate'
+                        id='dobDate'
                         labelTitle='Day'
                         type='text'
                         maxLength={2}
@@ -154,7 +158,7 @@ export default function SignUp() {
                 </div>
 
                 <Input
-                    onChangeInput={onChangeInput}
+                    onChange={onChangeInput}
                     name='tel'
                     id='tel'
                     labelTitle='Telephone'
@@ -163,14 +167,16 @@ export default function SignUp() {
                 />
 
                 <Input
-                    onChangeInput={onChangeCheck}
-                    name='is_admin'
-                    id='is_admin'
+                    onChange={onChangeCheck}
+                    name='isAdmin'
+                    id='isAdmin'
                     labelTitle='Is Admin'
                     type='checkbox'
                 />
 
-                <div className='btn-area'><button type="button" onClick={signUpAPI} className='btn_primary'>Sign Up</button></div>
+                <div className='btn-area'>
+                    <button type="button" onClick={callSignUpAPI} className='btn_primary'>Sign Up</button>
+                </div>
             </fieldset>
         </form>
     )

@@ -8,7 +8,7 @@ function reducer(state, action) {
             };
         case "CHECKBOX_CHANGE":
             return {
-                ...state, [action.name]: !action.value
+                ...state, [action.name]: action.checked
             }
         case "RESET":
             return Object.keys(state).reduce((acc, current) => {
@@ -29,14 +29,13 @@ function useInput(initialForm) {
     }, []);
 
     const onChangeCheck = useCallback(ev => {
-        const { name, value } = ev.target;
-        let check = (value === 'on') ? true : false;
-        dispatch({ type: "CHECKBOX_CHANGE", name, check });
+        const { name, checked } = ev.target;
+        dispatch({ type: "CHECKBOX_CHANGE", name, checked });
     }, []);
 
     const reset = useCallback(() => dispatch({ type: "RESET" }), []);
 
-    return [form, onChangeInput, onChangeCheck, reset];
+    return [form, onChangeInput, onChangeCheck];
 }
 
 export default useInput;

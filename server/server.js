@@ -14,7 +14,9 @@ app.use(express.static(frontend))
 app.use('/api', api)
 
 app.get('*', (req, resp) => {
-    resp.sendFile(frontend)
+    resp.sendFile(frontend, (err) => {
+        if (err) resp.sendStatus(500).end(err);
+    })
 });
 
 const server = app.listen(port, () => {
@@ -25,7 +27,6 @@ io.on('connection', (socket) => {
     console.log(socket.client.id)
     socket.on('get', (data) => {
         console.log(data.table)
-        //socket.emit('set', (data.table))
         socket.broadcast.emit('set', (data.table))
     })
 })

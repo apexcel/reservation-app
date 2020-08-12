@@ -10,20 +10,22 @@ export default function Input({
     minLength,
     max,
     min,
+    checked,
     placeHolder,
-    onChangeInput }) {
+    onChange }) {
 
     return (
         <div className='input-box'>
             {labelTitle ? <h3><label htmlFor={id}>{labelTitle}</label></h3> : null}
             <input
                 className='form-input'
-                onChange={onChangeInput}
+                onChange={onChange}
                 id={id}
                 type={type}
                 name={name}
                 placeholder={placeHolder}
                 maxLength={maxLength}
+                checked={checked}
             />
         </div>
     )

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Link, Switch, Route } from 'react-router-dom'
-import SearchUser from './SearchUser.tsx'
+import { Link, Switch, Route, Redirect } from 'react-router-dom'
+import Search from './Search.tsx'
 import SignUp from './SignUp.tsx'
 
 import '../../../styles/admin.scss'
@@ -14,13 +14,13 @@ export default function Admin() {
         <aside className={`${className}-aside`}>
             <nav className={`${className}-nav`}>
                 <Link className='link' to='/admin/signup'>Enroll User</Link>
-                <Link className='link' to='/admin/search-user'>Search User</Link>
+                <Link className='link' to='/admin/search'>Search User</Link>
             </nav>
         </aside>
         <section className={`${className}-section`}>
             <Switch>
                 <Route path='/admin/signup' component={() => <SignUp />} />
-                <Route path='/admin/search-user' component={() => <SearchUser />} />
+                <Route path='/admin/search' component={() => <Search />} />
             </Switch>
         </section>
         </div>

@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 const mysqlConn = require('../database/mysql/mysqlConn');
 const mongoConn = require('../database/mongo/mongoConn');
-const User = require('../database/mongo/user')
+const User = require('../database/mongo/schema/user')
 
 router.post('/sign-in', async (req, resp) => {
     mongoConn.conn()
@@ -16,6 +16,8 @@ router.post('/sign-in', async (req, resp) => {
     });
 
     if (matchUser !== null) {
+        console.log(matchUser)
+        //TODO: matchUser isAdmin 으로 변경
         const isAdmin = (matchUser.username === 'admin' && matchUser.fullname === 'admin') ? true : false;
         resp.send({
             username: matchUser.username,
@@ -38,7 +40,8 @@ router.post('/sign-up', async (req, resp) => {
         fullname: req.body.fullname,
         password: req.body.password,
         dob: req.body.dob,
-        tel: req.body.tel
+        tel: req.body.tel,
+        isAdmin: req.body.isAdmin
     };
 
     const query = {
@@ -61,5 +64,28 @@ router.post('/sign-up', async (req, resp) => {
     mongoConn.disconn();
     resp.status(200);
 });
+
+router.get('/find/:name', async (req, resp) => {
+    console.log('param: ', req.params)
+    mongoConn.conn();
+    const result = await User.findOne({ 'username': req.params.name })
+    mongoConn.disconn()
+    if (result !== null) {
+        const response = {
+            username: result.username,
+            fullname: result.fullname,
+            password: result.password,
+            dob: result.dob,
+            tel: result.tel,
+            lessons: result.lessons,
+            reservations: result.reservations
+        }
+        console.log(response)
+        resp.send(response)
+    }
+    else {
+        resp.status(500).end('Server Error');
+    }
+})
 
 module.exports = router;

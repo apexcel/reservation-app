@@ -10,9 +10,7 @@ export default function ErrorPage({ httpStatus }) {
             403: 'Forbidden',
             404: 'Not Found'
         }
-
-        console.log(codes)
-
+        
         return (
             <>
                 <h1>{httpStatus}</h1>

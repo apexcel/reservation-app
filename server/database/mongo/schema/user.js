@@ -1,12 +1,5 @@
 const mongoose = require('mongoose');
-
-const lessonSchema = new mongoose.Schema({
-    name: { type: String },
-    counter: { type: String },
-    start: { type: Date },
-    end: { type: Date },
-    price: {type: Number }
-});
+const LessonSchema = require('./lesson').schema
 
 const reservationSchema = new mongoose.Schema({
     target: { type: String },
@@ -19,8 +12,10 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true, trim: true },
     dob: { type: Date, required: true },
     tel: { type: String, required: true },
-    lessons: [lessonSchema],
-    reservations: [reservationSchema]
+    point: { type: Number},
+    lessons: [LessonSchema],
+    reservations: [reservationSchema],
+    isAdmin: { type: Boolean, required: true }
 });
 
 module.exports = mongoose.model('User', userSchema);
