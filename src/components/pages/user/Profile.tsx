@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { baseURLAtom, userStateAtom } from '../../../atoms/globalAtoms.ts'
+import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
 import axios from 'axios'
+
+import '../../../styles/profile.scss';
 
 export default function Profile({ userState }) {
 
+    const className = 'profile__page';
     const baseURL = useRecoilValue(baseURLAtom);
-    const setUserState = useSetRecoilState(userStateAtom);
     const [reservations, setReservations] = useState([]);
     const [refined, setRefined] = useState([]);
 
     useEffect(() => {
+        // Mounted 되었을 경우 re-rendering 하지 않도록 함
         let isMounted = true;
         if (!(reservations.length > 0)) {
             if (isMounted) {
-                getUserReservations().then(res => {
+                callResevationAPI().then(res => {
                     if (isMounted) setReservations(res.data);
                 });
             }
         }
-
-        console.log("pofile useEffect")
         return () => {
             isMounted = false;
         }
     }, [])
 
     useEffect(() => {
-        refinedUserReservations()
+        refinedReservations()
     }, [reservations])
 
-    const getUserReservations = async () => {
+    const callResevationAPI = async () => {
         const config = {
             url: `${baseURL}/api/reservation/find`,
             data: {
@@ -38,9 +39,9 @@ export default function Profile({ userState }) {
             }
         }
         return await axios.post(config.url, config.data);
-    }
+    };
 
-    const refinedUserReservations = () => {
+    const refinedReservations = () => {
         const bookedDate = [];
         const bookedTime = [];
         const finalList = [];
@@ -49,12 +50,10 @@ export default function Profile({ userState }) {
             bookedDate.push(Object.keys(el)[0].slice(10));
             bookedTime.push(Object.values(el)[0])
         });
-
+        console.log(bookedTime)
         
-        bookedTime.map((el, idx) => {
-            console.log(bookedDate[idx].slice(0, 4))
-            console.log(bookedDate[idx].slice(4))
-            el.map((el2, idx2) => {
+        bookedTime.map((bookedInfo, idx) => {
+            bookedInfo.map((el2, idx2) => {
                 const emptyObj = {};
                 //console.log(idx, el2.time, JSON.parse(el2.booked_data))
                 let item = Object.defineProperties(emptyObj, {
@@ -74,47 +73,49 @@ export default function Profile({ userState }) {
                 finalList.push(item);
             })
         })
+        console.log(bookedDate)
         setRefined(finalList)
-        return finalList;
     }
 
     const findTeacher = () => {
-        // TODO: 첫번째 요소만 반환하므로 동일한 시간대에 다른 사람 예약해도 나오지 않음
         return refined.map((el, idx) => {
             const match = Object.values(el.reservation).map((el2, idx2) => {
                 return el2 === userState.fullname ? Object.keys(el.reservation)[idx2] : null;
             });
             return match.find(name => name !== null);
         })
-    }
+    };
     
 
     const renderReservations = () => {
-        //TODO: 날짜에 알맞게 Teacher name 가져오는 새로운 방법 생각하기
-        // State를 이용한 방법을 이용하는 쪽으로
         const teacherNames = {
             so: '소정',
             hyun: '현영',
             jung: '상정'
-        }
+        };
         const teacher = findTeacher();
         console.log(teacher)
         return refined.map((el, idx) =>
-            <div key={idx}>
-                <span>{el.date} </span>
-                <span>{el.time}시</span>
-                <span>{teacherNames[teacher[idx]]}</span>
+            <div key={idx} className={`${className}-booked-list`}>
+                <span className={`${className}-booked-list-item`} >{el.date}</span>
+                <span className={`${className}-booked-list-item`} >{el.time}시</span>
+                <span className={`${className}-booked-list-item`} >{teacherNames[teacher[idx]]}</span>
             </div>
         );
     }
 
     return (
-        <div>
-            <p>Your username: {userState.username}</p>
-            <p>Your realname: {userState.fullname}</p>
-            <p>남은횟수와 레슨권 기간</p>
-            <p>Recent Booked dates</p>
-            {renderReservations()}
+        <div className={`${className}-container`}>
+            <div className={`${className}-userinfo`}>
+                <h1>User Infomation</h1>
+                <div>Your username: {userState.username}</div>
+                <div>Your realname: {userState.fullname}</div>
+                <div>남은횟수와 레슨권 기간</div>
+            </div>
+            <div className={`${className}-booked-list-container`}>
+                <h1>Recent Booked dates</h1>
+                {renderReservations()}
+            </div>
         </div>
     )
 }

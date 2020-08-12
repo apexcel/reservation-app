@@ -1,0 +1,24 @@
+.profile__page-container {
+    border: 1px solid red;
+    width: 100%;
+    min-height: 100vh;
+    max-height: 100%;
+}
+
+.profile__page-userinfo {
+    border: 1px solid green;
+}
+
+.profile__page-booked-list-container {
+    border: 1px solid skyblue;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile__page-booked-list {
+    border: 1px solid yellow;
+}
+
+.profile__page-booked-list-item {
+    padding: 2px;
+}

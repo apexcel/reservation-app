@@ -69,7 +69,6 @@ router.get('/find/:name', async (req, resp) => {
     console.log('param: ', req.params)
     mongoConn.conn();
     const result = await User.findOne({ 'username': req.params.name })
-    mongoConn.disconn()
     if (result !== null) {
         const response = {
             username: result.username,
@@ -86,6 +85,7 @@ router.get('/find/:name', async (req, resp) => {
     else {
         resp.status(500).end('Server Error');
     }
+    mongoConn.disconn()
 })
 
 module.exports = router;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Calendar from '../calendar/Calendar.tsx'
 import Dialog from '../modal/Dialog.tsx'
 import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
+import { genTableName } from '../../utils/utils.ts'
 import { tableHeadStateAtom, tableBodyStateAtom } from '../../atoms/tableAtoms.ts'
 import { baseURLAtom, currentSelectedDateAtom, getTableHeadersEachDay } from '../../atoms/globalAtoms.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -42,7 +43,7 @@ export default function Main() {
 
     //TODO: DB에서 가져올 때 날짜 변환 쉽도록 Date형식으로 보내주기
     const getBookedList = async (selectedDate) => {
-        const _selectedDate: string = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
+        const _selectedDate = genTableName(selectedDate);
         const config = {
             url: `${baseURL}/api/reservation/get-booked-data`,
             data: { date: _selectedDate }

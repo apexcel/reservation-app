@@ -4,6 +4,7 @@ import { isEmpty } from '../../utils/utils.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { tableBodyStateAtom, tableHeadStateAtom } from '../../atoms/tableAtoms.ts'
 import { baseURLAtom, userStateAtom } from '../../atoms/globalAtoms.ts'
+import { genTableName } from '../../utils/utils.ts'
 import axios from 'axios'
 
 import socketio from 'socket.io-client'
@@ -71,7 +72,7 @@ export default function Dialog({ isDialogVisible, closeDialog, selectedDateState
     };
 
     const setBookedData = async (rowIndex, newTableState, selectedDate) => {
-        const _currentDate = "" + selectedDate.getFullYear() + (selectedDate.getMonth() + 1) + selectedDate.getDate();
+        const _currentDate = genTableName(selectedDate);
         const config = {
             url: `${baseURL}/api/reservation/set-booked-data`,
             data: {

@@ -6,17 +6,17 @@ import Searched from './Searched.tsx'
 
 export default function Search() {
 
-    const [searchFor, onChangeInput] = useInput({name: ''});
-    const [sname, SetsName] = useState('');
+    const [searchName, onChangeInput] = useInput({name: ''});
+    const [nameForSearch, setNameForSearch] = useState('');
     const history = useHistory();
 
     useEffect(() => {
-        console.log(sname)
+        console.log(nameForSearch)
     })
 
     const onSearch = (ev) => {
         ev.preventDefault();
-        SetsName(searchFor.name)
+        setNameForSearch(searchName.name)
     }
 
     return (
@@ -25,7 +25,7 @@ export default function Search() {
                 <Input labelTitle='Search User name' onChange={onChangeInput} id='name' name='name' type='text' maxLength={20}/>
                 <button type='button' onClick={onSearch}>Search</button>
             </div>
-            <Searched username={sname} />
+            <Searched username={nameForSearch} />
         </div>
     )
 }

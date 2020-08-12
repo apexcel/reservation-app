@@ -1,4 +1,3 @@
-//const db = require('../database/mysql/mysqlConn');
 const mysql = require('mysql');
 const config = require('../database/mysql/config');
 const connection = mysql.createConnection({
@@ -29,7 +28,8 @@ function generateTable(tableName) {
     for (let i = 0; i <= 31; i += 1) {
         const newDate = new Date(now + (86_400_000 * i));
         const query = "CREATE TABLE IF NOT EXISTS ?? (time int(3) AUTO_INCREMENT, booked_data JSON, PRIMARY KEY(time)) AUTO_INCREMENT = 1";
-        const dbTableName = tableName + newDate.getFullYear() + (newDate.getMonth() + 1) + newDate.getDate();
+        //const dbTableName = tableName + newDate.getFullYear() + (newDate.getMonth() + 1) + newDate.getDate();
+        const dbTableName = tableName + genTableName(newDate);
         connection.query(query, dbTableName, (err, res) => {
             if (err) throw err;
         });
@@ -45,6 +45,16 @@ function insetTableData(tableName) {
             if (err) throw err;
         })
     }
+}
+
+function genTableName (date) {
+    const year = date.getFullYear().toString();
+    let month = (date.getMonth() + 1).toString();
+    let day = (date.getDate()).toString();
+
+    month = (month.length === 1) ? '0' + month : month;
+    day = (day.length === 1) ? '0' + day : day;
+    return `${year}-${month}-${day}`;
 }
 
 async function executeQuery() {

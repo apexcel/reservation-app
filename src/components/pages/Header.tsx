@@ -17,7 +17,7 @@ export default function Header({ setLogged, userState }) {
                 <Link className='link' to='/'>Main</Link>
                 <Link className='link' to='/profile'>Profile</Link>
                 <div className='main-nav-about-user'>
-                    <button type='button' onClick={logout}>logout</button>
+                    <button className='signout-btn' type='button' onClick={logout}>Sign Out</button>
                 </div>
             </nav>
         </header>
