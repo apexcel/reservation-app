@@ -4,7 +4,6 @@ export default function SelectOption({
     className,
     name,
     id,
-    labelTitle,
     type,
     maxLength,
     minLength,
@@ -17,10 +16,9 @@ export default function SelectOption({
         <option key={idx}>{el}</option>);
 
     return (
-        <div className='input-box'>
-            {labelTitle ? <h3><label htmlFor={id}>{labelTitle}</label></h3> : null}
+        <div className='common__input--container'>
             <select
-                className='form-input'
+                className={className}
                 onChange={onChangeInput}
                 id={id}
                 name={name}

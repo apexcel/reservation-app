@@ -43,37 +43,34 @@ export default function Profile({ userState }) {
 
     const refinedReservations = () => {
         const bookedDate = [];
-        const bookedTime = [];
+        const bookedDataList = [];
         const finalList = [];
 
         reservations.map((el, idx) => {
             bookedDate.push(Object.keys(el)[0].slice(10));
-            bookedTime.push(Object.values(el)[0])
+            bookedDataList.push(Object.values(el)[0])
         });
-        console.log(bookedTime)
         
-        bookedTime.map((bookedInfo, idx) => {
-            bookedInfo.map((el2, idx2) => {
+        bookedDataList.map((bookedInfo, idx) => {
+            bookedInfo.map(el => {
                 const emptyObj = {};
-                //console.log(idx, el2.time, JSON.parse(el2.booked_data))
                 let item = Object.defineProperties(emptyObj, {
                     'date': {
                         value: bookedDate[idx],
                         enumerable: true
                     },
                     'time': {
-                        value: el2.time,
+                        value: el.time,
                         enumerable: true
                     },
                     'reservation': {
-                        value: JSON.parse(el2.booked_data),
+                        value: JSON.parse(el.booked_data),
                         enumerable: true
                     }
                 });
                 finalList.push(item);
             })
         })
-        console.log(bookedDate)
         setRefined(finalList)
     }
 
@@ -107,10 +104,13 @@ export default function Profile({ userState }) {
     return (
         <div className={`${className}-container`}>
             <div className={`${className}-userinfo`}>
-                <h1>User Infomation</h1>
+                <h1>My Information</h1>
                 <div>Your username: {userState.username}</div>
                 <div>Your realname: {userState.fullname}</div>
-                <div>남은횟수와 레슨권 기간</div>
+                <h2>남은횟수와 레슨권 기간</h2>
+                <div>
+                    
+                </div>
             </div>
             <div className={`${className}-booked-list-container`}>
                 <h1>Recent Booked dates</h1>

@@ -120,8 +120,14 @@
     }
 }
 
-// Desktop
-@media only screen and (min-width: 1024px) {
+// Default
+    @include footer();
+    @include footer-section(3rem, 10rem);
+    @include footer-title(2rem);
+    @include footer-left(2rem);
+    @include footer-right(0.9rem);
+
+@media only screen and (min-width: 768) {
     @include footer();
     @include footer-section(3rem, 10rem);
     @include footer-title(2rem);
@@ -129,7 +135,7 @@
     @include footer-right(0.9rem);
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
     @include footer();
     @include footer-section(1rem, 2rem);
     @include footer-title(1.5rem);

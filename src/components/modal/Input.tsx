@@ -4,7 +4,6 @@ export default function Input({
     className,
     name,
     id,
-    labelTitle,
     type,
     maxLength,
     minLength,
@@ -12,13 +11,13 @@ export default function Input({
     min,
     checked,
     placeHolder,
-    onChange }) {
+    onChange
+}) {
 
     return (
-        <div className='input-box'>
-            {labelTitle ? <h3><label htmlFor={id}>{labelTitle}</label></h3> : null}
+        <div className='common__input--container'>
             <input
-                className='form-input'
+                className={`${className}`}
                 onChange={onChange}
                 id={id}
                 type={type}

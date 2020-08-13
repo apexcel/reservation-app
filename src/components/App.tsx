@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect, useHistory } fr
 import { userStateAtom } from '../atoms/globalAtoms.ts'
 import { isEmpty } from '../utils/utils.ts'
 
-import SignUp from './pages/admin/SignUp.tsx'
 import Header from './pages/Header.tsx'
 import Footer from './pages/Footer.tsx'
 import Profile from './pages/user/Profile.tsx'
@@ -19,35 +18,35 @@ import '../styles/layout.scss'
 
 export default function App() {
     const [userState, setUserState] = useRecoilState(userStateAtom)
-    const [logged, setLogged] = useState(false)
+    const [isLogin, setIsLogin] = useState(false)
 
     useEffect(() => {
         if (!isEmpty(sessionStorage.getItem('userState'))) {
             setUserState(JSON.parse(sessionStorage.getItem('userState')));
-            setLogged(true);
+            setIsLogin(true);
         }
     }, [])
 
     useEffect(() => {
-        if (logged) sessionStorage.setItem('userState', JSON.stringify(userState));
+        if (isLogin) sessionStorage.setItem('userState', JSON.stringify(userState));
         else sessionStorage.clear();
-    }, [logged])
+    }, [isLogin])
 
     const IndexPage = () => {
-        return logged ? <Main /> : <SignIn setLogged={setLogged} />
-    }
-
-    const ProfilePage = () => {
-        return logged ? <Profile userState={userState} /> : <ErrorPage httpStatus={401} />
+        return isLogin ? <Main /> : <SignIn setIsLogin={setIsLogin} adminLogin={false} />
     }
 
     const AdminPage = () => {
-        return logged && userState.isAdmin ? <Admin /> : <ErrorPage httpStatus={401} />
+        return isLogin && userState.isAdmin ? <Admin /> : <SignIn setIsLogin={setIsLogin} adminLogin={true} />
+    }
+
+    const ProfilePage = () => {
+        return isLogin ? <Profile userState={userState} /> : <ErrorPage httpStatus={401} />
     }
 
     return (
         <>
-            {logged ? <Header setLogged={setLogged} userState={userState} /> : null}
+            {isLogin ? <Header setIsLogin={setIsLogin} userState={userState} /> : null}
                 <div className='container'>
                 <Switch>
                     <Route exact path='/' component={IndexPage} />

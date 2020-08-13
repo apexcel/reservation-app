@@ -4,7 +4,7 @@ const mysqlConn = require('../database/mysql/mysqlConn');
 const mongoConn = require('../database/mongo/mongoConn');
 const User = require('../database/mongo/schema/user')
 
-router.post('/sign-in', async (req, resp) => {
+router.post('/signin', async (req, resp) => {
     mongoConn.conn()
     const query = {
         username: req.body.username,
@@ -23,13 +23,12 @@ router.post('/sign-in', async (req, resp) => {
             lessons: matchUser.lessons,
             reservations: matchUser.reservations,
             stamp: new Date().getTime(),
-            isAdmin: matchUser.isAdmin,
         })
     }
     mongoConn.disconn()
 });
 
-router.post('/sign-up', async (req, resp) => {
+router.post('/signup', async (req, resp) => {
     console.log(req.body)
     mongoConn.conn();
     const userInfo = {
@@ -38,7 +37,6 @@ router.post('/sign-up', async (req, resp) => {
         password: req.body.password,
         dob: req.body.dob,
         tel: req.body.tel,
-        isAdmin: req.body.isAdmin
     };
 
     const query = {
@@ -65,7 +63,7 @@ router.post('/sign-up', async (req, resp) => {
 router.get('/:name', async (req, resp) => {
     console.log('param: ', req.params)
     mongoConn.conn();
-    const result = await User.findOne({ 'username': req.params.name })
+    const result = await User.findOne({ 'username': req.params.name });
     if (result !== null) {
         const response = {
             username: result.username,
@@ -75,12 +73,11 @@ router.get('/:name', async (req, resp) => {
             tel: result.tel,
             lessons: result.lessons,
             reservations: result.reservations
-        }
-        console.log(response)
+        };
         resp.send(response)
     }
     else {
-        resp.status(500).end('Server Error');
+        resp.status(500).end();
     }
     mongoConn.disconn()
 })

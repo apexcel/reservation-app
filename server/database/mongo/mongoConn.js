@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const cfg = require('./config')
 
+mongoose.set('useFindAndModify', false);
+
 const mdbConn = () => {
     mongoose.connect(cfg.uri, cfg.options, (err) => {
         if (err) throw err;

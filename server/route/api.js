@@ -5,13 +5,15 @@ const cors = require('cors');
 
 const reservation = require('./reservation');
 const userinfo = require('./userinfo');
-const enroll = require('./enroll')
+const admin = require('./admin');
+const enroll = require('./enroll');
 
 router.use(cors());
 router.use(bodyParser.json());
 
 router.use('/reservation', reservation);
 router.use('/userinfo', userinfo);
+router.use('/admin', admin);
 router.use('/enroll', enroll);
 
 module.exports = router;

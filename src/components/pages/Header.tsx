@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom'
 
 import '../../styles/header.scss'
 
-export default function Header({ setLogged, userState }) {
+export default function Header({ setIsLogin, userState }) {
 
     const logout = (e) => {
         e.preventDefault();
-        setLogged(false);
+        setIsLogin(false);
     }
 
     return (

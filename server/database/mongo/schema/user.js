@@ -15,7 +15,6 @@ const userSchema = new mongoose.Schema({
     point: { type: Number},
     lessons: [LessonSchema],
     reservations: [reservationSchema],
-    isAdmin: { type: Boolean, required: true }
 });
 
 module.exports = mongoose.model('User', userSchema);

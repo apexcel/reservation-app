@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Calendar from '../calendar/Calendar.tsx'
-import Dialog from '../modal/Dialog.tsx'
+import TableDialog from '../modal/TableDialog.tsx'
 import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
 import { genTableName } from '../../utils/utils.ts'
 import { tableHeadStateAtom, tableBodyStateAtom } from '../../atoms/tableAtoms.ts'
@@ -70,7 +70,7 @@ export default function Main() {
                     }
                 }
             />
-            <Dialog
+            <TableDialog
                 isDialogVisible={isDialogVisible}
                 closeDialog={closeDialog}
                 selectedDateState={selectedDateState}

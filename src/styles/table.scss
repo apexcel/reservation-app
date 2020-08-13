@@ -53,15 +53,15 @@
         }
     }
 
-    &::before {
-        justify-content: center;
-        position: absolute;
-        left: 0;
-        margin-left: 10px;
-        margin-top: 12px;
-        counter-increment: tbody-counter;
-        content: counter(tbody-counter);
-    }
+    // &::before {
+    //     justify-content: center;
+    //     position: absolute;
+    //     left: 0;
+    //     margin-left: 10px;
+    //     margin-top: 12px;
+    //     counter-increment: tbody-counter;
+    //     content: counter(tbody-counter);
+    // }
 }
 .simple__table-row-cell {
     display: flex;

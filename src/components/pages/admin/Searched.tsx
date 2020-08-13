@@ -2,20 +2,20 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
 import { useRecoilValue } from 'recoil'
+import UpdateLessonDialog from './UpdateLessonDialog.tsx';
 
 export default function Searched({ username }) {
-    const [willSearch, setWillSearch] = useState({});
+    const [searchedUserInfo, setSearchedUserInfo] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
     const baseURL = useRecoilValue(baseURLAtom);
-
-    console.log(username)
 
     useEffect(() => {
         const callUserInfoAPI = async () => {
             setIsLoading(true);
             try {
-                const result = await axios.get(`${baseURL}/api/userinfo/${username}`).then(res => setWillSearch(res.data));
-                console.log(result)
+                const result = await axios.get(`${baseURL}/api/userinfo/${username}`);
+                setSearchedUserInfo(result.data);
             }
             catch (err) {
                 console.error(err);
@@ -25,44 +25,45 @@ export default function Searched({ username }) {
         if (username) {
             callUserInfoAPI();
         }
-        console.log(willSearch)
+        console.log(searchedUserInfo)
     }, [username])
 
     useEffect(() => {
-        console.log(willSearch)
-    }, [willSearch])
+        console.log(searchedUserInfo)
+    }, [searchedUserInfo])
 
+    const openDialog = () => { setVisible(true) };
+    const closeDialog = () => { setVisible(false) };
 
     // TODO:User Lessons update method
-    const updateUserLessons = () => {
-
+    const updateUserLessons = (ev) => {
+        ev.preventDefault();
+        openDialog();
     }
 
-    const renderData = () => {
-        console.log(willSearch.fullname)
+    const renderSearchedUserInfo = () => {
+        console.log(searchedUserInfo.fullname)
         return (
             <div>
                 <div>
-                    {willSearch.username}
+                    {searchedUserInfo.username}
                 </div>
                 <div>
-                    {willSearch.fullname}
+                    {searchedUserInfo.fullname}
                 </div>
                 <div>
-                    {willSearch.dob}
+                    {searchedUserInfo.dob}
                 </div>
                 <div>
-                    {willSearch.tel}
+                    {searchedUserInfo.tel}
                 </div>
                 <div>
-                    {willSearch.lessons}
+                    {searchedUserInfo.lessons}
                 </div>
                 <div>
-                    {willSearch.reservations}
+                    {searchedUserInfo.reservations}
                 </div>
-                <div>
-                    Update User Lessons
-                </div>
+                <button type='button' onClick={updateUserLessons}>New Lessons Update</button>
             </div>
         )
     }
@@ -71,8 +72,8 @@ export default function Searched({ username }) {
     return (
         <>
             {isLoading ? 'loading...' :
-                (Object.keys(willSearch).length > 0 ? renderData() : 'error')
-            }
+                (Object.keys(searchedUserInfo).length > 0 ? renderSearchedUserInfo() : 'error')}
+            {visible ? <UpdateLessonDialog closeDialog={closeDialog} /> : null}
         </>
     )
 }

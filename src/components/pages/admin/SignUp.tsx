@@ -1,4 +1,4 @@
-import React, {useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil'
 import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
 import { isEmpty } from '../../../utils/utils.ts'
@@ -35,17 +35,15 @@ export default function SignUp() {
 
     const callSignUpAPI = async (ev) => {
         ev.preventDefault();
-        const config = {
-            url: `${baseURL}/api/userinfo/sign-up`,
-            data: {
+        const url = signUpForm.isAdmin ? `${baseURL}/api/admin/signup` : `${baseURL}/api/userinfo/signup`;
+        const data = {
                 username: signUpForm.username,
                 password: signUpForm.password,
                 fullname: signUpForm.lastname + signUpForm.firstname,
                 dob: new Date(signUpForm.dobYear, signUpForm.dobMonth - 1, signUpForm.dobDate),
                 tel: signUpForm.tel,
                 isAdmin: signUpForm.isAdmin
-            }
-        };
+            };
 
         try {
             const firstEmptyItem = Object.values(signUpForm).map(el => el !== '');
@@ -53,7 +51,7 @@ export default function SignUp() {
                 let classList = document.getElementById(Object.keys(signUpForm)[idx]).classList;
                 el ? (classList.remove("empty-warn")) : (classList.add("empty-warn"));
             });
-            axios.post(config.url, config.data).then(res => console.log(res))
+            axios.post(url, data).then(res => console.log(res))
         }
         catch (err) {
             // redirect 503 error page;
@@ -77,98 +75,108 @@ export default function SignUp() {
     return (
         <form className='signup-form'>
             <fieldset className='signup-fieldset'>
+                <label htmlFor='username'>Username</label>
                 <Input
+                    className='common__input'
                     onChange={onChangeInput}
                     name='username'
                     id='username'
-                    labelTitle='Username'
                     type='text'
                     maxLength={20}
                 />
 
+                <label htmlFor='password'>Password</label>
                 <Input
+                    className='common__input'
                     onChange={onChangeInput}
                     name='password'
                     id='password'
-                    labelTitle='Password'
                     type='password'
                     maxLength={40}
                 />
 
+                <label htmlFor='passwordCheck'>Password Check</label>
                 <Input
+                    className='common__input'
                     onChange={onChangeInput}
                     name='passwordCheck'
                     id='passwordCheck'
-                    labelTitle='Password Check'
                     type='password'
                     maxLength={40}
                 />
 
                 {/* Name */}
                 <div className='name-box'>
+
+                    <label htmlFor='firstname'>First Name</label>
                     <Input
+                        className='common__input'
                         onChange={onChangeInput}
                         name='firstname'
                         id='firstname'
-                        labelTitle='First Name'
                         type='text'
                         maxLength={40}
                     />
 
+                    <label htmlFor='lastname'>Last Name</label>
                     <Input
+                        className='common__input'
                         onChange={onChangeInput}
                         name='lastname'
                         id='lastname'
-                        labelTitle='Last Name'
                         type='text'
                         maxLength={40}
                     />
                 </div>
 
                 {/* DOB */}
-
+                <label htmlFor='dobYear'>Year</label>
                 <div className='dob-box'>
                     <Input
+                        className='common__input'
                         onChange={onChangeInput}
                         name='dobYear'
                         id='dobYear'
-                        labelTitle='Year'
                         type='text'
                         maxLength={4}
                     />
 
+                    <label htmlFor='dobMonth'>Month</label>
                     <SelectOption
+                        className='common__select'
                         onChange={onChangeInput}
                         name='dobMonth'
                         id='dobMonth'
-                        labelTitle='Month'
                         optionArray={['Month', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
                     />
 
+                    <label htmlFor='dobDate'>Date</label>
                     <Input
+                        className='common__input'
                         onChange={onChangeInput}
                         name='dobDate'
                         id='dobDate'
-                        labelTitle='Day'
                         type='text'
                         maxLength={2}
                     />
                 </div>
 
+                <label htmlFor='tel'>Tel</label>
                 <Input
+                    className='common__input'
                     onChange={onChangeInput}
                     name='tel'
                     id='tel'
-                    labelTitle='Telephone'
                     type='tel'
                     maxLength={11}
                 />
 
+                <label htmlFor='isAdmin'>Is Admin</label>
                 <Input
+                    className='common__input'
                     onChange={onChangeCheck}
                     name='isAdmin'
                     id='isAdmin'
-                    labelTitle='Is Admin'
                     type='checkbox'
                 />
 

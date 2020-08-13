@@ -1,5 +1,5 @@
 const mongoConn = require('../database/mongo/mongoConn');
-const User = require('../database/mongo/schema/user');
+const Admin = require('../database/mongo/schema/admin');
 
 async function createDefaultAdmin() {
     await mongoConn.conn();
@@ -10,9 +10,7 @@ async function createDefaultAdmin() {
     const adminInfo = {
         fullname: 'admin',
         username: 'admin',
-        password: 'pwd0815',
-        dob: new Date(),
-        tel: 'Default Value',
+        password: 'dltt0815',
         isAdmin: true,
     }
     const options = {
@@ -21,7 +19,7 @@ async function createDefaultAdmin() {
         setDefaultOnInsert: true,
         useFindAndModify: false
     };
-    await User.findOneAndUpdate(query, adminInfo, options, (err, res) => {
+    await Admin.findOneAndUpdate(query, adminInfo, options, (err, res) => {
         if (err) throw err;
         mongoConn.disconn();
     })

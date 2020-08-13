@@ -15,6 +15,7 @@ export default function Admin() {
             <nav className={`${className}-nav`}>
                 <Link className='link' to='/admin/signup'>Enroll User</Link>
                 <Link className='link' to='/admin/search'>Search User</Link>
+                <Link className='link' to='/admin/alluser'>All User Manipulation</Link>
             </nav>
         </aside>
         <section className={`${className}-section`}>
