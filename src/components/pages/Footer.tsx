@@ -19,15 +19,15 @@ export default function Footer() {
                 </div>
                 <div className='footer-right'>
                     <div className='footer-item right-item'>
-                        <SVG name='location_marker' width={20} height={20} color='#ffffff' />
+                        <SVG name='location_marker' width={20} height={20} color='#ffffff' viewBox='0 0 175 175'/>
                         <span className='footer-desc'>경기 수원시 영통구 영통로217번길 21</span>
                     </div>
                     <div className='footer-item right-item'>
-                        <SVG name='call' width={18} height={18} color='#ffffff' />
+                        <SVG name='call' width={20} height={20} color='#ffffff' viewBox='0 0 175 175'/>
                         <span className='footer-desc'>+82 01088004825</span>
                     </div>
                     <div className='footer-item right-item'>
-                        <SVG name='time' width={19} height={19} color='#ffffff' />
+                        <SVG name='time' width={20} height={20} color='#ffffff' viewBox='0 0 175 175' />
                         <span className='footer-desc'>PM 13:00 ~ 23:00 / Monday off.</span>
                     </div>
                     <div className='footer-item right-item'>

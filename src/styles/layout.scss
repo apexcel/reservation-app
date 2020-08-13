@@ -1,3 +1,6 @@
+@import './header.scss';
+@import './footer.scss';
+
 * {
     margin: 0;
     padding: 0;
@@ -34,134 +37,9 @@ html, body {
     overflow: hidden;
 }
 
-// Header
-header {
-    position: fixed;
-    top: 0;
-}
-
-// Footer
-footer {
-    position: static;
-    display: block;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background-color: #0e0e0e;
-    color: #d6d6d6;
-
-    .footer-section {
-        display: flex;
-        flex-direction: row;
-        flex-grow: 1;
-        flex-basis: 1;
-        padding: 3rem 10rem 3rem 10rem;
-    }
-
-    .footer-title {
-        margin-bottom: 2rem;
-        font-family: 'Caveat', cursive;
-        font-size: 2rem;
-
-        &:hover {
-            &::before, &::after {
-                width: 100%;
-                opacity: 1;
-            }
-        }
-
-        a {
-            position: relative;
-            text-decoration: none;
-            
-            &:visited {
-                color: inherit;
-            }
-            
-            &::before {
-                content: "";
-                position: absolute;
-                width: 100%;
-                height: 2px;
-                bottom: 0;
-                left: 0;
-                transition: all 0.3s 0.1s ease-in-out;
-                transform: scaleX(0);
-                background-color: #df6f25;
-                opacity: 0;
-            }
-            
-            &:hover {
-                color: #df6f25;
-                &::before {
-                    width: 100%;
-                    transform: scaleX(1);
-                    opacity: 1;
-                }
-            }
-        }
-    }
-
-    .footer-left {
-        display: flex;
-        flex-grow: 1;
-        flex-basis: 0;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-        width: 50%;
-        .left-item {
-            a { margin-right: 2rem; }
-            svg {
-                &:hover path {
-                    animation: svgPathColorFill;
-                    animation-duration: 10s;
-                    animation-iteration-count: infinite;
-                    animation-timing-function: ease-in-out;
-                }
-            }
-        }
-    }
-
-    .footer-right {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        height: 100%;
-        width: 50%;
-        font-size: 0.9rem;
-        .right-item {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            padding: 2px 0px 10px 0;
-            a {
-                text-decoration: none;
-                color: #7c7c7c;
-                &:hover {
-                    color: #df6f25;
-                }
-            }
-        }
-        .footer-desc {
-            margin-left: 5px;
-        }
-    }
 
 
-    .footer-item {
 
-    }
-
-    @keyframes svgPathColorFill {
-        0% { fill: #cf8525; }
-        25% { fill: #d4246d; }
-        50% { fill: #67ce22; }
-        75% { fill: #3328cf; }
-        100% { fill: #ca2750; }
-    }
-}
 
 // Fonts Import
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
