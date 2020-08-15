@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Calendar from '../calendar/Calendar.tsx'
-import TableDialog from '../modal/TableDialog.tsx'
+import TableDialog from './TableDialog.tsx'
+import ReservationApi from '../../utils/api/ReservationApi'
 import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
 import { genTableName } from '../../utils/utils.ts'
 import { tableHeadStateAtom, tableBodyStateAtom } from '../../atoms/tableAtoms.ts'
-import { baseURLAtom, currentSelectedDateAtom, getTableHeadersEachDay } from '../../atoms/globalAtoms.ts'
+import { currentSelectedDateAtom, getTableHeadersEachDay } from '../../atoms/globalAtoms.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import axios from 'axios'
 import socketio from 'socket.io-client'
 const io = socketio.connect('http://localhost:9000');
 
@@ -14,7 +14,6 @@ export default function Main() {
 
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom);
-    const baseURL = useRecoilValue(baseURLAtom);
     const getHeaders = useRecoilValue(getTableHeadersEachDay);
 
     const [isDialogVisible, setIsDialogVisible] = useState(false);
@@ -42,16 +41,12 @@ export default function Main() {
     };
 
     const getBookedList = async (selectedDate) => {
-        const _selectedDate = genTableName(selectedDate);
-        const config = {
-            url: `${baseURL}/api/reservation/get-booked-data`,
-            data: { date: _selectedDate }
+        const data = {
+            date: genTableName(selectedDate)
         };
-        const result = await axios.post(config.url, config.data)
-        console.log(result)
-
+        const response = await ReservationApi.getReservationList(data);
         const emptyTableRow = createEmptyTableRow(tableHead);
-        const newTableBody = fulfillEmptyObject(result.data, emptyTableRow);
+        const newTableBody = fulfillEmptyObject(response.data, emptyTableRow);
         setTableBody(newTableBody)
     };
 

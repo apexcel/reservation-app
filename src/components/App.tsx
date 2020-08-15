@@ -43,7 +43,7 @@ export default function App() {
     const ProfilePage = () => {
         return isLogin ? <Profile userState={userState} /> : <ErrorPage httpStatus={401} />
     }
-
+    console.log(userState)
     return (
         <>
             {isLogin ? <Header setIsLogin={setIsLogin} userState={userState} /> : null}

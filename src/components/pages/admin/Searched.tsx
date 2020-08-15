@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
-import { useRecoilValue } from 'recoil'
 import UpdateLessonDialog from './UpdateLessonDialog.tsx';
+import UserApi from '../../../utils/api/UserApi'
 
-export default function Searched({ username }) {
+export default function Searched({ match }) {
     const [searchedUserInfo, setSearchedUserInfo] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [visible, setVisible] = useState(false);
-    const baseURL = useRecoilValue(baseURLAtom);
 
     useEffect(() => {
-        const callUserInfoAPI = async () => {
-            setIsLoading(true);
-            try {
-                const result = await axios.get(`${baseURL}/api/userinfo/${username}`);
-                setSearchedUserInfo(result.data);
-            }
-            catch (err) {
-                console.error(err);
-            }
-            setIsLoading(false);
+        let isMounted = true;
+        setIsLoading(true);
+
+        if (match.params.name !== undefined || match.params.name !== '') {
+            UserApi.getUserInfo(match.params.name).then(resp => {
+                if (isMounted) {
+                    setSearchedUserInfo(resp.data)
+                }
+            });
         }
-        if (username) {
-            callUserInfoAPI();
+
+        setIsLoading(false);
+
+        return () => {
+            isMounted = false;
         }
-        console.log(searchedUserInfo)
-    }, [username])
+    }, [match.params.name])
 
     useEffect(() => {
         console.log(searchedUserInfo)
@@ -41,27 +39,41 @@ export default function Searched({ username }) {
         openDialog();
     }
 
+    const renderLessonList = () => {
+        return searchedUserInfo.lessons.reverse().map((el, idx) =>
+            <div key={idx}>
+                <div>레슨권: {el.name}</div>
+                <div>남은횟수: {el.counter}</div>
+                <div>시작일: {el.start}</div>
+                <div>종료일: {el.end}</div>
+            </div>
+        )
+    };
+
     const renderSearchedUserInfo = () => {
         console.log(searchedUserInfo.fullname)
         return (
             <div>
                 <div>
-                    {searchedUserInfo.username}
+                    Username: {searchedUserInfo.username}
                 </div>
                 <div>
-                    {searchedUserInfo.fullname}
+                    Name: {searchedUserInfo.fullname}
                 </div>
                 <div>
-                    {searchedUserInfo.dob}
+                    Day of Birth: {searchedUserInfo.dob}
                 </div>
                 <div>
-                    {searchedUserInfo.tel}
+                    Phone: {searchedUserInfo.tel}
                 </div>
                 <div>
-                    {searchedUserInfo.lessons}
+                    Lessons: {renderLessonList()}
                 </div>
                 <div>
-                    {searchedUserInfo.reservations}
+                    Recent Booked: {searchedUserInfo.reservations}
+                </div>
+                <div>
+                    Remain Point: {searchedUserInfo.point}
                 </div>
                 <button type='button' onClick={updateUserLessons}>New Lessons Update</button>
             </div>
@@ -72,8 +84,8 @@ export default function Searched({ username }) {
     return (
         <>
             {isLoading ? 'loading...' :
-                (Object.keys(searchedUserInfo).length > 0 ? renderSearchedUserInfo() : 'error')}
-            {visible ? <UpdateLessonDialog closeDialog={closeDialog} /> : null}
+                (Object.keys(searchedUserInfo).length > 0 ? renderSearchedUserInfo() : '')}
+            {visible ? <UpdateLessonDialog fullname={searchedUserInfo.fullname} closeDialog={closeDialog} /> : null}
         </>
     )
 }

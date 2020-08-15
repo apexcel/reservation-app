@@ -53,4 +53,18 @@ router.post('/signup', async (req, resp) => {
     resp.status(200).end();
 });
 
+router.get('/adminlist', async (req, resp) => {
+    mongoConn.conn();
+    const list = await Admin.find({}, (err, res) => {
+        if (err) throw err;
+    });
+    const adminNames = list.map(el => el.fullname);
+    resp.send(adminNames);
+    mongoConn.disconn();
+})
+
+router.get('/lesson-names', async (req, resp) => {
+
+})
+
 module.exports = router;

@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true, trim: true },
     dob: { type: Date, required: true },
     tel: { type: String, required: true },
-    point: { type: Number},
+    point: { type: Number, default: 0 },
     lessons: [LessonSchema],
     reservations: [reservationSchema],
 });

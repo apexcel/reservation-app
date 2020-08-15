@@ -10,7 +10,7 @@ export default function SelectOption({
     max,
     min,
     optionArray,
-    onChangeInput }) {
+    onChange }) {
 
     const options = optionArray.map((el, idx) =>
         <option key={idx}>{el}</option>);
@@ -19,7 +19,7 @@ export default function SelectOption({
         <div className='common__input--container'>
             <select
                 className={className}
-                onChange={onChangeInput}
+                onChange={onChange}
                 id={id}
                 name={name}
                 defaultValue=""

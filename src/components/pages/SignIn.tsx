@@ -1,63 +1,65 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import UserApi from '../../utils/api/UserApi'
+import AdminApi from '../../utils/api/AdminApi'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { userStateAtom, baseURLAtom } from '../../atoms/globalAtoms.ts'
 import { isEmpty } from '../../utils/utils.ts'
 import Input from '../modal/Input.tsx'
 import useInput from '../../reducer/useInput.ts'
-import axios from 'axios';
 
 export default function SignIn({ setIsLogin, adminLogin }) {
 
     const [userState, setUserState] = useRecoilState(userStateAtom);
-    const baseURL = useRecoilValue(baseURLAtom);
 
     const [{ username, password }, onChangeInput] = useInput({
         username: '', password: ''
     });
 
-    const callGetUserInfoAPI = async () => {
-
-        const url = adminLogin ? `${baseURL}/api/admin/signin` : `${baseURL}/api/userinfo/signin`
+    const getUserInfo = async () => {
         const data = {
             username: username,
             password: password,
             stamp: new Date().getTime()
         };
 
-        try {
-            const resp = await axios.post(url, data).then(res => res.data)
-            if (resp) {
-                if (adminLogin) {
-                    setUserState({
-                        username: resp.username,
-                        fullname: resp.fullname,
-                        stamp: resp.stamp,
-                        isAdmin: resp.isAdmin
-                    })
-                }
-                else {
-                    setUserState({
-                        username: resp.username,
-                        fullname: resp.fullname,
-                        dob: resp.dob,
-                        lessons: resp.lessons,
-                        reservations: resp.reservations,
-                        stamp: resp.stamp,
-                    })
-                }
+        if (adminLogin) {
+            try {
+                const adminResp = await AdminApi.signIn(data).then(resp => resp.data);
+                setUserState({
+                    username: adminResp.username,
+                    fullname: adminResp.fullname,
+                    stamp: adminResp.stamp,
+                    isAdmin: adminResp.isAdmin
+                })
                 setIsLogin(true)
             }
+            catch (err) {
+                throw err;
+            }
         }
-        catch (err) {
-            throw err;
+        else {
+            try {
+                const userResp = await UserApi.signIn(data).then(resp => resp.data);
+                setUserState({
+                    username: userResp.username,
+                    fullname: userResp.fullname,
+                    dob: userResp.dob,
+                    lessons: userResp.lessons,
+                    reservations: userResp.reservations,
+                    stamp: userResp.stamp,
+                })
+                setIsLogin(true)
+            }
+            catch (err) {
+                throw err;
+            }
         }
     }
 
     const onSignIn = async (ev) => {
         ev.preventDefault();
         if (isEmpty(username) || isEmpty(password)) return;
-        else callGetUserInfoAPI();
+        else getUserInfo();
     };
 
     return (

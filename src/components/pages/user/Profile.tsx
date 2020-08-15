@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
-import axios from 'axios'
+import ReservationApi from '../../../utils/api/ReservationApi'
 
 import '../../../styles/profile.scss';
 
 export default function Profile({ userState }) {
 
     const className = 'profile__page';
-    const baseURL = useRecoilValue(baseURLAtom);
     const [reservations, setReservations] = useState([]);
     const [refined, setRefined] = useState([]);
 
@@ -17,7 +14,7 @@ export default function Profile({ userState }) {
         let isMounted = true;
         if (!(reservations.length > 0)) {
             if (isMounted) {
-                callResevationAPI().then(res => {
+                getUserBookedList().then(res => {
                     if (isMounted) setReservations(res.data);
                 });
             }
@@ -31,14 +28,13 @@ export default function Profile({ userState }) {
         refinedReservations()
     }, [reservations])
 
-    const callResevationAPI = async () => {
-        const config = {
-            url: `${baseURL}/api/reservation/find`,
-            data: {
-                fullname: userState.fullname
-            }
-        }
-        return await axios.post(config.url, config.data);
+    const getUserBookedList = async () => {
+        const data = {
+            fullname: userState.fullname
+        };
+        const response = await ReservationApi.getUserReservationList(data);
+        console.log(response)
+        return response;
     };
 
     const refinedReservations = () => {
@@ -101,6 +97,11 @@ export default function Profile({ userState }) {
         );
     }
 
+    const renderLessonList = () => {
+        console.log(refined)
+    };
+
+    renderLessonList()
     return (
         <div className={`${className}-container`}>
             <div className={`${className}-userinfo`}>
@@ -109,7 +110,7 @@ export default function Profile({ userState }) {
                 <div>Your realname: {userState.fullname}</div>
                 <h2>남은횟수와 레슨권 기간</h2>
                 <div>
-                    
+
                 </div>
             </div>
             <div className={`${className}-booked-list-container`}>

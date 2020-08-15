@@ -11,6 +11,10 @@ export default function Input({
     min,
     checked,
     placeHolder,
+    step,
+    value,
+    disabled,
+    readOnly,
     onChange
 }) {
 
@@ -25,6 +29,10 @@ export default function Input({
                 placeholder={placeHolder}
                 maxLength={maxLength}
                 checked={checked}
+                step={step}
+                value={value}
+                disabled={disabled}
+                readOnly={readOnly}
             />
         </div>
     )

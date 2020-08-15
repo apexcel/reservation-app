@@ -23,14 +23,3 @@ export function genTableName(date: Date) {
     day = (day.length === 1) ? '0' + day : day;
     return `${year}-${month}-${day}`;
 }
-
-
-//TODO: sort compare 함수 만들기
-export function compare(a, b) {
-    let keysA = [];
-    a.map(el => {
-        console.log(el)
-        keysA.push(Object.keys(el))
-    })
-    const largestKeys = keysA.sort()[keysA.length - 1];
-}

@@ -8,6 +8,7 @@ export default function Header({ setIsLogin, userState }) {
     const logout = (e) => {
         e.preventDefault();
         setIsLogin(false);
+        window.location.replace('/');
     }
 
     return (

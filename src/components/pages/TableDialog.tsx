@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../table/Table.tsx'
-import { isEmpty } from '../../utils/utils.ts'
+import ReservationApi from '../../utils/api/ReservationApi'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { tableBodyStateAtom, tableHeadStateAtom } from '../../atoms/tableAtoms.ts'
 import { baseURLAtom, userStateAtom } from '../../atoms/globalAtoms.ts'
-import { genTableName } from '../../utils/utils.ts'
-import axios from 'axios'
+import { genTableName, isEmpty } from '../../utils/utils.ts'
+import Dialog from '../modal/Dialog.tsx'
 
 import socketio from 'socket.io-client'
 const io = socketio.connect('http://localhost:9000');
@@ -47,7 +47,7 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
             if (ans) {
                 const updated = await updateTableBodyState(rowIndex, selectedHeadState.field)
                 setTableBody(updated)
-                await setBookedData(rowIndex, updated[rowIndex], selectedDate);
+                await setBookedList(rowIndex, updated[rowIndex], selectedDate);
                 io.emit('get', { table: updated })
             }
         }
@@ -65,25 +65,21 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                     }
                 });
                 setTableBody(removed);
-                await setBookedData(rowIndex, removed[rowIndex], selectedDate);
+                await setBookedList(rowIndex, removed[rowIndex], selectedDate);
                 io.emit('get', { table: removed })
             }
         }
     };
 
-    const setBookedData = async (rowIndex, newTableState, selectedDate) => {
-        const _currentDate = genTableName(selectedDate);
-        const config = {
-            url: `${baseURL}/api/reservation/set-booked-data`,
-            data: {
-                date: _currentDate,
-                booked_data: JSON.stringify(newTableState),
-                time: (rowIndex + 1)
-            }
-        }
-        await axios.post(config.url, config.data);
-    }
+    const setBookedList = async (rowIndex, newTableState, selectedDate) => {
+        const data = {
+            date: genTableName(selectedDate),
+            time: (rowIndex + 1),
+            booked_data: JSON.stringify(newTableState)
+        };
 
+        await ReservationApi.setReservationList(data);
+    };
 
     const renderDialogHeader = () => {
         const dow = ['일', '월', '화', '수', '목', '금', '토'];
@@ -100,20 +96,15 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     return (
         <>
             {isDialogVisible ?
-                <div className='dialog'>
-                    <div className='dialog-header'>
-                        <div className='dialog-close-btn' onClick={closeDialog}>
-                            <div className='cross-line'></div>
-                            <div className='cross-line'></div>
-                        </div>
-                        {renderDialogHeader()}
-                    </div>
-                    <Table
-                        tHeadState={tableHead}
-                        tBodyState={tableBody}
-                        onTableRowClick={onTableRowClick}
-                    />
-                </div> : null}
+                <Dialog
+                    closeDialog={closeDialog}
+                    dialogHeader={renderDialogHeader()}
+                    dialogBody={
+                        <Table
+                            tHeadState={tableHead}
+                            tBodyState={tableBody}
+                            onTableRowClick={onTableRowClick} />}
+                /> : null}
         </>
     )
 }
