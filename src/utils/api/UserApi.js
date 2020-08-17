@@ -16,10 +16,17 @@ export default {
         })
     },
 
+    setUserInfo(fullname) {
+        return SendTo({
+            url: `/userinfo/setuser/${fullname}`,
+            method: 'get',
+        })
+    },
+
     getAllUserInfo() {
         return SendTo({
             url: `/userinfo/alluser`,
             method: 'get',
         })
-    }
+    },
 };

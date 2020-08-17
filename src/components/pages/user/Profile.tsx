@@ -19,6 +19,7 @@ export default function Profile({ userState }) {
                 });
             }
         }
+
         return () => {
             isMounted = false;
         }
@@ -46,7 +47,7 @@ export default function Profile({ userState }) {
             bookedDate.push(Object.keys(el)[0].slice(10));
             bookedDataList.push(Object.values(el)[0])
         });
-        
+
         bookedDataList.map((bookedInfo, idx) => {
             bookedInfo.map(el => {
                 const emptyObj = {};
@@ -78,7 +79,7 @@ export default function Profile({ userState }) {
             return match.find(name => name !== null);
         })
     };
-    
+
 
     const renderReservations = () => {
         const teacherNames = {
@@ -98,7 +99,16 @@ export default function Profile({ userState }) {
     }
 
     const renderLessonList = () => {
-        console.log(refined)
+        return userState.lessons.map((el, idx) => {
+            return (
+                <div key={idx}>
+                    <div>레슨: {el.name}</div>
+                    <div>시작일: {el.start}</div>
+                    <div>종료일: {el.end}</div>
+                    <div>남은 횟수: {el.counter}</div>
+                </div>
+            )
+        })
     };
 
     renderLessonList()
@@ -109,9 +119,7 @@ export default function Profile({ userState }) {
                 <div>Your username: {userState.username}</div>
                 <div>Your realname: {userState.fullname}</div>
                 <h2>남은횟수와 레슨권 기간</h2>
-                <div>
-
-                </div>
+            {renderLessonList()}
             </div>
             <div className={`${className}-booked-list-container`}>
                 <h1>Recent Booked dates</h1>

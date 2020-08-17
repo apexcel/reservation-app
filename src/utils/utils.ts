@@ -23,3 +23,14 @@ export function genTableName(date: Date) {
     day = (day.length === 1) ? '0' + day : day;
     return `${year}-${month}-${day}`;
 }
+
+export function stringFromDate(date: Date) {
+    let yy = date.getFullYear();
+    let mm = '' + (date.getMonth() + 1);
+    let dd = '' + date.getDate();
+
+    if (mm.length < 2) mm = '0' + mm;
+    if (dd.length < 2) dd = '0' + dd;
+
+    return [yy, mm, dd].join('-');
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../table/Table.tsx'
 import ReservationApi from '../../utils/api/ReservationApi'
+import UserApi from '../../utils/api/UserApi'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { tableBodyStateAtom, tableHeadStateAtom } from '../../atoms/tableAtoms.ts'
 import { baseURLAtom, userStateAtom } from '../../atoms/globalAtoms.ts'
@@ -25,7 +26,12 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     const [userState, setUserState] = useRecoilState(userStateAtom)
     const baseURL = useRecoilValue(baseURLAtom);
 
-    const updateTableBodyState = (index, field) => {
+    const updateTableBodyState = (index, field, name?) => {
+        if (name) {
+            return (tableBody.map((el, idx) => {
+                return index === idx ? { ...tableBody[idx], [field]: name } : el
+            }))
+        }
         return (tableBody.map((el, idx) => {
             return index === idx ? { ...tableBody[idx], [field]: userState.fullname } : el
         }))
@@ -44,11 +50,23 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
         // 예약
         if (isEmpty(currentTableRowValue)) {
             const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);
-            if (ans) {
-                const updated = await updateTableBodyState(rowIndex, selectedHeadState.field)
+            if (ans && canBooking()) {
+                const updated = updateTableBodyState(rowIndex, selectedHeadState.field)
                 setTableBody(updated)
                 await setBookedList(rowIndex, updated[rowIndex], selectedDate);
                 io.emit('get', { table: updated })
+                subtractLessonCounter()
+                return;
+            }
+            // 어드민일 경우
+            if (ans && userState.isAdmin) {
+                const willSetName = prompt('이름을 입력해주세요.');
+                if (!isEmpty(willSetName)) {
+                    const updated = updateTableBodyState(rowIndex, selectedHeadState.field, willSetName)
+                    setTableBody(updated)
+                    await setBookedList(rowIndex, updated[rowIndex], selectedDate);
+                    io.emit('get', { table: updated })
+                }
             }
         }
         // 예약 취소
@@ -80,6 +98,19 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
 
         await ReservationApi.setReservationList(data);
     };
+
+    const canBooking = () => {
+        const validLessons = userState.lessons.filter(el =>
+            el.counter > 0 &&
+            new Date(el.start) < new Date() &&
+            new Date(el.end) > new Date()
+        );
+        return validLessons.length > 0 ? true : false;
+    }
+
+    const subtractLessonCounter = async () => {
+        await UserApi.setUserInfo(userState.fullname)
+    }
 
     const renderDialogHeader = () => {
         const dow = ['일', '월', '화', '수', '목', '금', '토'];

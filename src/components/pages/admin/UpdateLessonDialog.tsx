@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import axios from 'axios'
+import { stringFromDate } from '../../../utils/utils.ts'
 import { useRecoilValue } from 'recoil'
 import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
 import useInput from '../../../reducer/useInput.ts'
@@ -17,7 +18,7 @@ const initForm = {
     point: 0,
 }
 
-export default function UpdateLessonDialog({ username, closeDialog }) {
+export default function UpdateLessonDialog({ fullname, closeDialog }) {
 
     const baseURL = useRecoilValue(baseURLAtom)
     const [adminList, setAdminList] = useState([]);
@@ -60,7 +61,7 @@ const testArr = [
         ev.preventDefault();
         const url = `${baseURL}/api/userinfo/lesson-update`;
         const data = {
-            username: username,
+            fullname: fullname,
             lesson: lessonForm,
         };
         await axios.post(url, data);
@@ -88,17 +89,6 @@ const testArr = [
             default:
                 return new Date();
         }
-    }
-
-    const stringFromDate = (date: Date) => {
-        let yy = date.getFullYear();
-        let mm = '' + (date.getMonth() + 1);
-        let dd = '' + date.getDate();
-
-        if (mm.length < 2) mm = '0' + mm;
-        if (dd.length < 2) dd = '0' + dd;
-
-        return [yy, mm, dd].join('-');
     }
 
     const renderDialogBody = () => {

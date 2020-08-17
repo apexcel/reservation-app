@@ -6,6 +6,8 @@ import UserApi from '../../../utils/api/UserApi'
 import Input from '../../modal/Input.tsx'
 import Searched from './Searched.tsx'
 
+import '../../../styles/search.scss'
+
 export default function Search() {
 
     const [searchName, onChangeInput] = useInput({ name: '' });
@@ -37,15 +39,27 @@ export default function Search() {
         searchName.name = '';
     }
 
+    const onClickUserList = (ev, name) => {
+        ev.preventDefault()
+        console.log(name)
+    };
+
     const renderUserList = () => {
-        return userList.map((el, idx) =>
-            <div key={idx}>
+
+        return userList.map((el, idx) => {
+
+            const _onClick = (ev: React.MouseEvent , name = el.fullname) => {
+                ev.preventDefault();
+                onClickUserList.call(this, ev, name)
+            }
+
+            return (<div className='user-list-container' onClick={_onClick} key={idx}>
                 <div>{el.fullname}</div>
                 <div>{el.username}</div>
                 <div>{el.tel}</div>
-            </div>
-        )
-    }
+            </div>);
+        })
+    };
 
     return (
         <div>

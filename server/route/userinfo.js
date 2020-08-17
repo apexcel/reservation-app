@@ -3,6 +3,18 @@ const router = express.Router();
 const mysqlConn = require('../database/mysql/mysqlConn');
 const mongoConn = require('../database/mongo/mongoConn');
 const User = require('../database/mongo/schema/user')
+const Lesson = require('../database/mongo/schema/lesson')
+
+function stringFromDate(date) {
+    let yy = date.getFullYear();
+    let mm = '' + (date.getMonth() + 1);
+    let dd = '' + date.getDate();
+
+    if (mm.length < 2) mm = '0' + mm;
+    if (dd.length < 2) dd = '0' + dd;
+
+    return [yy, mm, dd].join('-');
+}
 
 router.post('/signin', async (req, resp) => {
     console.log(req.body)
@@ -84,25 +96,22 @@ router.get('/getuser/:name', async (req, resp) => {
     mongoConn.disconn()
 })
 
-router.post('/lesson-update', async (req, resp) => {
-    if (req.body.lesson.lessonName === '') {
-        resp.end();
-        return;
-    }
+router.get('/setuser/:name', async (req, resp) => {
     mongoConn.conn();
-    const searchQuery = {
-        username: req.body.username
+
+    const query = {
+        fullname: req.params.name,
     };
 
-    const updateQuery = {
-        $inc: {'point': req.body.lesson.point},
-        $push: {'lessons': {
-            'name': req.body.lesson.lessonName,
-            'counter': req.body.lesson.counter,
-            'start': req.body.lesson.startDate ,
-            'end': req.body.lesson.endDate ,
-        }}
-    }
+    const filterQuery = {
+        lessons: {
+            $elemMatch: {
+                counter: { $gt: 0 },
+                start: {$lte: stringFromDate(new Date())},
+                end: {$gte: stringFromDate(new Date())}
+            }
+        }
+    };
 
     const options = {
         upsert: true,
@@ -110,9 +119,46 @@ router.post('/lesson-update', async (req, resp) => {
         setDefaultOnInsert: true
     };
 
-    const result = await User.findOneAndUpdate(searchQuery, updateQuery, options);
-    console.log(result)
+    const result = await User.find(query, filterQuery, (err, res) => {
+        if (err) throw err;
+        console.log(res[0])
+    })
+
+    resp.sendStatus(201)
     mongoConn.disconn()
+})
+
+router.post('/lesson-update', async (req, resp) => {
+    if (req.body.lesson.lessonName === '') {
+        resp.end();
+        return;
+    }
+    mongoConn.conn();
+    const searchQuery = {
+        fullname: req.body.fullname
+    };
+
+    const updateQuery = {
+        $inc: { 'point': req.body.lesson.point },
+        $push: {
+            'lessons': {
+                'name': req.body.lesson.lessonName,
+                'counter': req.body.lesson.counter,
+                'start': req.body.lesson.startDate,
+                'end': req.body.lesson.endDate,
+            }
+        }
+    };
+
+    const options = {
+        upsert: true,
+        new: true,
+        setDefaultOnInsert: true
+    };
+
+    await User.findOneAndUpdate(searchQuery, updateQuery, options);
+    mongoConn.disconn()
+    resp.sendStatus(201);
 })
 
 router.get('/alluser', async (req, resp) => {
