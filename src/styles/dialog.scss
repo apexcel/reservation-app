@@ -47,6 +47,11 @@
     }
 }
 
+.dialog__input {
+    height: 1.5rem !important;
+    font-size: 1.1rem !important;
+}
+
 @keyframes trans{
     from {
         opacity: 0;

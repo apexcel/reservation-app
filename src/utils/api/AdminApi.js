@@ -7,5 +7,12 @@ export default {
             method: 'post',
             data: data
         })
+    },
+
+    getAdminList() {
+        return SendTo({
+            url: '/admin/adminlist',
+            method: 'get',
+        })
     }
 };

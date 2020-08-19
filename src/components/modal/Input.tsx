@@ -33,6 +33,8 @@ export default function Input({
                 value={value}
                 disabled={disabled}
                 readOnly={readOnly}
+                min={min}
+                max={max}
             />
         </div>
     )

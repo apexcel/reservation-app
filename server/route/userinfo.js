@@ -107,21 +107,34 @@ router.get('/setuser/:name', async (req, resp) => {
         lessons: {
             $elemMatch: {
                 counter: { $gt: 0 },
-                start: {$lte: stringFromDate(new Date())},
-                end: {$gte: stringFromDate(new Date())}
+                start: { $lte: stringFromDate(new Date()) },
+                end: { $gte: stringFromDate(new Date()) }
             }
         }
-    };
+    }
+
+    const updateQuery = {
+        lessons: {
+            $elemMatch: {
+                counter: { $gt: 0 },
+                start: { $lte: stringFromDate(new Date()) },
+                end: { $gte: stringFromDate(new Date()) }
+            }
+        },
+        $inc: {
+            'lessons.$.counter': -1
+        }
+    }
 
     const options = {
         upsert: true,
         new: true,
-        setDefaultOnInsert: true
+        //select: filterQuery
     };
 
-    const result = await User.find(query, filterQuery, (err, res) => {
+    await User.findOneAndUpdate(query, updateQuery, options, (err, res) => {
         if (err) throw err;
-        console.log(res[0])
+        console.log(res)
     })
 
     resp.sendStatus(201)
@@ -130,35 +143,43 @@ router.get('/setuser/:name', async (req, resp) => {
 
 router.post('/lesson-update', async (req, resp) => {
     if (req.body.lesson.lessonName === '') {
-        resp.end();
-        return;
+        resp.sendStatus(200);
     }
-    mongoConn.conn();
-    const searchQuery = {
-        fullname: req.body.fullname
-    };
+    else {
+        mongoConn.conn();
+        const searchQuery = {
+            fullname: req.body.fullname
+        };
 
-    const updateQuery = {
-        $inc: { 'point': req.body.lesson.point },
-        $push: {
-            'lessons': {
-                'name': req.body.lesson.lessonName,
-                'counter': req.body.lesson.counter,
-                'start': req.body.lesson.startDate,
-                'end': req.body.lesson.endDate,
+        const updateQuery = {
+            $inc: { 'point': req.body.lesson.point },
+            $push: {
+                'lessons': {
+                    'name': req.body.lesson.lessonName,
+                    'counter': req.body.lesson.counter,
+                    'enrollDate': req.body.lesson.enrollDate,
+                    'startDate': req.body.lesson.startDate,
+                    'endDate': req.body.lesson.endDate,
+                    'discount': req.body.lesson.discount,
+                    'additionalDays': req.body.lesson.additionalDays,
+                    'price': req.body.lesson.price
+                }
             }
-        }
-    };
+        };
 
-    const options = {
-        upsert: true,
-        new: true,
-        setDefaultOnInsert: true
-    };
+        const options = {
+            upsert: true,
+            new: true,
+        };
 
-    await User.findOneAndUpdate(searchQuery, updateQuery, options);
-    mongoConn.disconn()
-    resp.sendStatus(201);
+        // 두 번씩 호출 되는 이유
+        // 앞에 await 때문, 따라서 callback으로 내부에서 나머지를 호출해야함
+        User.findOneAndUpdate(searchQuery, updateQuery, options, (err, res) => {
+            if (err) throw err;
+            resp.sendStatus(201);
+            mongoConn.disconn()
+        });
+    }
 })
 
 router.get('/alluser', async (req, resp) => {

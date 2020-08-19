@@ -15,7 +15,6 @@ import ErrorPage from './pages/ErrorPage.tsx'
 // styles
 import '../styles/layout.scss'
 
-
 export default function App() {
     const [userState, setUserState] = useRecoilState(userStateAtom)
     const [isLogin, setIsLogin] = useState(false)

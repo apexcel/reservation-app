@@ -29,4 +29,12 @@ export default {
             method: 'get',
         })
     },
+
+    addLesson(data) {
+        return SendTo({
+            url: `/userinfo/lesson-update`,
+            method: 'post',
+            data: data
+        })
+    }
 };
