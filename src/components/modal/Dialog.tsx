@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Dialog({ closeDialog, dialogHeader, dialogBody}) {
     return (
-        <div className='dialog'>
+        <dialog className='dialog'>
             <div className='dialog-header'>
                 <div className='dialog-close-btn' onClick={closeDialog}>
                     <div className='cross-line'></div>
@@ -11,6 +11,6 @@ export default function Dialog({ closeDialog, dialogHeader, dialogBody}) {
                 {dialogHeader}
             </div>
             {dialogBody}
-        </div>
+        </dialog>
     )
 }

@@ -16,7 +16,6 @@ router.post("/get-booked-data", async (req, resp) => {
 });
 
 router.post("/set-booked-data", async (req, resp) => {
-    console.log(req.body)
     await getConn((conn) => {
         const query = "UPDATE ?? SET booked_data = (?) WHERE time = ?;";
         const queryParams = [
@@ -27,7 +26,6 @@ router.post("/set-booked-data", async (req, resp) => {
 
         conn.query(query, queryParams, (err, row) => {
             if (err) throw err
-            console.log(row)
             resp.send(row)
         })
         conn.release();

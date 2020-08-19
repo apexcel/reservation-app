@@ -11,8 +11,8 @@ import Input from '../../modal/Input.tsx'
 const initForm = {
     lessonName: '',
     employee: '',
-    enrollDate: '',
-    startDate: '',
+    enrollDate: stringFromDate(new Date()),
+    startDate: stringFromDate(new Date()),
     endDate: '',
     counter: 0,
     additionalDays: 0,
@@ -24,30 +24,28 @@ const initForm = {
 export default function UpdateLessonDialog({ fullname, closeDialog }) {
 
     const [adminList, setAdminList] = useState([]);
-    const [calculatedValues, setCalculatedValues] = useState({});
+    const [calculatedValues, setCalculatedValues] = useState(initForm);
     const [lessonForm, onChangeInput] = useInput(initForm);
 
-// TEST Array
-const testArr = [
-    'Lessons',
-    'M1C4',
-    'M2C5',
-    'M2C9',
-    'M3C13',
-    'M6C26'
-];
+    // TEST Array
+    const testArr = [
+        'Lessons',
+        'M1C4',
+        'M2C5',
+        'M2C9',
+        'M3C13',
+        'M6C26'
+    ];
 
     useEffect(() => {
         adminListFromAPI()
     }, [])
 
     useEffect(() => {
-        const fromValues = setFormValue(lessonForm.lessonName, lessonForm.startDate, lessonForm.additionalDays);
-        const str = stringFromDate(fromValues);
-        const price = calcDiscount()
-        setCalculatedValues({...calculatedValues, endDateStr: str, price: price})
-        lessonForm.endDate = calculatedValues.str;
-        lessonForm.price = calculatedValues.price;
+        const val = setFormValue(lessonForm.lessonName)
+        lessonForm.price = calculatedValues.price
+        lessonForm.endDate = val;
+        lessonForm.counter = calculatedValues.counter
         console.log(lessonForm)
     }, [lessonForm])
 
@@ -69,37 +67,64 @@ const testArr = [
         closeDialog();
     }
 
-    const calcDiscount = () => {
-        return lessonForm.discount === 0 ? lessonForm.price : 
-        lessonForm.price - (lessonForm.price * (lessonForm.discount / 100));
+    const calcDiscount = (price, discount) => {
+        return (discount === 0) ? price :
+            price - (price * (discount / 100));
     };
 
-    const setFormValue = (lessonName, beginDate: string, additional: number) => {
+    const setFormValue = (lessonName) => {
         switch (lessonName) {
             case 'M1C4':
-                lessonForm.counter = 4;
-                lessonForm.price = 210000;
-                return new Date (new Date(beginDate).valueOf() + (86400000* 31) + (additional * 86400000));
+                setCalculatedValues({
+                    ...calculatedValues,
+                    counter: 4,
+                    price: calcDiscount(210000, lessonForm.discount),
+                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 31) + (lessonForm.additionalDays * 86400000)))
+                })
+                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 31) + (lessonForm.additionalDays * 86400000)))
             case 'M2C5':
-                lessonForm.counter = 5;
-                lessonForm.price = 330000;
-                return new Date (new Date(beginDate).valueOf() + (86400000* 61) + (additional * 86400000));
+                setCalculatedValues({
+                    ...calculatedValues,
+                    counter: 5,
+                    price: calcDiscount(330000, lessonForm.discount),
+                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
+                })
+                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
             case 'M2C9':
-                lessonForm.counter = 9;
-                lessonForm.price = 420000;
-                return new Date (new Date(beginDate).valueOf() + (86400000* 61) + (additional * 86400000));
+                setCalculatedValues({
+                    ...calculatedValues,
+                    counter: 9,
+                    price: calcDiscount(420000, lessonForm.discount),
+                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
+                })
+                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
             case 'M3C13':
-                lessonForm.counter = 13;
-                lessonForm.price = 630000;
-                return new Date (new Date(beginDate).valueOf() + (86400000* 91) + (additional * 86400000));
+                setCalculatedValues({
+                    ...calculatedValues,
+                    counter: 13,
+                    price: calcDiscount(630000, lessonForm.discount),
+                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 91) + (lessonForm.additionalDays * 86400000)))
+                })
+                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 91) + (lessonForm.additionalDays * 86400000)))
             case 'M6C26':
-                lessonForm.counter = 26;
-                lessonForm.price = 1260000;
-                return new Date (new Date(beginDate).valueOf() + (86400000* 182) + (additional * 86400000));
+                setCalculatedValues({
+                    ...calculatedValues,
+                    counter: 26,
+                    price: calcDiscount(1260000, lessonForm.discount),
+                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 182) + (lessonForm.additionalDays * 86400000)))
+                })
+                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 182) + (lessonForm.additionalDays * 86400000)))
             default:
-                return new Date();
+                setCalculatedValues({
+                    ...calculatedValues,
+                    counter: 0,
+                    price: 0,
+                    endDate: stringFromDate(new Date())
+                })
+                return stringFromDate(new Date())
         }
     }
+
 
     const renderDialogBody = () => {
         return (
@@ -117,10 +142,10 @@ const testArr = [
                 <Input onChange={onChangeInput} className='dialog__input common__input' id='startDate' name='startDate' type='date' />
 
                 <label htmlFor='endDate'>End Date</label>
-                <Input className='dialog__input common__input' id='endDate' name='endDate' type='date' diabled={true} value={calculatedValues.endDateStr} readOnly={true} />
+                <Input className='dialog__input common__input' id='endDate' name='endDate' type='date' diabled={true} value={calculatedValues.endDate} readOnly={true} />
 
                 <label htmlFor='counter'>Counter</label>
-                <Input onChange={onChangeInput} className='dialog__input common__input' id='counter' name='counter' type='number' value={lessonForm.counter} diabled={true} readOnly={true} step={1} />
+                <Input onChange={onChangeInput} className='dialog__input common__input' id='counter' name='counter' type='number' value={calculatedValues.counter} diabled={true} readOnly={true} step={1} />
 
                 <label htmlFor='discount'>Discount</label>
                 <Input onChange={onChangeInput} className='dialog__input common__input' id='discount' name='discount' type='number' min={0} max={100} maxLength={2} />
@@ -133,7 +158,7 @@ const testArr = [
 
                 <label htmlFor='point'>Point</label>
                 <Input onChange={onChangeInput} className='dialog__input common__input' id='point' name='point' type='number' step={1000} />
-                
+
                 <div>
                     <button type='button' onClick={addLessonToUser}>Confirm</button>
                 </div>

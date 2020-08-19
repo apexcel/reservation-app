@@ -1,9 +1,17 @@
 import SendTo from './SendTo';
 
 export default {
+    test(data) {
+        return SendTo({
+            url: '/users/test',
+            method: 'post',
+            data: data
+        })
+    },
+
     signIn(data) {
         return SendTo({
-            url: '/userinfo/signin',
+            url: '/users/signin',
             method: 'post',
             data: data
         })
@@ -11,29 +19,29 @@ export default {
 
     getUserInfo(fullname) {
         return SendTo({
-            url: `/userinfo/getuser/${fullname}`,
+            url: `/users/getuser/${fullname}`,
             method: 'get',
         })
     },
 
-    setUserInfo(fullname) {
+    updateLesson(fullname) {
         return SendTo({
-            url: `/userinfo/setuser/${fullname}`,
-            method: 'get',
+            url: `/users/update-lesson/${fullname}`,
+            method: 'put',
         })
     },
 
     getAllUserInfo() {
         return SendTo({
-            url: `/userinfo/alluser`,
+            url: `/users/alluser`,
             method: 'get',
         })
     },
 
     addLesson(data) {
         return SendTo({
-            url: `/userinfo/lesson-update`,
-            method: 'post',
+            url: `/users/add-lesson`,
+            method: 'put',
             data: data
         })
     }

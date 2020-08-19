@@ -47,13 +47,13 @@ export default function App() {
         <>
             {isLogin ? <Header setIsLogin={setIsLogin} userState={userState} /> : null}
                 <div className='container'>
-                <Switch>
-                    <Route exact path='/' component={IndexPage} />
-                    <Route path='/profile' component={ProfilePage} />
-                    <Route path='/admin' component={AdminPage} />
-                    <Route render={() => <ErrorPage httpStatus={404}/>} />
-                </Switch>
-            </div>
+                    <Switch>
+                        <Route exact path='/' component={IndexPage} />
+                        <Route path='/profile' component={ProfilePage} />
+                        <Route path='/admin' component={AdminPage} />
+                        <Route render={() => <ErrorPage httpStatus={404}/>} />
+                    </Switch>
+                </div>
             <Footer />
         </>
     )

@@ -1,0 +1,23 @@
+.information__card--container {
+    width: 100%;
+    display: flex;
+    border: 1px solid red;
+}
+
+.information__card--image {
+    border: 1px solid blue;
+    flex-basis: 1;
+    flex-grow: 1;
+}
+
+.information__card--contents {
+    flex-basis: 3;
+    flex-grow: 3;
+    border: 1px solid green;
+}
+
+.information__card--btn-bar {
+    flex-basis: 2;
+    flex-grow: 2;
+    border: 1px solid yellow;
+}

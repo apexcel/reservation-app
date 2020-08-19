@@ -19,13 +19,11 @@ export default function Profile({ userState }) {
                 });
             }
         }
-
-        return () => {
-            isMounted = false;
-        }
+        return () => { isMounted = false; }
     }, [])
 
     useEffect(() => {
+        console.log(reservations)
         refinedReservations()
     }, [reservations])
 
@@ -52,11 +50,11 @@ export default function Profile({ userState }) {
             bookedInfo.map(el => {
                 const emptyObj = {};
                 let item = Object.defineProperties(emptyObj, {
-                    'date': {
+                    'bookedDate': {
                         value: bookedDate[idx],
                         enumerable: true
                     },
-                    'time': {
+                    'bookedTime': {
                         value: el.time,
                         enumerable: true
                     },
@@ -91,8 +89,8 @@ export default function Profile({ userState }) {
         console.log(teacher)
         return refined.map((el, idx) =>
             <div key={idx} className={`${className}-booked-list`}>
-                <span className={`${className}-booked-list-item`} >{el.date}</span>
-                <span className={`${className}-booked-list-item`} >{el.time}시</span>
+                <span className={`${className}-booked-list-item`} >{el.bookedDate}</span>
+                <span className={`${className}-booked-list-item`} >{el.bookedTime}시</span>
                 <span className={`${className}-booked-list-item`} >{teacherNames[teacher[idx]]}</span>
             </div>
         );
@@ -103,8 +101,8 @@ export default function Profile({ userState }) {
             return (
                 <div key={idx}>
                     <div>레슨: {el.name}</div>
-                    <div>시작일: {el.start}</div>
-                    <div>종료일: {el.end}</div>
+                    <div>시작일: {el.startDate}</div>
+                    <div>종료일: {el.endDate}</div>
                     <div>남은 횟수: {el.counter}</div>
                 </div>
             )

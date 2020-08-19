@@ -44,8 +44,8 @@ export default function Searched({ match }) {
             <div key={idx}>
                 <div>레슨권: {el.name}</div>
                 <div>남은횟수: {el.counter}</div>
-                <div>시작일: {el.start}</div>
-                <div>종료일: {el.end}</div>
+                <div>시작일: {el.startDate}</div>
+                <div>종료일: {el.endDate}</div>
             </div>
         )
     };
