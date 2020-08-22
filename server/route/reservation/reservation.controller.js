@@ -1,21 +1,19 @@
-const express = require('express');
-const router = express.Router();
-const getConn = require('../database/mysql/mysqlConn');
+const getConn = require('../../database/mysql/mysqlConn');
 
-router.post("/get-booked-data", async (req, resp) => {
-    //console.log(req.body)
+exports.getBookedData = async function(req, resp, next) {
     await getConn((conn) => {
         const query = "SELECT * FROM ??";
         const queryParams = `time_table${req.body.date}`
         conn.query(query, queryParams, (err, row) => {
             if (err) throw err;
-            resp.send(row)
+            resp.status(200).json(row)
             conn.release()
         });
     });
-});
+    return;
+}
 
-router.post("/set-booked-data", async (req, resp) => {
+exports.setBookedData = async function(req, resp, next) {
     await getConn((conn) => {
         const query = "UPDATE ?? SET booked_data = (?) WHERE time = ?;";
         const queryParams = [
@@ -26,13 +24,14 @@ router.post("/set-booked-data", async (req, resp) => {
 
         conn.query(query, queryParams, (err, row) => {
             if (err) throw err
-            resp.send(row)
+            resp.status(200).json(row)
         })
         conn.release();
     });
-});
+    return;
+}
 
-router.post('/find', async (req, resp) => {
+exports.findReservation = async function(req, resp, next) {
     await getConn(async (conn) => {
         const query = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME=?';
         const queryParams = 'booked_data'
@@ -62,13 +61,12 @@ router.post('/find', async (req, resp) => {
                         resultSet.push(emptyObj);
                     }
                     if (i === _tableNames.length - 1) {
-                        resp.send(resultSet);
+                        resp.status(200).send(resultSet);
                         conn.release();
                     }
                 })
             }
         })
     }
-})
-
-module.exports = router;
+    return;
+}

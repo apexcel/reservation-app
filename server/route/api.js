@@ -3,17 +3,15 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 const cors = require('cors');
 
-const reservation = require('./reservation');
-const usersRouter = require('./usersRouter');
-const admin = require('./admin');
-const enroll = require('./enroll');
+const reservationRouter = require('./reservation/reservation.router');
+const usersRouter = require('./users/users.router');
+const adminRouter = require('./admin/admin.router');
 
 router.use(cors());
 router.use(bodyParser.json());
 
-router.use('/reservation', reservation);
+router.use('/reservation', reservationRouter);
 router.use('/users', usersRouter);
-router.use('/admin', admin);
-router.use('/enroll', enroll);
+router.use('/admin', adminRouter);
 
 module.exports = router;
