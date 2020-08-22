@@ -15,10 +15,26 @@ import ErrorPage from './pages/ErrorPage.tsx'
 
 // styles
 import '../styles/layout.scss'
+import KakaoDevApp from './pages/KakaoDevApp.tsx'
 
 export default function App() {
     const [userState, setUserState] = useRecoilState(userStateAtom)
     const [isLogin, setIsLogin] = useState(false)
+
+    useEffect(() => {
+        if (document.getElementById('kakao-sdk') == null || document.getElementById('kakao-sdk') == undefined) {
+            const script = document.createElement('script');
+            script.id = 'kakao-sdk'
+            script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+            script.async = true;
+            document.body.append(script)
+            globalThis.Kakao.init('ea144ad47a8a64a6e0b341fbc81d29f5')
+        }
+        if (!globalThis.Kakao.isInitialized()) {
+            globalThis.Kakao.init('ea144ad47a8a64a6e0b341fbc81d29f5')
+            console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
+        }
+    }, [])
 
     useEffect(() => {
         const token = localStorage.getItem('userToken');
@@ -59,6 +75,7 @@ export default function App() {
                         <Route exact path='/' component={IndexPage} />
                         <Route path='/profile' component={ProfilePage} />
                         <Route path='/admin' component={AdminPage} />
+                        <Route path='/kakao-devapp' component={() => <KakaoDevApp />} />
                         <Route render={() => <ErrorPage httpStatus={404}/>} />
                     </Switch>
                 </div>

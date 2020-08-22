@@ -1,9 +1,12 @@
 const User = require('../../database/mongo/schema/user');
 const mongoConn = require('../../database/mongo/mongoConn');
 const jwt = require('jsonwebtoken');
+const axios = require('axios')
+const querystring = require('querystring');
 
 //TODO: 키 따로 관리하기
 const SECRET_KEY = 'secret_key_0815';
+const KAKAO_REST_API_KEY = '52d0e38dadbfb480d5daa3566df71c2f';
 
 function stringFromDate(date) {
     let yy = date.getFullYear();
@@ -14,6 +17,28 @@ function stringFromDate(date) {
     if (dd.length < 2) dd = '0' + dd;
 
     return [yy, mm, dd].join('-');
+}
+
+exports.kakaoAuthToken = async function(req, resp, next) {
+    try {
+        const host = 'https://kauth.kakao.com';
+        const path = '/oauth/token';
+        const redirectUri = 'http://localhost:3001/kakao-devapp';
+        const data = {
+            'grant_type': 'authorization_code',
+            'client_id': KAKAO_REST_API_KEY,
+            'redirect_uri': redirectUri,
+            'code': req.body.code
+        };
+        const result = await axios.post(`${host}${path}`, querystring.stringify(data))
+        //console.log(result)
+        resp.json(result.data)
+    }
+    catch (err) {
+        console.error(err);
+        next(err);
+    }
+    return;
 }
 
 exports.createToken = async function (req, resp, next) {
@@ -110,10 +135,10 @@ exports.getUserInfo = async function (req, resp, next) {
                 SECRET_KEY,
                 { expiresIn: '10m' }
             )
-            resp.status(200).json({ 
-                result: true, 
+            resp.status(200).json({
+                result: true,
                 desc: 'Get user infomation',
-                token 
+                token
             });
         }
         else {
@@ -179,7 +204,7 @@ exports.addLesson = async function (req, resp, next) {
             // 앞에 await 때문, 따라서 callback으로 내부에서 나머지를 호출해야함
             User.findOneAndUpdate(searchQuery, updateQuery, options, (err, res) => {
                 if (err) throw err;
-                resp.status(200).json({ 
+                resp.status(200).json({
                     result: true,
                     desc: 'Add lesson'
                 });
@@ -208,25 +233,25 @@ exports.subtractLessonCounter = async function (req, resp, next) {
                 }
             }
         };
-    
+
         const updateQuery = {
             $inc: {
                 'lessons.$.counter': -1
             }
         }
-    
+
         const options = {
             upsert: true,
             new: true,
         };
-    
+
         User.findOneAndUpdate(query, updateQuery, options, (err, res) => {
             if (err) {
-                resp.status(500).json({ error: 'Error occured'})
+                resp.status(500).json({ error: 'Error occured' })
                 //throw err;
             }
             else {
-                resp.status(200).json({ 
+                resp.status(200).json({
                     result: true,
                     desc: 'Subtract lesson counter'
                 })

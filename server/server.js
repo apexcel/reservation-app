@@ -22,6 +22,7 @@ app.get('*', (req, resp) => {
 const server = app.listen(port, () => {
     console.log(`Server running on ${port} port`)
 })
+
 const io = require('socket.io')(server);
 io.on('connection', (socket) => {
     console.log(socket.client.id)

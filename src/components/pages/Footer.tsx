@@ -15,6 +15,7 @@ export default function Footer() {
                         <a href='https://blog.naver.com/dltt_music' target='_blank'><SVG name='blog' width={32} height={32} color='#ffffff' /></a>
                         <a href='http://www.dlttmusic.com/' target='_blank'><SVG name='homepage' width={32} height={32} color='#ffffff' /></a>
                         <a href='https://www.instagram.com/dilettantepiano/' target='_blank'><SVG name='insta_logo' width={32} height={32} color='#ffffff' /></a>
+                        <a href='/kakao-devapp' target='_blank'><SVG name='kakao_logo' width={32} height={32} color='#ffffff' viewBox='0 0 24 24' /></a>
                     </div>
                 </div>
                 <div className='footer-right'>

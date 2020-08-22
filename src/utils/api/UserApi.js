@@ -36,5 +36,13 @@ export default {
             method: 'put',
             data: data
         })
+    },
+
+    getKakaoAccessToken(data) {
+        return SendTo({
+            url: '/users/kakao-token',
+            method: 'post',
+            data: data,
+        })
     }
 };
