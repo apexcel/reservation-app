@@ -1,14 +1,6 @@
 import SendTo from './SendTo';
 
 export default {
-    test(data) {
-        return SendTo({
-            url: '/users/test',
-            method: 'post',
-            data: data
-        })
-    },
-
     signIn(data) {
         return SendTo({
             url: '/users/signin',
@@ -24,9 +16,9 @@ export default {
         })
     },
 
-    updateLesson(fullname) {
+    subtractLesson(fullname) {
         return SendTo({
-            url: `/users/update-lesson/${fullname}`,
+            url: `/users/subtract-lesson/${fullname}`,
             method: 'put',
         })
     },

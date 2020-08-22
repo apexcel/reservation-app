@@ -8,6 +8,8 @@ import { userStateAtom } from '../../atoms/globalAtoms.ts'
 import { genTableName, isEmpty } from '../../utils/utils.ts'
 import Dialog from '../modal/Dialog.tsx'
 
+import jwtDecode from 'jwt-decode'
+
 import socketio from 'socket.io-client'
 const io = socketio.connect('http://localhost:9000');
 
@@ -49,18 +51,17 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     }, [])
 
     const onTableRowClick = async (ev, rowIndex, currentTableRowValue, selectedHeadState) => {
-        //console.log(ev, currentTableRowValue, rowIndex, selectedHeadState)
         const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIndex + 13);
         // 예약
         if (isEmpty(currentTableRowValue)) {
+
             const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);
             if (ans) {
                 const updated = updateTableBodyState(rowIndex, selectedHeadState.field)
                 setTableBody(updated)
                 await setBookedList(rowIndex, updated[rowIndex], selectedDate);
                 openL()
-                subtractLessonCounter()
-                //getUserInformation()
+                updateLesson()
                 io.emit('get', { table: updated })
                 return;
             }
@@ -72,6 +73,7 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                     setTableBody(updated)
                     await setBookedList(rowIndex, updated[rowIndex], selectedDate);
                     io.emit('get', { table: updated })
+                    return;
                 }
             }
         }
@@ -91,8 +93,10 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                 setTableBody(removed);
                 await setBookedList(rowIndex, removed[rowIndex], selectedDate);
                 io.emit('get', { table: removed })
+                return;
             }
         }
+        return;
     };
 
     const setBookedList = async (rowIndex, newTableState, selectedDate) => {
@@ -114,25 +118,16 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
         return validLessons.length > 0 ? true : false;
     }
 
-    const subtractLessonCounter = async () => {
-        await UserApi.updateLesson(userState.fullname)
-    }
-
-    const addLessonCounter = async () => {
-        await UserApi.updateLesson(userState.fullname)
-    }
-
-    const getUserInformation = async () => {
-        const userResp = await UserApi.getUserInfo(userState.fullname).then(res => res.data)
-        setUserState({
-            username: userResp.username,
-            fullname: userResp.fullname,
-            dob: userResp.dob,
-            lessons: userResp.lessons,
-            reservations: userResp.reservations,
-            stamp: userResp.stamp,
-        })
-    }
+    const updateLesson = async () => {
+        const updated = await UserApi.subtractLesson(userState.fullname);
+        if (updated.status === 200) {
+            const userResp = await UserApi.getUserInfo(userState.fullname).then(res => res.data)
+            setUserState(jwtDecode(userResp.token))
+        }
+        else {
+            alert('Unknown Error!')
+        }
+    };
 
     const renderDialogHeader = () => {
         const dow = ['일', '월', '화', '수', '목', '금', '토'];

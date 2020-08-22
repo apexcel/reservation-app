@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ReservationApi from '../../../utils/api/ReservationApi'
 
 import '../../../styles/profile.scss';
+import Table from '../../table/Table.tsx';
 
 export default function Profile({ userState }) {
 
@@ -97,6 +98,7 @@ export default function Profile({ userState }) {
     }
 
     const renderLessonList = () => {
+        console.log(userState.lessons)
         return userState.lessons.map((el, idx) => {
             return (
                 <div key={idx}>
@@ -109,7 +111,14 @@ export default function Profile({ userState }) {
         })
     };
 
-    renderLessonList()
+    const th = [
+        { name: '레슨명', field: 'lessonName' },
+        { name: '시작일', field: 'startDate' },
+    ]
+
+    const tb = [
+        {lessonsName: 'A', startDate: 'today'}
+    ]
     return (
         <div className={`${className}-container`}>
             <div className={`${className}-userinfo`}>
@@ -117,7 +126,7 @@ export default function Profile({ userState }) {
                 <div>Your username: {userState.username}</div>
                 <div>Your realname: {userState.fullname}</div>
                 <h2>남은횟수와 레슨권 기간</h2>
-            {renderLessonList()}
+                {renderLessonList()}
             </div>
             <div className={`${className}-booked-list-container`}>
                 <h1>Recent Booked dates</h1>

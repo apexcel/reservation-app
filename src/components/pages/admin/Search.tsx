@@ -45,9 +45,7 @@ export default function Search() {
     };
 
     const renderUserList = () => {
-
         return userList.map((el, idx) => {
-
             const _onClick = (ev: React.MouseEvent , name = el.fullname) => {
                 ev.preventDefault();
                 onClickUserList.call(this, ev, name)

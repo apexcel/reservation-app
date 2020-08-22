@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import UserApi from '../../utils/api/UserApi'
 import AdminApi from '../../utils/api/AdminApi'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { userStateAtom, baseURLAtom } from '../../atoms/globalAtoms.ts'
+import { useRecoilState } from 'recoil'
+import { userStateAtom } from '../../atoms/globalAtoms.ts'
 import { isEmpty } from '../../utils/utils.ts'
 import Input from '../modal/Input.tsx'
 import useInput from '../../reducer/useInput.ts'
@@ -19,18 +19,11 @@ export default function SignIn({ setIsLogin, adminLogin }) {
         const data = {
             username: username,
             password: password,
-            stamp: new Date().getTime()
         };
-
         if (adminLogin) {
             try {
                 const adminResp = await AdminApi.signIn(data).then(resp => resp.data);
-                setUserState({
-                    username: adminResp.username,
-                    fullname: adminResp.fullname,
-                    stamp: adminResp.stamp,
-                    isAdmin: adminResp.isAdmin
-                })
+                localStorage.setItem('userToken', adminResp.token);
                 setIsLogin(true)
             }
             catch (err) {
@@ -40,20 +33,14 @@ export default function SignIn({ setIsLogin, adminLogin }) {
         else {
             try {
                 const userResp = await UserApi.signIn(data).then(resp => resp.data);
-                setUserState({
-                    username: userResp.username,
-                    fullname: userResp.fullname,
-                    dob: userResp.dob,
-                    lessons: userResp.lessons,
-                    reservations: userResp.reservations,
-                    stamp: userResp.stamp,
-                })
+                localStorage.setItem('userToken', userResp.token);
                 setIsLogin(true)
             }
             catch (err) {
                 throw err;
             }
         }
+        return;
     }
 
     const onSignIn = async (ev) => {

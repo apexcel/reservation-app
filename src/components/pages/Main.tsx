@@ -7,10 +7,6 @@ import { genTableName } from '../../utils/utils.ts'
 import { tableHeadStateAtom, tableBodyStateAtom } from '../../atoms/tableAtoms.ts'
 import { currentSelectedDateAtom, getTableHeadersEachDay } from '../../atoms/globalAtoms.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import socketio from 'socket.io-client'
-import UserApi from '../../utils/api/UserApi'
-
-const io = socketio.connect('http://localhost:9000');
 
 export default function Main() {
 
@@ -54,9 +50,6 @@ export default function Main() {
 
     return (
         <>
-            <button onClick={async () => {
-                await UserApi.test('김강희').then(res => console.log(res))
-            }}>aa</button>
             <Calendar
                 onDateClick={onDateClick}
                 maxDate={maxDate}

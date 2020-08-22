@@ -3,6 +3,7 @@ import { atom, useRecoilState } from 'recoil'
 import { BrowserRouter as Router, Route, Link, Switch, Redirect, useHistory } from 'react-router-dom'
 import { userStateAtom } from '../atoms/globalAtoms.ts'
 import { isEmpty } from '../utils/utils.ts'
+import jwtDecode from 'jwt-decode'
 
 import Header from './pages/Header.tsx'
 import Footer from './pages/Footer.tsx'
@@ -20,15 +21,22 @@ export default function App() {
     const [isLogin, setIsLogin] = useState(false)
 
     useEffect(() => {
-        if (!isEmpty(sessionStorage.getItem('userState'))) {
-            setUserState(JSON.parse(sessionStorage.getItem('userState')));
-            setIsLogin(true);
+        const token = localStorage.getItem('userToken');
+        if (!isEmpty(token)) {
+            const decodedUserState = jwtDecode(token);
+            const isExpired = new Date(decodedUserState.exp * 1000) < new Date() ? true : false;
+            if (isExpired) {
+                setIsLogin(false)
+                localStorage.clear()    
+            }
+            else {
+                setUserState(decodedUserState);
+                setIsLogin(true);
+            }
         }
-    }, [])
-
-    useEffect(() => {
-        if (isLogin) sessionStorage.setItem('userState', JSON.stringify(userState));
-        else sessionStorage.clear();
+        else {
+            setIsLogin(false);
+        }
     }, [isLogin])
 
     const IndexPage = () => {
@@ -42,7 +50,7 @@ export default function App() {
     const ProfilePage = () => {
         return isLogin ? <Profile userState={userState} /> : <ErrorPage httpStatus={401} />
     }
-    console.log(userState)
+
     return (
         <>
             {isLogin ? <Header setIsLogin={setIsLogin} userState={userState} /> : null}
