@@ -14,5 +14,8 @@ router.get('/adminlist', (req, resp, next1) => {
     adminController.getAdminList(req, resp, next);
 })
 
+router.post('/kakao-token', (req, resp, next) => {
+    adminController.kakaoAuthToken(req, resp, next)
+})
 
 module.exports = router;

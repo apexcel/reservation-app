@@ -14,5 +14,13 @@ export default {
             url: '/admin/adminlist',
             method: 'get',
         })
+    },
+
+    getKakaoAccessToken(data) {
+        return SendTo({
+            url: '/admin/kakao-token',
+            method: 'post',
+            data: data,
+        })
     }
 };

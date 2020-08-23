@@ -1,9 +1,34 @@
 const Admin = require('../../database/mongo/schema/admin');
 const mongoConn = require('../../database/mongo/mongoConn');
 const jwt = require('jsonwebtoken');
+const axios = require('axios')
+const querystring = require('querystring')
 
 // TODO: 키 따로 관리하기
 const SECRET_KEY = 'secret_key_0815';
+const KAKAO_REST_API_KEY = '52d0e38dadbfb480d5daa3566df71c2f';
+
+exports.kakaoAuthToken = async function(req, resp, next) {
+    try {
+        const host = 'https://kauth.kakao.com';
+        const path = '/oauth/token';
+        const redirectUri = 'http://localhost:3001/admin/kakao-api';
+        const data = {
+            'grant_type': 'authorization_code',
+            'client_id': KAKAO_REST_API_KEY,
+            'redirect_uri': redirectUri,
+            'code': req.body.code
+        };
+        const result = await axios.post(`${host}${path}`, querystring.stringify(data))
+        //console.log(result)
+        resp.json(result.data)
+    }
+    catch (err) {
+        console.error(err);
+        next(err);
+    }
+    return;
+}
 
 exports.createToken = async function (req, resp, next) {
     try {

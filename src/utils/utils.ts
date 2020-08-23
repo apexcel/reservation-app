@@ -1,5 +1,5 @@
 export function isEmpty(obj) {
-    if (obj === null || obj === undefined || obj.toString() === '' || 
+    if (obj === null || obj === undefined || obj.toString() === '' ||
         (obj !== null && typeof obj === 'object' && !Object.keys(obj).length) ||
         (typeof obj === 'function' && !obj.length)) {
         return true
@@ -34,3 +34,5 @@ export function stringFromDate(date: Date) {
 
     return [yy, mm, dd].join('-');
 }
+
+// TODO: query string 을 탐색하는 메소드 개발해보자
