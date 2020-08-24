@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import AdminApi from '../../../utils/api/AdminApi';
+import { autoComplete } from '../../../utils/autoComplete.ts'
+import { debounce } from '../../../utils/utils.ts'
 
 export default function KakaoAPI() {
     const Kakao = globalThis.Kakao;
 
     const [accessCode, setAccessCode] = useState('');
-    const [tokenData, setTokenData] = useState({})
+    const [friendsList, setFriendsList] = useState([]);
+    const [testList, setTestList] = useState([
+        '김명수', '김동제', '이익순', '이동익', '최강서', '함익병', '박명수'
+    ]);
+    const [searchWord, setSearchWord] = useState('');
 
     useEffect(() => {
         if (globalThis.location.search.length > 0) {
@@ -14,6 +20,11 @@ export default function KakaoAPI() {
                 getKakaoAuthToken()
             }
         }
+        console.log(friendsList)
+    })
+
+    useEffect(() => {
+        autoComplete(document.getElementById('ipt'), testList)
     })
 
     const getCode = () => {
@@ -42,6 +53,7 @@ export default function KakaoAPI() {
         Kakao.API.request({
             url: '/v1/api/talk/friends',
             success: function (response) {
+                setFriendsList(response.elements)
                 console.log(response);
             },
             fail: function (error) {
@@ -56,6 +68,20 @@ export default function KakaoAPI() {
         });
     }
 
+    const renderFriendsList = () => {
+        return friendsList.map((el, idx) =>
+            <div key={idx}>
+                <div>{el.profile_nickname}</div>
+            </div>
+        );
+    }
+
+    const onChangeSearch = (ev) => {
+        ev.preventDefault();
+        const { value } = ev.target;
+        setSearchWord(value);
+    }
+
     return (
         <div>
             <div onClick={getKakaoAuthCode}>
@@ -65,10 +91,15 @@ export default function KakaoAPI() {
                 />
             </div>
             <div onClick={kakaoLogOut}>
-                Logout
+                로그아웃
             </div>
             <div onClick={getKakaoFriendsList}>
-                getKakaoFriendsList
+                카카오에서 친구목록 가져오기
+            </div>
+            {friendsList.length > 0 ? renderFriendsList() : '친구목록 없음'}
+            <input id='ipt' onChange={onChangeSearch} type='text' />
+            <div id='list'>
+
             </div>
         </div>
     )

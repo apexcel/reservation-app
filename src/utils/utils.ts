@@ -35,4 +35,15 @@ export function stringFromDate(date: Date) {
     return [yy, mm, dd].join('-');
 }
 
-// TODO: query string 을 탐색하는 메소드 개발해보자
+export function debounce(callback, wait, leading) {
+    let onDebounce;
+
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(onDebounce);
+        onDebounce = setTimeout(() => {
+            callback.apply(context, args);
+        }, wait);
+    }
+}
