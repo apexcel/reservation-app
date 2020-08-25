@@ -35,15 +35,25 @@ export function stringFromDate(date: Date) {
     return [yy, mm, dd].join('-');
 }
 
-export function debounce(callback, wait, leading) {
+export function debounce(callback: Function, wait: number) {
     let onDebounce;
-
-    return function() {
-        const context = this;
-        const args = arguments;
+    return function () {
         clearTimeout(onDebounce);
         onDebounce = setTimeout(() => {
-            callback.apply(context, args);
+            callback.apply(this, arguments);
         }, wait);
+    }
+}
+
+export function throttle(callback: Function, wait: number) {
+    let onThrottle;
+    return function () {
+        if (!onThrottle) {
+            callback(arguments)
+            onThrottle = true;
+            onThrottle = setTimeout(() => {
+                onThrottle = false;
+            }, wait)
+        }
     }
 }

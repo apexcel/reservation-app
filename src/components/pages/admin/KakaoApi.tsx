@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import AdminApi from '../../../utils/api/AdminApi';
+import React, { useEffect, useState, useRef } from 'react'
 import { autoComplete } from '../../../utils/autoComplete.ts'
-import { debounce } from '../../../utils/utils.ts'
+import useInput from '../../../reducer/useInput.ts'
+import AdminApi from '../../../utils/api/AdminApi';
+import Input from '../../modal/Input.tsx'
 
 import '../../../styles/kakaoapi.scss'
+
+const initForm = {
+    friendName: '',
+    date: '',
+    time: '',
+    message: ''
+}
 
 export default function KakaoAPI() {
     const Kakao = globalThis.Kakao;
@@ -11,23 +19,32 @@ export default function KakaoAPI() {
     const [accessCode, setAccessCode] = useState('');
     const [friendsList, setFriendsList] = useState([]);
     const [friendsNameList, setFriendsNameList] = useState([]);
-    const [testList, setTestList] = useState([
-        '김명수', '김동제', '이익순', '이동익', '최강서', '함익병', '박명수'
-    ]);
+    const [msgList, setMsgList] = useState([])
     const [searchWord, setSearchWord] = useState('');
+    const test = ['김동익', '김말순', '김제인', '김말숙', '김제제', '김지지']
+
+    const [messageForm, onChangeInput] = useInput(initForm);
 
     useEffect(() => {
+        let isMounted = false;
         if (globalThis.location.search.length > 0) {
             getCode();
             if (accessCode.length > 0 && !Kakao.Auth.getAccessToken()) {
                 getKakaoAuthToken()
             }
         }
-    })
-
+        if (!isMounted) {
+            autoComplete(document.getElementById('friendName'), test)
+        }
+        isMounted = true;
+    }, [])
+    
     useEffect(() => {
-        autoComplete(document.getElementById('ipt'), friendsNameList)
-    }, [searchWord])
+        console.log(messageForm)
+    })
+    
+    useEffect(() => {
+    }, [messageForm])
 
     const getCode = () => {
         const { search } = globalThis.location;
@@ -80,19 +97,25 @@ export default function KakaoAPI() {
         );
     }
 
-    const onChangeSearch = (ev) => {
+    const setBookingMessage = (ev) => {
         ev.preventDefault();
-        const { value } = ev.target;
-        setSearchWord(value);
+        setMsgList([...msgList, messageForm])
     }
 
-    const onKeyDown = (ev) => {
-        if (ev.key === 'ArrowDown') {
-            console.log(ev.target)
+    const renderMsgList = () => {
+        function delMsg() {
+
         }
-        else if (ev.key === 'ArrowUp') {
-            console.log(ev)
-        }
+
+        return msgList.map((el, idx) => 
+            <div key={idx}>
+                {el.friendName}
+                {el.date}
+                {el.time}
+                {el.message}
+                <div onClick={delMsg}>삭제</div>
+            </div>
+        )
     }
 
     return (
@@ -110,9 +133,15 @@ export default function KakaoAPI() {
                 카카오에서 친구목록 가져오기
             </div>
             {friendsList.length > 0 ? renderFriendsList() : '친구목록 없음'}
-            <input id='ipt' onChange={onChangeSearch} type='text' />
+            친구 찾기
+            {/* <input ref={ref} id='search-kakao-friends' onChange={onChangeSearch} type='text' /> */}
+            <Input id='friendName' name='friendName' onChange={onChangeInput} type='text' />
+            <Input id='date' name='date' onChange={onChangeInput} type='date' />
+            <Input id='time' name='time' onChange={onChangeInput} type='time' />
+            <textarea id='message' name='message' onChange={onChangeInput} rows={5} cols={40} maxLength={200} />
+            <button onClick={setBookingMessage} type='button'>발송 예약 하기</button>
             <div id='list'>
-
+                {renderMsgList()}
             </div>
         </div>
     )

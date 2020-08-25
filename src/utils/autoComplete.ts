@@ -1,9 +1,10 @@
+import { debounce, throttle } from './utils.ts'
+
 export function autoComplete(input: HTMLInputElement, arr: Array<String>) {
     let currentFocus;
     input.addEventListener('input', (ev) => {
-        if (!(input.value)) return false;
-
         destoryAllSuggestList();
+        if (!(input.value)) return false;
 
         currentFocus = -1;
         const listContainer = document.createElement('div');
@@ -30,6 +31,7 @@ export function autoComplete(input: HTMLInputElement, arr: Array<String>) {
         const suggestItem = document.getElementById(input.id + 'auto-completed-list');
         const itemList = suggestItem ? suggestItem.getElementsByTagName('div') : null;
 
+        console.log(itemList)
         if (ev.key === 'ArrowDown') {
             currentFocus += 1;
             addActive(itemList)
