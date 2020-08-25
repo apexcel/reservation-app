@@ -20,20 +20,19 @@ import KakaoDevApp from './pages/KakaoDevApp.tsx'
 export default function App() {
     const [userState, setUserState] = useRecoilState(userStateAtom)
     const [isLogin, setIsLogin] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+
+    const kakaoSDK = 'https://developers.kakao.com/sdk/js/kakao.js';
+    const jsKey = 'ea144ad47a8a64a6e0b341fbc81d29f5';
 
     useEffect(() => {
-        if (document.getElementById('kakao-sdk') == null || document.getElementById('kakao-sdk') == undefined) {
-            const script = document.createElement('script');
-            script.id = 'kakao-sdk'
-            script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
-            script.async = true;
-            document.body.append(script)
-            globalThis.Kakao.init('ea144ad47a8a64a6e0b341fbc81d29f5')
-        }
+        setIsLoading(true)
+        addScriptTagForKakaoApi()
         if (!globalThis.Kakao.isInitialized()) {
             globalThis.Kakao.init('ea144ad47a8a64a6e0b341fbc81d29f5')
             console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
         }
+        setIsLoading(false)
     }, [])
 
     useEffect(() => {
@@ -43,7 +42,7 @@ export default function App() {
             const isExpired = new Date(decodedUserState.exp * 1000) < new Date() ? true : false;
             if (isExpired) {
                 setIsLogin(false)
-                localStorage.clear()    
+                localStorage.clear()
             }
             else {
                 setUserState(decodedUserState);
@@ -54,6 +53,16 @@ export default function App() {
             setIsLogin(false);
         }
     }, [isLogin])
+
+    const addScriptTagForKakaoApi = () => {
+        const script = document.createElement('script');
+        script.id = 'kakao-sdk'
+        script.src = kakaoSDK;
+        script.async = true;
+        document.body.append(script)
+        globalThis.Kakao.init(jsKey)
+        console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
+    }
 
     const IndexPage = () => {
         return isLogin ? <Main /> : <SignIn setIsLogin={setIsLogin} adminLogin={false} />
@@ -69,17 +78,21 @@ export default function App() {
 
     return (
         <>
-            {isLogin ? <Header setIsLogin={setIsLogin} userState={userState} /> : null}
-                <div className='container'>
-                    <Switch>
-                        <Route exact path='/' component={IndexPage} />
-                        <Route path='/profile' component={ProfilePage} />
-                        <Route path='/admin' component={AdminPage} />
-                        <Route path='/kakao-devapp' component={() => <KakaoDevApp />} />
-                        <Route render={() => <ErrorPage httpStatus={404}/>} />
-                    </Switch>
-                </div>
-            <Footer />
+            {isLoading ? 'Loading...' :
+                <>
+                    {isLogin ? <Header setIsLogin={setIsLogin} userState={userState} /> : null}
+                    <div className='container'>
+                        <Switch>
+                            <Route exact path='/' component={IndexPage} />
+                            <Route path='/profile' component={ProfilePage} />
+                            <Route path='/admin' component={AdminPage} />
+                            <Route path='/kakao-devapp' component={() => <KakaoDevApp />} />
+                            <Route render={() => <ErrorPage httpStatus={404} />} />
+                        </Switch>
+                    </div>
+                    <Footer />
+                </>
+            }
         </>
     )
 }

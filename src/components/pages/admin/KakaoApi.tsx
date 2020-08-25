@@ -3,11 +3,14 @@ import AdminApi from '../../../utils/api/AdminApi';
 import { autoComplete } from '../../../utils/autoComplete.ts'
 import { debounce } from '../../../utils/utils.ts'
 
+import '../../../styles/kakaoapi.scss'
+
 export default function KakaoAPI() {
     const Kakao = globalThis.Kakao;
 
     const [accessCode, setAccessCode] = useState('');
     const [friendsList, setFriendsList] = useState([]);
+    const [friendsNameList, setFriendsNameList] = useState([]);
     const [testList, setTestList] = useState([
         '김명수', '김동제', '이익순', '이동익', '최강서', '함익병', '박명수'
     ]);
@@ -20,12 +23,11 @@ export default function KakaoAPI() {
                 getKakaoAuthToken()
             }
         }
-        console.log(friendsList)
     })
 
     useEffect(() => {
-        autoComplete(document.getElementById('ipt'), testList)
-    })
+        autoComplete(document.getElementById('ipt'), friendsNameList)
+    }, [searchWord])
 
     const getCode = () => {
         const { search } = globalThis.location;
@@ -53,7 +55,9 @@ export default function KakaoAPI() {
         Kakao.API.request({
             url: '/v1/api/talk/friends',
             success: function (response) {
+                const friendNames = response.elements.map(el => el.profile_nickname)
                 setFriendsList(response.elements)
+                setFriendsNameList(friendNames)
                 console.log(response);
             },
             fail: function (error) {
@@ -80,6 +84,15 @@ export default function KakaoAPI() {
         ev.preventDefault();
         const { value } = ev.target;
         setSearchWord(value);
+    }
+
+    const onKeyDown = (ev) => {
+        if (ev.key === 'ArrowDown') {
+            console.log(ev.target)
+        }
+        else if (ev.key === 'ArrowUp') {
+            console.log(ev)
+        }
     }
 
     return (

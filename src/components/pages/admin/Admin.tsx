@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, Switch, Route, Redirect } from 'react-router-dom'
 import Search from './Search.tsx'
 import SignUp from './SignUp.tsx'
-import KakaoAPI from './KakaoAPI.tsx'
+import KakaoAPI from './KakaoApi.tsx'
 
 import '../../../styles/admin.scss'
 

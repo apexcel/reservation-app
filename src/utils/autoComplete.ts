@@ -18,7 +18,7 @@ export function autoComplete(input: HTMLInputElement, arr: Array<String>) {
                 suggestItem.innerHTML += arr[i].substring(input.value.length)
                 suggestItem.innerHTML += `<input type='hidden' value='${arr[i]}' />`;
                 suggestItem.addEventListener('click', (ev) => {
-                    input.value = this.getElementByTagName('input')[0].value;
+                    input.value = suggestItem.getElementsByTagName('input')[0].value;
                     destoryAllSuggestList();
                 })
                 listContainer.appendChild(suggestItem);
@@ -27,22 +27,22 @@ export function autoComplete(input: HTMLInputElement, arr: Array<String>) {
     })
 
     input.addEventListener('keydown', (ev) => {
-        const suggestitem = document.getElementById(input.id + 'auto-completed-list');
-        const itemList = suggestitem ? suggestitem.getElementsByTagName('div') : null;
+        const suggestItem = document.getElementById(input.id + 'auto-completed-list');
+        const itemList = suggestItem ? suggestItem.getElementsByTagName('div') : null;
 
-        if (ev.code === '40') {
+        if (ev.key === 'ArrowDown') {
             currentFocus += 1;
             addActive(itemList)
         }
-        else if (ev.code === '38') {
-            currentFocus += 1;
+        else if (ev.key === 'ArrowUp') {
+            currentFocus -= 1;
             addActive(itemList)
         }
-        else if (ev.code === '13') {
+        else if (ev.key === 'Enter') {
             ev.preventDefault();
             if (currentFocus > -1) {
-                if (suggestitem) {
-                    suggestitem[currentFocus].click();
+                if (suggestItem) {
+                    itemList[currentFocus].click();
                 }
             }
         }
