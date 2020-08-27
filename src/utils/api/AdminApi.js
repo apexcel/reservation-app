@@ -22,5 +22,13 @@ export default {
             method: 'post',
             data: data,
         })
+    },
+
+    kakaoBookMessage(data) {
+        return SendTo({
+            url: '/admin/kakao-book-message',
+            method: 'post',
+            data: data,
+        })
     }
 };

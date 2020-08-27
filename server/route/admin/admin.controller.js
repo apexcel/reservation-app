@@ -1,4 +1,5 @@
 const Admin = require('../../database/mongo/schema/admin');
+const KakaoMsg = require('../../database/mongo/schema/kakaomsg');
 const mongoConn = require('../../database/mongo/mongoConn');
 const jwt = require('jsonwebtoken');
 const axios = require('axios')
@@ -8,7 +9,7 @@ const querystring = require('querystring')
 const SECRET_KEY = 'secret_key_0815';
 const KAKAO_REST_API_KEY = '52d0e38dadbfb480d5daa3566df71c2f';
 
-exports.kakaoAuthToken = async function(req, resp, next) {
+exports.kakaoAuthToken = async function (req, resp, next) {
     try {
         const host = 'https://kauth.kakao.com';
         const path = '/oauth/token';
@@ -30,6 +31,42 @@ exports.kakaoAuthToken = async function(req, resp, next) {
     return;
 }
 
+exports.kakaoBookMessage = async function (req, resp, next) {
+    console.log(req.body)
+    try {
+        mongoConn.conn()
+        for (let i = 0; i < req.body.length; i += 1) {
+            
+            const options = {
+                upsert: true,
+                new: true,
+                setDefaultOnInsert: true
+            };
+            
+            const msg = {
+                profile_nickname: req.body[i].nickname,
+                app_uuid: 'temp',
+                date: req.body[i].date,
+                time: req.body[i].time,
+                message: req.body[i].message
+            }
+
+            await new KakaoMsg(msg).save(options)
+        }
+        resp.status(200).json({
+            result: true,
+            desc: 'Kakao message reservation succeed'
+        })
+        
+        mongoConn.disconn()
+    }
+    catch (err) {
+        console.error(err);
+        next(err);
+    }
+    return;
+}
+
 exports.createToken = async function (req, resp, next) {
     try {
         mongoConn.conn();
@@ -41,7 +78,7 @@ exports.createToken = async function (req, resp, next) {
 
         if (admin) {
             const token = jwt.sign(
-                { 
+                {
                     username: admin.username,
                     fullname: admin.fullname,
                     isAdmin: admin.isAdmin
@@ -68,7 +105,7 @@ exports.createToken = async function (req, resp, next) {
     return;
 }
 
-exports.signUpAdmin = async function(req, resp, next) {
+exports.signUpAdmin = async function (req, resp, next) {
     try {
         mongoConn.conn();
         const userInfo = {
@@ -77,23 +114,23 @@ exports.signUpAdmin = async function(req, resp, next) {
             password: req.body.password,
             isAdmin: req.body.isAdmin
         };
-    
+
         const query = {
             username: req.body.username,
             fullname: req.body.fullname,
         };
-    
+
         const options = {
             upsert: true,
             new: true,
             setDefaultOnInsert: true
         };
-    
+
         await Admin.findOneAndUpdate(query, userInfo, options, (err, res) => {
             if (err) throw err;
         })
         mongoConn.disconn();
-        resp.status(201).json({ 
+        resp.status(201).json({
             result: true,
             desc: 'Admin registered'
         });
@@ -106,7 +143,7 @@ exports.signUpAdmin = async function(req, resp, next) {
 }
 
 
-exports.getAdminList = async function(req, resp, next) {
+exports.getAdminList = async function (req, resp, next) {
     try {
         mongoConn.conn();
         const list = await Admin.find({})

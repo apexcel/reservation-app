@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react'
 import axios from 'axios'
 import UserApi from '../../../utils/api/UserApi'
 import AdminApi from '../../../utils/api/AdminApi'
-import { stringFromDate } from '../../../utils/utils.ts'
+import { formattedDateString } from '../../../utils/utils.ts'
 import useInput from '../../../reducer/useInput.ts'
 import SelectOption from '../../modal/SelectOption.tsx';
 import Dialog from '../../modal/Dialog.tsx'
@@ -11,8 +11,8 @@ import Input from '../../modal/Input.tsx'
 const initForm = {
     lessonName: '',
     employee: '',
-    enrollDate: stringFromDate(new Date()),
-    startDate: stringFromDate(new Date()),
+    enrollDate: formattedDateString(new Date()),
+    startDate: formattedDateString(new Date()),
     endDate: '',
     counter: 0,
     additionalDays: 0,
@@ -79,49 +79,49 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
                     ...calculatedValues,
                     counter: 4,
                     price: calcDiscount(210000, lessonForm.discount),
-                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 31) + (lessonForm.additionalDays * 86400000)))
+                    endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 31) + (lessonForm.additionalDays * 86400000)))
                 })
-                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 31) + (lessonForm.additionalDays * 86400000)))
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 31) + (lessonForm.additionalDays * 86400000)))
             case 'M2C5':
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 5,
                     price: calcDiscount(330000, lessonForm.discount),
-                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
+                    endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
                 })
-                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
             case 'M2C9':
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 9,
                     price: calcDiscount(420000, lessonForm.discount),
-                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
+                    endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
                 })
-                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
             case 'M3C13':
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 13,
                     price: calcDiscount(630000, lessonForm.discount),
-                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 91) + (lessonForm.additionalDays * 86400000)))
+                    endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 91) + (lessonForm.additionalDays * 86400000)))
                 })
-                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 91) + (lessonForm.additionalDays * 86400000)))
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 91) + (lessonForm.additionalDays * 86400000)))
             case 'M6C26':
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 26,
                     price: calcDiscount(1260000, lessonForm.discount),
-                    endDate: stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 182) + (lessonForm.additionalDays * 86400000)))
+                    endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 182) + (lessonForm.additionalDays * 86400000)))
                 })
-                return stringFromDate(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 182) + (lessonForm.additionalDays * 86400000)))
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 182) + (lessonForm.additionalDays * 86400000)))
             default:
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 0,
                     price: 0,
-                    endDate: stringFromDate(new Date())
+                    endDate: formattedDateString(new Date())
                 })
-                return stringFromDate(new Date())
+                return formattedDateString(new Date())
         }
     }
 

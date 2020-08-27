@@ -18,4 +18,8 @@ router.post('/kakao-token', (req, resp, next) => {
     adminController.kakaoAuthToken(req, resp, next)
 })
 
+router.post('/kakao-book-message', (req, resp, next) => {
+    adminController.kakaoBookMessage(req, resp, next)
+})
+
 module.exports = router;

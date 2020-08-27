@@ -27,12 +27,17 @@ export default function App() {
 
     useEffect(() => {
         setIsLoading(true)
-        addScriptTagForKakaoApi()
-        if (!globalThis.Kakao.isInitialized()) {
-            globalThis.Kakao.init('ea144ad47a8a64a6e0b341fbc81d29f5')
-            console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
+        if (!globalThis.Kakao) {
+            addScriptTagForKakaoApi()
+        }
+        else {
+            if (!globalThis.Kakao.isInitialized()) {
+                globalThis.Kakao.init('ea144ad47a8a64a6e0b341fbc81d29f5')
+                console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
+            }
         }
         setIsLoading(false)
+        console.log(globalThis.Kakao)
     }, [])
 
     useEffect(() => {
@@ -54,13 +59,13 @@ export default function App() {
         }
     }, [isLogin])
 
-    const addScriptTagForKakaoApi = () => {
+    const addScriptTagForKakaoApi = async () => {
         const script = document.createElement('script');
         script.id = 'kakao-sdk'
         script.src = kakaoSDK;
         script.async = true;
         document.body.append(script)
-        globalThis.Kakao.init(jsKey)
+        await globalThis.Kakao.init(jsKey)
         console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
     }
 

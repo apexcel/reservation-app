@@ -24,7 +24,7 @@ export function genTableName(date: Date) {
     return `${year}-${month}-${day}`;
 }
 
-export function stringFromDate(date: Date) {
+export function formattedDateString(date: Date) {
     let yy = date.getFullYear();
     let mm = '' + (date.getMonth() + 1);
     let dd = '' + date.getDate();

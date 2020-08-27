@@ -8,7 +8,7 @@ const querystring = require('querystring');
 const SECRET_KEY = 'secret_key_0815';
 const KAKAO_REST_API_KEY = '52d0e38dadbfb480d5daa3566df71c2f';
 
-function stringFromDate(date) {
+function formattedDateString(date) {
     let yy = date.getFullYear();
     let mm = '' + (date.getMonth() + 1);
     let dd = '' + date.getDate();
@@ -228,8 +228,8 @@ exports.subtractLessonCounter = async function (req, resp, next) {
             lessons: {
                 $elemMatch: {
                     counter: { $gt: 0 },
-                    startDate: { $lte: stringFromDate(new Date()) },
-                    endDate: { $gte: stringFromDate(new Date()) }
+                    startDate: { $lte: formattedDateString(new Date()) },
+                    endDate: { $gte: formattedDateString(new Date()) }
                 }
             }
         };

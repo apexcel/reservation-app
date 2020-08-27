@@ -7,7 +7,7 @@ import Input from '../../modal/Input.tsx'
 import '../../../styles/kakaoapi.scss'
 
 const initForm = {
-    friendName: '',
+    nickname: '',
     date: '',
     time: '',
     message: ''
@@ -16,7 +16,6 @@ const initForm = {
 export default function KakaoAPI() {
     const Kakao = globalThis.Kakao;
 
-    const [accessCode, setAccessCode] = useState('');
     const [friendsList, setFriendsList] = useState([]);
     const [friendsNameList, setFriendsNameList] = useState([]);
     const [msgList, setMsgList] = useState([])
@@ -28,29 +27,29 @@ export default function KakaoAPI() {
     useEffect(() => {
         let isMounted = false;
         if (globalThis.location.search.length > 0) {
-            getCode();
-            if (accessCode.length > 0 && !Kakao.Auth.getAccessToken()) {
-                getKakaoAuthToken()
+            const code = getKakaoAccessCode();
+            if (!Kakao.Auth.getAccessToken()) {
+                getKakaoAuthToken(code)
             }
         }
         if (!isMounted) {
-            autoComplete(document.getElementById('friendName'), test)
+            autoComplete(document.getElementById('nickname'), test)
         }
         isMounted = true;
     }, [])
-    
+
     useEffect(() => {
-        console.log(messageForm)
+        console.log(msgList)
     })
-    
+
     useEffect(() => {
+        messageForm.nickname = document.getElementById('nickname').value;
     }, [messageForm])
 
-    const getCode = () => {
+    const getKakaoAccessCode = () => {
         const { search } = globalThis.location;
         const index = search.indexOf('=');
         const code = search.slice(index + 1);
-        setAccessCode(code)
         return code;
     };
 
@@ -62,8 +61,8 @@ export default function KakaoAPI() {
         return;
     };
 
-    const getKakaoAuthToken = async () => {
-        const res = await AdminApi.getKakaoAccessToken({ code: accessCode });
+    const getKakaoAuthToken = async (code) => {
+        const res = await AdminApi.getKakaoAccessToken({ code: code });
         Kakao.Auth.setAccessToken(res.data.access_token)
         return;
     }
@@ -89,12 +88,8 @@ export default function KakaoAPI() {
         });
     }
 
-    const renderFriendsList = () => {
-        return friendsList.map((el, idx) =>
-            <div key={idx}>
-                <div>{el.profile_nickname}</div>
-            </div>
-        );
+    const kakaoSetBookMessage = async () => {
+        await AdminApi.kakaoBookMessage(msgList).then(res => console.log(res))
     }
 
     const setBookingMessage = (ev) => {
@@ -102,18 +97,29 @@ export default function KakaoAPI() {
         setMsgList([...msgList, messageForm])
     }
 
-    const renderMsgList = () => {
-        function delMsg() {
+    const renderFriendsList = () => {
+        return friendsList.map((el, idx) =>
+            <div key={idx}>
+                <img width='50' height='50' src={el.profile_thumbnail_image}/>
+                <div>{el.profile_nickname}</div>
+            </div>
+        );
+    }
 
+    const renderMsgList = () => {
+        function delMsg(name) {
+            const index = msgList.findIndex(el => el.nickname === name)
+            const newList = [].concat(msgList.slice(0, index), msgList.slice(index + 1));
+            setMsgList(newList)
         }
 
-        return msgList.map((el, idx) => 
+        return msgList.map((el, idx) =>
             <div key={idx}>
-                {el.friendName}
+                {el.nickname}
                 {el.date}
                 {el.time}
                 {el.message}
-                <div onClick={delMsg}>삭제</div>
+                <div onClick={() => delMsg(el.nickname)}>삭제</div>
             </div>
         )
     }
@@ -135,11 +141,12 @@ export default function KakaoAPI() {
             {friendsList.length > 0 ? renderFriendsList() : '친구목록 없음'}
             친구 찾기
             {/* <input ref={ref} id='search-kakao-friends' onChange={onChangeSearch} type='text' /> */}
-            <Input id='friendName' name='friendName' onChange={onChangeInput} type='text' />
+            <Input id='nickname' name='nickname' onChange={onChangeInput} type='text' />
             <Input id='date' name='date' onChange={onChangeInput} type='date' />
             <Input id='time' name='time' onChange={onChangeInput} type='time' />
             <textarea id='message' name='message' onChange={onChangeInput} rows={5} cols={40} maxLength={200} />
-            <button onClick={setBookingMessage} type='button'>발송 예약 하기</button>
+            <button onClick={setBookingMessage} type='button'>명단 추가하기</button>
+            <button onClick={kakaoSetBookMessage} type='button'>발송예약</button>
             <div id='list'>
                 {renderMsgList()}
             </div>
