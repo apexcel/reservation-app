@@ -30,5 +30,21 @@ export default {
             method: 'post',
             data: data,
         })
+    },
+
+    kakaoCheckToken(data) {
+        return SendTo({
+            url: '/admin/kakao-check-token',
+            method: 'post',
+            data: data,
+        })
+    },
+
+    kakaoRefreshAccessToken(data) {
+        return SendTo({
+            url: '/admin/kakao-refresh-access-token',
+            method: 'post',
+            data: data,
+        })
     }
 };

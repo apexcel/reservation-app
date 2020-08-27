@@ -1,5 +1,6 @@
 const Admin = require('../../database/mongo/schema/admin');
 const KakaoMsg = require('../../database/mongo/schema/kakaomsg');
+const KakaoToken = require('../../database/mongo/schema/kakaotoken');
 const mongoConn = require('../../database/mongo/mongoConn');
 const jwt = require('jsonwebtoken');
 const axios = require('axios')
@@ -21,8 +22,8 @@ exports.kakaoAuthToken = async function (req, resp, next) {
             'code': req.body.code
         };
         const result = await axios.post(`${host}${path}`, querystring.stringify(data))
-        //console.log(result)
-        resp.json(result.data)
+        
+        resp.status(200).json(result.data)
     }
     catch (err) {
         console.error(err);
@@ -48,7 +49,7 @@ exports.kakaoBookMessage = async function (req, resp, next) {
                 app_uuid: 'temp',
                 date: req.body[i].date,
                 time: req.body[i].time,
-                message: req.body[i].message
+                message: req.body[i].message,
             }
 
             await new KakaoMsg(msg).save(options)
@@ -65,6 +66,39 @@ exports.kakaoBookMessage = async function (req, resp, next) {
         next(err);
     }
     return;
+}
+
+exports.kakaoRefreshAccessToken = async function (req, resp, next) {
+    try{
+        const configs = {
+            grant_type: 'refresh_token',
+            client_id: KAKAO_REST_API_KEY,
+            refresh_token: req.body.refresh_token,
+        };
+
+        const res = await axios.post('https://kauth.kakao.com/oauth/token', querystring(configs))
+        console.log(res)
+        resp.send('good')
+    }
+    catch (err) {
+        console.error(err);
+        next(err);
+    }
+    return;
+}
+
+exports.kakaoCheckToken = async function (req, resp, next) {
+    const headers = {
+        'Authorization': `Bearer ${req.body.token}`,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+    };
+
+    const res = await axios.get('https://kapi.kakao.com/v1/user/access_token_info', { headers: headers })
+    console.log(res)
+    resp.json({ 
+        result: true,
+        desc: 'Kakao user access token checked.'
+    })
 }
 
 exports.createToken = async function (req, resp, next) {

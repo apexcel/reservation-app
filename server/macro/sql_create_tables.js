@@ -63,4 +63,4 @@ async function executeQuery() {
     //await insetTableData(TABLE_NAME);
     connection.end();
 }
-executeQuery();
+module.exports = executeQuery;
