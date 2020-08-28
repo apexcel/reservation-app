@@ -1,6 +1,6 @@
 const getConn = require('../../database/mysql/mysqlConn');
 
-exports.getBookedData = async function(req, resp, next) {
+exports.getBookedData = async function (req, resp, next) {
     await getConn((conn) => {
         const query = "SELECT * FROM ??";
         const queryParams = `time_table${req.body.date}`
@@ -13,25 +13,34 @@ exports.getBookedData = async function(req, resp, next) {
     return;
 }
 
-exports.setBookedData = async function(req, resp, next) {
-    await getConn((conn) => {
-        const query = "UPDATE ?? SET booked_data = (?) WHERE time = ?;";
-        const queryParams = [
-            `time_table${req.body.date}`,
-            req.body.booked_data,
-            req.body.time
-        ];
+exports.setBookedData = async function (req, resp, next) {
+    try {
+        await getConn((conn) => {
+            const query = "UPDATE ?? SET booked_data = (?) WHERE time = ?;";
+            const queryParams = [
+                `time_table${req.body.date}`,
+                req.body.booked_data,
+                req.body.time
+            ];
 
-        conn.query(query, queryParams, (err, row) => {
-            if (err) throw err
-            resp.status(200).json(row)
+            conn.query(query, queryParams, (err, row) => {
+                if (err) throw err;
+                resp.status(200).json(row)
+            })
+            conn.release();
+        });
+    }
+    catch (err) {
+        console.error(err);
+        resp.json({
+            result: false,
+            desc: 'Unexpected error occured'
         })
-        conn.release();
-    });
+    }
     return;
 }
 
-exports.findReservation = async function(req, resp, next) {
+exports.findReservation = async function (req, resp, next) {
     await getConn(async (conn) => {
         const query = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME=?';
         const queryParams = 'booked_data'

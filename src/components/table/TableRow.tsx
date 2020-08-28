@@ -36,9 +36,7 @@ export default function TableRow({
                 ev.preventDefault();
                 onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i])
             };
-            const classNames = [
-                `${className}-row-cell`,
-            ]
+            const classNames = [`${className}-row-cell`];
             let isClickable = true;
             const children = rowItem[tHeadState[i].field]
 

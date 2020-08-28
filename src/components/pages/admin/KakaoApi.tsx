@@ -10,7 +10,40 @@ const initForm = {
     nickname: '',
     date: '',
     time: '',
+    uuid: '',
     message: ''
+};
+
+function kakaoLogin() {
+    globalThis.Kakao.Auth.authorize({
+        redirectUri: 'http://localhost:3001/admin/kakao-api',
+        scope: 'profile, birthday, talk_message, friends',
+    });
+    return;
+};
+
+function kakaoLogOut() {
+    globalThis.Kakao.Auth.logout(function () {
+        console.log(globalThis.Kakao.Auth.getAccessToken());
+        globalThis.location.replace('/admin')
+    });
+}
+
+function getQueryString() {
+    const { search } = globalThis.location;
+    const index = search.indexOf('=');
+    return search.slice(index + 1);
+};
+
+function loginFormWithKakao() {
+    globalThis.Kakao.Auth.loginForm({
+        success: function (authObj) {
+            console.log(authObj)
+        },
+        fail: function (err) {
+            console.log(err)
+        },
+    })
 }
 
 export default function KakaoAPI() {
@@ -25,31 +58,28 @@ export default function KakaoAPI() {
 
     useEffect(() => {
         let isMounted = false;
-        // if (globalThis.location.search.length > 0) {
-        //     const code = getQueryString();
-        //     if (!(Kakao.Auth.getAccessToken())) {
-        //         getKakaoAuthToken()
-        //     }
-        // }
         if (!isMounted) {
-            autoComplete(document.getElementById('nickname'), test)
+            autoComplete(document.getElementById('nickname'), friendsNameList)
         }
-        isMounted = true;
-    }, [])
-
-    useEffect(() => {
         console.log(msgList)
         console.log(refreshToken)
+        console.log(messageForm)
+        if (globalThis.location.search.length > 0) {
+            getKakaoAuthToken()
+        }
+        return () => isMounted = true;
     })
 
     useEffect(() => {
         messageForm.nickname = document.getElementById('nickname').value;
+        messageForm.uuid = inputValue()[0]?.uuid
     }, [messageForm])
 
     const getKakaoAuthToken = async () => {
-        if (globalThis.Kakao.Auth.getAccessToken()) return;
-        const res = await AdminApi.getKakaoAccessToken({ code: getQueryString() });
-        globalThis.Kakao.Auth.setAccessToken(res.data.access_token)
+        if (!globalThis.Kakao.Auth.getAccessToken()) {
+            const res = await AdminApi.getKakaoAccessToken({ code: getQueryString() });
+            globalThis.Kakao.Auth.setAccessToken(res.data.access_token)
+        }
         return;
     }
 
@@ -78,12 +108,16 @@ export default function KakaoAPI() {
     }
 
     const kakaoRefreshAccessToken = async () => {
-        await AdminApi.kakaoRefreshAccessToken({})
+        await AdminApi.kakaoRefreshAccessToken()
     }
 
     const setBookingMessage = (ev) => {
         ev.preventDefault();
         setMsgList([...msgList, messageForm])
+    }
+
+    const inputValue = () => {
+        return friendsList.filter(el => el.profile_nickname === messageForm.nickname)
     }
 
     const renderFriendsList = () => {
@@ -111,7 +145,9 @@ export default function KakaoAPI() {
                 <div onClick={() => delMsg(el.nickname)}>삭제</div>
             </div>
         )
-    }
+    };
+
+
 
     return (
         <div>
@@ -120,6 +156,9 @@ export default function KakaoAPI() {
                     src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
                     width="222"
                 />
+            </div>
+            <div onClick={loginFormWithKakao}>
+                새로 로그인
             </div>
             <div onClick={getKakaoAuthToken}>
                 카카오 인증하기
@@ -135,13 +174,14 @@ export default function KakaoAPI() {
             <div onClick={kakaoCheckToken}>
                 토큰체크
             </div>
-            <div onClick={kakaoLogin}>
-                토큰 요청 하기
+            <div onClick={kakaoRefreshAccessToken}>
+                토큰 리프레쉬
             </div>
             {/* <input ref={ref} id='search-kakao-friends' onChange={onChangeSearch} type='text' /> */}
             <Input id='nickname' name='nickname' onChange={onChangeInput} type='text' />
             <Input id='date' name='date' onChange={onChangeInput} type='date' />
             <Input id='time' name='time' onChange={onChangeInput} type='time' />
+            <Input id='uuid' name='uuid' readonly={true} disabled={true} value={messageForm.uuid} />
             <textarea id='message' name='message' onChange={onChangeInput} rows={5} cols={40} maxLength={200} />
             <button onClick={setBookingMessage} type='button'>명단 추가하기</button>
             <button onClick={kakaoSetBookMessage} type='button'>발송예약</button>
@@ -151,28 +191,3 @@ export default function KakaoAPI() {
         </div>
     )
 }
-
-async function kakaoLogin()  {
-    await globalThis.Kakao.Auth.authorize({
-        redirectUri: 'http://localhost:3001/admin/kakao-api',
-        scope: 'profile, birthday, talk_message, friends',
-    });
-    return;
-};
-
-function kakaoLogOut() {
-    globalThis.Kakao.Auth.logout(function () {
-        console.log(globalThis.Kakao.Auth.getAccessToken());
-        globalThis.location.replace('/admin')
-    });
-}
-
-function getQueryString() {
-    if (globalThis.location.search.length > 0) {
-        const { search } = globalThis.location;
-        const index = search.indexOf('=');
-        return search.slice(index + 1);
-    }
-    console.log('There is no query string')
-    return;
-};

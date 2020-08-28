@@ -40,11 +40,10 @@ export default {
         })
     },
 
-    kakaoRefreshAccessToken(data) {
+    kakaoRefreshAccessToken() {
         return SendTo({
             url: '/admin/kakao-refresh-access-token',
-            method: 'post',
-            data: data,
+            method: 'get',
         })
     }
 };

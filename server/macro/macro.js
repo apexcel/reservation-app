@@ -5,5 +5,5 @@ const createSqlTable = require('./sql_create_tables')
 const genSqlTable = new CronJob('00 00 23 * * 0-6', async () => {
     await createSqlTable()
 })
-genSqlTable()
+genSqlTable.start();
 

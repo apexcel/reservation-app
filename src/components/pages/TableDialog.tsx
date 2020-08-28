@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import Table from '../table/Table.tsx'
-import ReservationApi from '../../utils/api/ReservationApi'
-import UserApi from '../../utils/api/UserApi'
 import { useRecoilState } from 'recoil'
+import jwtDecode from 'jwt-decode'
 import { tableBodyStateAtom, tableHeadStateAtom } from '../../atoms/tableAtoms.ts'
 import { userStateAtom } from '../../atoms/globalAtoms.ts'
 import { genTableName, isEmpty } from '../../utils/utils.ts'
-import Dialog from '../modal/Dialog.tsx'
 
-import jwtDecode from 'jwt-decode'
+import ReservationApi from '../../utils/api/ReservationApi'
+import UserApi from '../../utils/api/UserApi'
+
+import Table from '../table/Table.tsx'
+import Dialog from '../modal/Dialog.tsx'
+import LessonDialog from './user/LessonDialog.tsx'
 
 import socketio from 'socket.io-client'
 const io = socketio.connect('http://localhost:9000');
 
 import '../../styles/dialog.scss'
-import LessonDialog from './user/LessonDialog.tsx'
 
 interface DialogProps {
     isDialogVisible: boolean,
@@ -56,13 +57,12 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
         if (isEmpty(currentTableRowValue)) {
 
             const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);
-            if (ans) {
+            if (ans && !userState.isAdmin) {
                 const updated = updateTableBodyState(rowIndex, selectedHeadState.field)
                 setTableBody(updated)
-                await setBookedList(rowIndex, updated[rowIndex], selectedDate);
-                openL()
-                updateLesson()
+                setBookedList(rowIndex, updated[rowIndex], selectedDate);
                 io.emit('get', { table: updated })
+                //updateLesson()
                 return;
             }
             // 어드민일 경우
@@ -71,7 +71,7 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                 if (!isEmpty(willSetName)) {
                     const updated = updateTableBodyState(rowIndex, selectedHeadState.field, willSetName)
                     setTableBody(updated)
-                    await setBookedList(rowIndex, updated[rowIndex], selectedDate);
+                    setBookedList(rowIndex, updated[rowIndex], selectedDate);
                     io.emit('get', { table: updated })
                     return;
                 }
@@ -106,7 +106,8 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
             booked_data: JSON.stringify(newTableState)
         };
 
-        await ReservationApi.setReservationList(data);
+        await ReservationApi.setReservationList(data).then(res => console.log(res));
+        return;
     };
 
     const canBooking = () => {

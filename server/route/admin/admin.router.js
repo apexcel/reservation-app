@@ -22,7 +22,7 @@ router.post('/kakao-check-token', (req, resp, next) => {
     adminController.kakaoCheckToken(req, resp, next)
 })
 
-router.post('/kakao-refresh-access-token', (req, resp, next) => {
+router.get('/kakao-refresh-access-token', (req, resp, next) => {
     adminController.kakaoRefreshAccessToken(req, resp, next)
 })
 

@@ -59,7 +59,7 @@ function genTableName (date) {
 
 async function executeQuery() {
     await generateDataBase("dilettante");
-    await generateTable(TABLE_NAME);
+    generateTable(TABLE_NAME);
     //await insetTableData(TABLE_NAME);
     connection.end();
 }

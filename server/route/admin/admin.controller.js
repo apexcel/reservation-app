@@ -22,8 +22,13 @@ exports.kakaoAuthToken = async function (req, resp, next) {
             'code': req.body.code
         };
         const result = await axios.post(`${host}${path}`, querystring.stringify(data))
-        
         resp.status(200).json(result.data)
+        mongoConn.conn()
+        await KakaoToken.deleteMany({}, (err, res) => {
+            console.log('Delete all KakaoToken document')
+        })
+        await new KakaoToken(result.data).save();
+        mongoConn.disconn()
     }
     catch (err) {
         console.error(err);
@@ -46,7 +51,7 @@ exports.kakaoBookMessage = async function (req, resp, next) {
             
             const msg = {
                 profile_nickname: req.body[i].nickname,
-                app_uuid: 'temp',
+                app_uuid: req.body[i].uuid,
                 date: req.body[i].date,
                 time: req.body[i].time,
                 message: req.body[i].message,
@@ -69,16 +74,29 @@ exports.kakaoBookMessage = async function (req, resp, next) {
 }
 
 exports.kakaoRefreshAccessToken = async function (req, resp, next) {
-    try{
+    try {
+        mongoConn.conn()
+        const tokenData = await KakaoToken.findOne({});
+        console.log(tokenData)
         const configs = {
             grant_type: 'refresh_token',
             client_id: KAKAO_REST_API_KEY,
-            refresh_token: req.body.refresh_token,
+            refresh_token: tokenData.refresh_token,
         };
 
-        const res = await axios.post('https://kauth.kakao.com/oauth/token', querystring(configs))
+        const res = await axios.post('https://kauth.kakao.com/oauth/token', querystring.stringify(configs))
         console.log(res)
-        resp.send('good')
+        await KakaoToken.findOneAndUpdate({}, {access_token: res.data.access_token})
+
+        //TODO: 클라이언트에서 갱신하기
+        resp.status(200).json({
+            result: true,
+            access_token: res.data.access_token,
+            token_type: res.data.token_type,
+            expires_in: res.data.expires_in,
+            desc: 'Kakao new access token requested'
+        })
+        mongoConn.disconn()
     }
     catch (err) {
         console.error(err);
