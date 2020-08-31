@@ -44,6 +44,20 @@ function loginFormWithKakao() {
             console.log(err)
         },
     })
+};
+
+function unlinkKakao() {
+    globalThis.Kakao.API.request({
+        url: '/v1/user/unlink',
+        success: function (response) {
+            //alert('Kakao unlink succeed')
+            console.log(response);
+        },
+        fail: function (error) {
+            //alert('Kakao unlink error: ${error}')
+            console.log(error);
+        },
+    });
 }
 
 export default function KakaoAPI() {
@@ -77,8 +91,10 @@ export default function KakaoAPI() {
 
     const getKakaoAuthToken = async () => {
         if (!globalThis.Kakao.Auth.getAccessToken()) {
-            const res = await AdminApi.getKakaoAccessToken({ code: getQueryString() });
-            globalThis.Kakao.Auth.setAccessToken(res.data.access_token)
+            if (globalThis.location.search.length > 0) {
+                const res = await AdminApi.getKakaoAccessToken({ code: getQueryString() });
+                globalThis.Kakao.Auth.setAccessToken(res.data.access_token)
+            }
         }
         return;
     }
@@ -176,6 +192,9 @@ export default function KakaoAPI() {
             </div>
             <div onClick={kakaoRefreshAccessToken}>
                 토큰 리프레쉬
+            </div>
+            <div onClick={unlinkKakao}>
+                카카오 언링크
             </div>
             {/* <input ref={ref} id='search-kakao-friends' onChange={onChangeSearch} type='text' /> */}
             <Input id='nickname' name='nickname' onChange={onChangeInput} type='text' />
