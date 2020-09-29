@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import jwtDecode from 'jwt-decode'
-import { tableBodyStateAtom, tableHeadStateAtom } from '../../atoms/tableAtoms.ts'
-import { userStateAtom } from '../../atoms/globalAtoms.ts'
-import { genTableName, isEmpty } from '../../utils/utils.ts'
 
-import ReservationApi from '../../utils/api/ReservationApi'
-import UserApi from '../../utils/api/UserApi'
+import { tableBodyStateAtom, tableHeadStateAtom } from 'Atoms/tableAtoms.ts'
+import { userStateAtom } from 'Atoms/globalAtoms.ts'
+import { genTableName, isEmpty } from 'Utils/utils.ts'
 
-import Table from '../table/Table.tsx'
-import Dialog from '../modal/Dialog.tsx'
+import ReservationApi from 'Api/ReservationApi'
+import UserApi from 'Api/UserApi'
+
+import Table from 'Components/table/Table.tsx'
+import Dialog from 'Components/modal/Dialog.tsx'
 import LessonDialog from './user/LessonDialog.tsx'
 
 import socketio from 'socket.io-client'
 const io = socketio.connect('http://localhost:9000');
 
-import '../../styles/dialog.scss'
+import 'Styles/dialog.scss'
 
 interface DialogProps {
     isDialogVisible: boolean,

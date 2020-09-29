@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import '../../styles/header.scss'
+import 'Styles/header.scss'
 
 export default function Header({ setIsLogin, userState }) {
 

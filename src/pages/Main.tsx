@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import Calendar from '../calendar/Calendar.tsx'
-import TableDialog from './TableDialog.tsx'
-import ReservationApi from '../../utils/api/ReservationApi'
-import { createEmptyTableRow, fulfillEmptyObject } from '../../utils/tableUtils.ts'
-import { genTableName } from '../../utils/utils.ts'
-import { tableHeadStateAtom, tableBodyStateAtom } from '../../atoms/tableAtoms.ts'
-import { currentSelectedDateAtom, getTableHeadersEachDay } from '../../atoms/globalAtoms.ts'
 import { useRecoilState, useRecoilValue } from 'recoil'
+
+import { createEmptyTableRow, fulfillEmptyObject } from 'Utils/tableUtils.ts'
+import { genTableName } from 'Utils/utils.ts'
+import { tableHeadStateAtom, tableBodyStateAtom } from 'Atoms/tableAtoms.ts'
+import { currentSelectedDateAtom, getTableHeadersEachDay } from 'Atoms/globalAtoms.ts'
+
+import TableDialog from './TableDialog.tsx'
+import Calendar from 'Components/calendar/Calendar.tsx'
+
+import ReservationApi from 'Api/ReservationApi'
 
 export default function Main() {
 

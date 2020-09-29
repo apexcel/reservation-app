@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { autoComplete } from '../../../utils/autoComplete.ts'
-import useInput from '../../../reducer/useInput.ts'
-import AdminApi from '../../../utils/api/AdminApi';
-import Input from '../../modal/Input.tsx'
+import useInput from 'Reducers/useInput.ts'
+import AdminApi from 'Api/AdminApi';
+import Input from 'Components/modal/Input.tsx'
 
-import '../../../styles/kakaoapi.scss'
+import 'Styles/kakaoapi.scss'
 
 const initForm = {
     nickname: '',

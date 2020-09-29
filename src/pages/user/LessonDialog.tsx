@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
-import Dialog from '../../modal/Dialog.tsx'
+import Dialog from 'Components/modal/Dialog.tsx'
 
 
 export default function LessonDialog({ closeDialog }) {
-
-
-    
 
     return (
         <Dialog 

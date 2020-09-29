@@ -1,11 +1,13 @@
 import React from 'react';
-import UserApi from '../../utils/api/UserApi'
-import AdminApi from '../../utils/api/AdminApi'
 import { useRecoilState } from 'recoil'
-import { userStateAtom } from '../../atoms/globalAtoms.ts'
-import { isEmpty } from '../../utils/utils.ts'
-import Input from '../modal/Input.tsx'
-import useInput from '../../reducer/useInput.ts'
+
+import { userStateAtom } from 'Atoms/globalAtoms.ts'
+import { isEmpty } from 'Utils/utils.ts'
+
+import Input from 'Components/modal/Input.tsx'
+import useInput from 'Reducers/useInput.ts'
+import AdminApi from 'Api/AdminApi'
+import UserApi from 'Api/UserApi'
 
 export default function SignIn({ setIsLogin, adminLogin }) {
 

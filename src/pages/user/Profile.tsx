@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import ReservationApi from '../../../utils/api/ReservationApi'
+import ReservationApi from '../../../api/ReservationApi'
 
-import '../../../styles/profile.scss';
+import 'Styles/profile.scss';
 import Table from '../../table/Table.tsx';
 
 export default function Profile({ userState }) {

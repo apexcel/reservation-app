@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { isEmpty } from '../../utils/utils.ts'
+import { isEmpty } from '../../../utils/utils.ts'
 
 interface TableRowProps {
     className: string,

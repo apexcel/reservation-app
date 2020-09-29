@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil'
-import { baseURLAtom } from '../../../atoms/globalAtoms.ts'
-import { isEmpty } from '../../../utils/utils.ts'
-import useInput from '../../../reducer/useInput.ts';
+import { baseURLAtom } from 'Atoms/globalAtoms.ts'
+import useInput from 'Reducers/useInput.ts';
 import axios from 'axios';
 
-import Input from '../../modal/Input.tsx'
-import SelectOption from '../../modal/SelectOption.tsx';
+import Input from 'Components/modal/Input.tsx'
+import SelectOption from 'Components/modal/SelectOption.tsx';
 
-import '../../../styles/common.scss'
-import '../../../styles/signup.scss'
+import 'Styles/common.scss'
+import 'Styles/signup.scss'
 
 export default function SignUp() {
 

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Route, Switch, useHistory } from 'react-router-dom'
-import useInput from '../../../reducer/useInput.ts'
-import UserApi from '../../../utils/api/UserApi'
+import useInput from 'Reducers/useInput.ts'
+import UserApi from 'Api/UserApi'
 
-import Input from '../../modal/Input.tsx'
+import Input from 'Components/modal/Input.tsx'
 import Searched from './Searched.tsx'
 
-import '../../../styles/search.scss'
+import 'Styles/search.scss'
 
 export default function Search() {
 

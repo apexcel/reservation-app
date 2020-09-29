@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import UserApi from '../../utils/api/UserApi'
+import UserApi from 'Api/UserApi'
 
-import '../../styles/kakaodevapp.scss'
+import 'Styles/kakaodevapp.scss'
 
 export default function KakaoDevApp() {
 

@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { useRecoilState } from 'recoil'
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 
-// custom import
-import { userStateAtom } from '../atoms/globalAtoms.ts'
-import { isEmpty } from '../utils/utils.ts'
+// custom
+import { userStateAtom } from 'Atoms/globalAtoms.ts'
+import { isEmpty } from 'Utils/utils.ts'
+import RestrictedRoute from 'Components/RestrictedRoute.tsx'
 
 // pages
-import Header from './pages/Header.tsx'
-import Footer from './pages/Footer.tsx'
+import Header from './pages/layout/Header.tsx'
+import Footer from './pages/layout/Footer.tsx'
 import Profile from './pages/user/Profile.tsx'
 import Main from './pages/Main.tsx'
 import SignIn from './pages/SignIn.tsx'
@@ -18,7 +19,7 @@ import ErrorPage from './pages/ErrorPage.tsx'
 import KakaoDevApp from './pages/KakaoDevApp.tsx'
 
 // styles
-import '../styles/layout.scss'
+import 'Styles/layout.scss'
 
 // constants
 const kakaoSDK = 'https://developers.kakao.com/sdk/js/kakao.js';
@@ -93,10 +94,16 @@ export default function App() {
                     <div className='container'>
                         <Switch>
                             <Route exact path='/' component={IndexPage} />
-                            <Route path='/profile' component={ProfilePage} />
+                            <RestrictedRoute 
+                                path='/profile'
+                                component={<Profile userState={userState}/>}
+                                fallback={<ErrorPage httpStatus={401}/>}
+                                isAllow={isLogin}
+                            />
                             <Route path='/admin' component={AdminPage} />
                             <Route path='/kakao-devapp' component={() => <KakaoDevApp />} />
                             <Route render={() => <ErrorPage httpStatus={404} />} />
+                            <Redirect to='/' />
                         </Switch>
                     </div>
                     <Footer />

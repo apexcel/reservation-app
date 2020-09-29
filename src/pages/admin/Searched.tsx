@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import UpdateLessonDialog from './UpdateLessonDialog.tsx';
-import UserApi from '../../../utils/api/UserApi'
+import UserApi from '../../../api/UserApi'
 
 export default function Searched({ match }) {
     const [searchedUserInfo, setSearchedUserInfo] = useState({});

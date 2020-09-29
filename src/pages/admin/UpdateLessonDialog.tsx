@@ -1,12 +1,11 @@
 import React, { useEffect, useReducer, useState } from 'react'
-import axios from 'axios'
-import UserApi from '../../../utils/api/UserApi'
-import AdminApi from '../../../utils/api/AdminApi'
-import { formattedDateString } from '../../../utils/utils.ts'
-import useInput from '../../../reducer/useInput.ts'
-import SelectOption from '../../modal/SelectOption.tsx';
-import Dialog from '../../modal/Dialog.tsx'
-import Input from '../../modal/Input.tsx'
+import UserApi from 'Api/UserApi'
+import AdminApi from 'Api/AdminApi'
+import { formattedDateString } from 'Utils/utils.ts'
+import useInput from 'Reducers/useInput.ts'
+import SelectOption from 'Components/modal/SelectOption.tsx';
+import Dialog from 'Components/modal/Dialog.tsx'
+import Input from 'Components/modal/Input.tsx'
 
 const initForm = {
     lessonName: '',

@@ -9,8 +9,8 @@ interface RestrictedRoute {
 }
 
 export default function RestrictedRoute({ 
-    component: Component, fallback: Fallback, isAllow
+    component, fallback, isAllow
 }: RestrictedRoute) {
 
-    return isAllow ? <Component /> : <Fallback />;
+    return isAllow ? component : fallback;
 }

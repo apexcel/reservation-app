@@ -1,5 +1,5 @@
 import React from 'react'
-import SVG from '../modal/SVG.tsx'
+import SVG from 'Components/modal/SVG.tsx'
 
 export default function Footer() {
 

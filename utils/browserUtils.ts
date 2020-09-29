@@ -1,5 +1,3 @@
-import { debounce, throttle } from './utils.ts'
-
 export function autoComplete(input: HTMLInputElement, arr: Array<String>) {
     let currentFocus;
     input.addEventListener('input', (ev) => {

@@ -16,10 +16,10 @@
     "include": [
         "./src/**/*.tsx",
         "@type", 
-        "src/components/App.tsx", 
+        "src/App.tsx", 
         "../tulib/src/calendar/Calendar.ts", 
-        "src/reducer/useInput.ts",
-        "src/utils/",
+        "src/reducers/useInput.ts",
+        "utils",
         "types"
     ],
     "exclude": [
