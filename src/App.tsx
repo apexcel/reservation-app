@@ -74,18 +74,6 @@ export default function App() {
         }
     }, [isLogin])
 
-    const IndexPage = () => {
-        return isLogin ? <Main /> : <SignIn setIsLogin={setIsLogin} adminLogin={false} />
-    }
-
-    const AdminPage = () => {
-        return isLogin && userState.isAdmin ? <Admin /> : <SignIn setIsLogin={setIsLogin} adminLogin={true} />
-    }
-
-    const ProfilePage = () => {
-        return isLogin ? <Profile userState={userState} /> : <ErrorPage httpStatus={401} />
-    }
-
     return (
         <>
             {isLoading ? 'Loading...' :
@@ -93,16 +81,30 @@ export default function App() {
                     {isLogin ? <Header setIsLogin={setIsLogin} userState={userState} /> : null}
                     <div className='container'>
                         <Switch>
-                            <Route exact path='/' component={IndexPage} />
-                            <RestrictedRoute 
-                                path='/profile'
-                                component={<Profile userState={userState}/>}
-                                fallback={<ErrorPage httpStatus={401}/>}
+                            <RestrictedRoute
+                                path='/'
+                                component={<Main />}
+                                fallback={<SignIn setIsLogin={setIsLogin} adminLogin={false} />}
                                 isAllow={isLogin}
                             />
-                            <Route path='/admin' component={AdminPage} />
-                            <Route path='/kakao-devapp' component={() => <KakaoDevApp />} />
-                            <Route render={() => <ErrorPage httpStatus={404} />} />
+                            <RestrictedRoute
+                                path='/profile'
+                                component={<Profile userState={userState} />}
+                                fallback={<ErrorPage httpStatus={401} />}
+                                isAllow={isLogin}
+                            />
+                            <RestrictedRoute
+                                path='/admin'
+                                component={<Admin />}
+                                fallback={<SignIn setIsLogin={setIsLogin} adminLogin={true} />}
+                                isAllow={isLogin && userState.isAdmin}
+                            />
+                            <RestrictedRoute
+                                path='/kakao-devapp'
+                                component={<KakaoDevApp />}
+                                fallback={<Main />}
+                                isAllow={true}
+                            />
                             <Redirect to='/' />
                         </Switch>
                     </div>
