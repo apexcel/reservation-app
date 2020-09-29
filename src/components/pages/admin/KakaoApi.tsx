@@ -35,6 +35,8 @@ function getQueryString() {
     return search.slice(index + 1);
 };
 
+// TODO: 도메인 등록해서 사용하는 것이 안전
+// 호스트 ip변경에 따라 접속 불가능 할 수도 있다
 function loginFormWithKakao() {
     globalThis.Kakao.Auth.loginForm({
         success: function (authObj) {

@@ -1,6 +1,12 @@
 import React from 'react'
 
-export default function Dialog({ closeDialog, dialogHeader, dialogBody}) {
+interface DialogProps {
+    dialogHeader: string | HTMLElement,
+    children: any,
+    closeDialog: () => void
+}
+
+export default function Dialog({ closeDialog, dialogHeader, children}: DialogProps) {
     return (
         <dialog className='dialog'>
             <div className='dialog-header'>
@@ -10,7 +16,7 @@ export default function Dialog({ closeDialog, dialogHeader, dialogBody}) {
                 </div>
                 {dialogHeader}
             </div>
-            {dialogBody}
+            {children}
         </dialog>
     )
 }

@@ -1,5 +1,10 @@
 import React from 'react'
 
+interface InputProps<CommonFormType> {
+    CommonFormType,
+    
+}
+
 export default function Input({
     className,
     name,

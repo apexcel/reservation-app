@@ -5,7 +5,10 @@ exports.getBookedData = async function (req, resp, next) {
         const query = "SELECT * FROM ??";
         const queryParams = `time_table${req.body.date}`
         conn.query(query, queryParams, (err, row) => {
-            if (err) throw err;
+            if (err) {
+                console.error(err);
+                resp.status(500).json({msg: "Can not find table"});
+            }
             resp.status(200).json(row)
             conn.release()
         });
