@@ -1,10 +1,12 @@
-export function consoleLog(data: any, {...options}) {
-    const {color, fontWeight} = options;
+import { debounce } from './utils.ts';
+
+export function consoleLog(data: any, { ...options }) {
+    const { color, fontWeight } = options;
     const _emoji = '\u{1F6A7}';
     const _color = color ? color : 'orange';
     const _fontWeight = fontWeight ? fontWeight : 'normal';
 
-    console.log(`${_emoji} %c${data}`, 
+    console.log(`${_emoji} %c${data}`,
         `color: ${_color}; 
         font-weight: ${_fontWeight};`);
     return;
