@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Redirect, Switch } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 
 // custom
 import { userStateAtom } from 'Atoms/globalAtoms.ts'
 import { isEmpty } from 'Utils/utils.ts'
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 import RestrictedRoute from 'Components/RestrictedRoute.tsx'
 
 // pages
@@ -55,23 +56,28 @@ export default function App() {
     });
 
     useEffect(() => {
-        const token = localStorage.getItem('userToken');
-        if (!isEmpty(token)) {
-            const decodedUserState = jwtDecode(token);
-            const isExpired = new Date(decodedUserState.exp * 1000) < new Date() ? true : false;
-            if (isExpired) {
-                setIsLogin(false)
-                localStorage.clear()
+        hasUserCookieState();
+    }, [isLogin]);
+
+    const hasUserCookieState = () => {
+        const userCookie = getCookie('userToken');
+        if (!isEmpty(userCookie)) {
+            const token = jwtDecode(userCookie);
+            const isExpired = new Date(token.exp * 1000) < new Date() ? true : false;
+            if (!isExpired) {
+                setIsLogin(true);
+                setUserState(token);
             }
             else {
-                setUserState(decodedUserState);
-                setIsLogin(true);
+                setIsLogin(false);
+                deleteCookie('userToken');
             }
         }
         else {
             setIsLogin(false);
         }
-    }, [isLogin]);
+        return
+    };
 
     return (
         <>

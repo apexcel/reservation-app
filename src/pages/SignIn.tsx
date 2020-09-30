@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { isEmpty } from 'Utils/utils.ts'
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 
 import Input from 'Components/modal/Input.tsx'
 import useInput from 'Reducers/useInput.ts'
@@ -23,7 +24,7 @@ export default function SignIn({ setIsLogin, adminLogin }) {
         try {
             if (adminLogin) response = await AdminApi.signIn(data).then(resp => resp.data);
             else response = await UserApi.signIn(data).then(resp => resp.data);
-            localStorage.setItem('userToken', response.token);
+            setCookie('userToken', response.token);
             setIsLogin(true);
         }
         catch (err) {

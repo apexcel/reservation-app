@@ -6,13 +6,26 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
     mode: 'production',
+    
     entry: {
         main: './src/index.js'
     },
+
     output: {
         filename: '[name].js',
         path: path.resolve('./dist'),
         publicPath: '/'
+    },
+
+    resolve: {
+        alias: {
+            Utils: path.resolve(__dirname, "utils/"),
+            Atoms: path.resolve(__dirname, "src/atoms/"),
+            Api: path.resolve(__dirname, "api/"),
+            Components: path.resolve(__dirname, "src/components/"),
+            Reducers: path.resolve(__dirname, "src/reducers/"),
+            Styles: path.resolve(__dirname, "src/styles/")
+        }
     },
 
     module: {

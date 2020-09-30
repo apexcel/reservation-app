@@ -1,16 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
+
 import 'Styles/header.scss'
 
 export default function Header({ setIsLogin, userState }) {
 
-    const logout = (e) => {
-        e.preventDefault();
+    const logout = (ev) => {
+        ev.preventDefault();
         setIsLogin(false);
-        localStorage.clear();
+        deleteCookie('userToken');
         globalThis.location.replace('/');
-    }
+    };
 
     return (
         <header className='main-top-header'>
