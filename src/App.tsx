@@ -25,14 +25,14 @@ import 'Styles/layout.scss'
 const kakaoSDK = 'https://developers.kakao.com/sdk/js/kakao.js';
 const jsKey = 'ea144ad47a8a64a6e0b341fbc81d29f5';
 
-async function addScriptTagForKakaoApi() {
+async function addKakaoScript() {
     const script = document.createElement('script');
-    script.id = 'kakao-sdk'
+    script.id = 'kakao-sdk';
     script.src = kakaoSDK;
     script.async = true;
-    document.body.append(script)
-    globalThis.Kakao.init(jsKey)
-    console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
+    document.body.append(script);
+    globalThis.Kakao.init(jsKey);
+    console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized());
 }
 
 export default function App() {
@@ -41,9 +41,9 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        setIsLoading(true)
+        setIsLoading(true);
         if (!globalThis.Kakao) {
-            addScriptTagForKakaoApi()
+            addKakaoScript();
         }
         else {
             if (!globalThis.Kakao.isInitialized()) {
@@ -51,9 +51,8 @@ export default function App() {
                 console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
             }
         }
-        setIsLoading(false)
-        console.log(globalThis.Kakao)
-    })
+        setIsLoading(false);
+    });
 
     useEffect(() => {
         const token = localStorage.getItem('userToken');
@@ -72,7 +71,7 @@ export default function App() {
         else {
             setIsLogin(false);
         }
-    }, [isLogin])
+    }, [isLogin]);
 
     return (
         <>
@@ -83,21 +82,22 @@ export default function App() {
                         <Switch>
                             <RestrictedRoute
                                 path='/'
+                                exact
                                 component={<Main />}
                                 fallback={<SignIn setIsLogin={setIsLogin} adminLogin={false} />}
-                                isAllow={isLogin}
-                            />
-                            <RestrictedRoute
-                                path='/profile'
-                                component={<Profile userState={userState} />}
-                                fallback={<ErrorPage httpStatus={401} />}
                                 isAllow={isLogin}
                             />
                             <RestrictedRoute
                                 path='/admin'
                                 component={<Admin />}
                                 fallback={<SignIn setIsLogin={setIsLogin} adminLogin={true} />}
-                                isAllow={isLogin && userState.isAdmin}
+                                isAllow={isLogin === true && userState.isAdmin === true}
+                            />
+                            <RestrictedRoute
+                                path='/profile'
+                                component={<Profile userState={userState} />}
+                                fallback={<ErrorPage httpStatus={401} />}
+                                isAllow={isLogin}
                             />
                             <RestrictedRoute
                                 path='/kakao-devapp'

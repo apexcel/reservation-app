@@ -1,18 +1,13 @@
 import React from 'react';
-import { useRecoilState } from 'recoil'
 
-import { userStateAtom } from 'Atoms/globalAtoms.ts'
 import { isEmpty } from 'Utils/utils.ts'
 
 import Input from 'Components/modal/Input.tsx'
 import useInput from 'Reducers/useInput.ts'
 import AdminApi from 'Api/AdminApi'
 import UserApi from 'Api/UserApi'
-import { Redirect } from 'react-router-dom';
 
 export default function SignIn({ setIsLogin, adminLogin }) {
-
-    const [userState, setUserState] = useRecoilState(userStateAtom);
 
     const [{ username, password }, onChangeInput] = useInput({
         username: '', password: ''
