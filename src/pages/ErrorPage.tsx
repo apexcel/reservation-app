@@ -1,15 +1,18 @@
 import React from 'react'
 
-export default function ErrorPage({ httpStatus }) {
+interface ErrorPageProps {
+    httpStatus: number
+}
+
+export default function ErrorPage({ httpStatus }: ErrorPageProps) {
 
     const renderHttpStatusCode = () => {
-
         const codes = {
             400: 'Bad Request',
             401: 'Unauthorized',
             403: 'Forbidden',
             404: 'Not Found'
-        }
+        };
         
         return (
             <>

@@ -27,8 +27,8 @@ interface DialogProps {
 export default function TableDialog({ isDialogVisible, closeDialog, selectedDateState }: DialogProps) {
 
     const [lessonDialogShow, setLessonDialogShow] = useState(false);
-    const openL = () => {setLessonDialogShow(true)}
-    const closeL = () => {setLessonDialogShow(false)}
+    const openL = () => { setLessonDialogShow(true) }
+    const closeL = () => { setLessonDialogShow(false) }
 
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom)
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
@@ -149,12 +149,13 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                 <Dialog
                     closeDialog={closeDialog}
                     dialogHeader={renderDialogHeader()}
-                    dialogBody={
-                        <Table
-                            tHeadState={tableHead}
-                            tBodyState={tableBody}
-                            onTableRowClick={onTableRowClick} />}
-                /> : null}
+                >
+                    <Table
+                        tHeadState={tableHead}
+                        tBodyState={tableBody}
+                        onTableRowClick={onTableRowClick} 
+                    />
+                </Dialog> : null}
             {lessonDialogShow ? <LessonDialog closeDialog={closeL} /> : null}
         </>
     )

@@ -43,6 +43,7 @@ exports.kakaoAuthToken = async function(req, resp, next) {
 
 exports.createToken = async function (req, resp, next) {
     try {
+        console.log(req.body)
         mongoConn.conn();
         const matchUser = await User.findOne(req.body);
 

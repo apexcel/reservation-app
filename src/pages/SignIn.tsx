@@ -8,6 +8,7 @@ import Input from 'Components/modal/Input.tsx'
 import useInput from 'Reducers/useInput.ts'
 import AdminApi from 'Api/AdminApi'
 import UserApi from 'Api/UserApi'
+import { Redirect } from 'react-router-dom';
 
 export default function SignIn({ setIsLogin, adminLogin }) {
 
@@ -17,38 +18,29 @@ export default function SignIn({ setIsLogin, adminLogin }) {
         username: '', password: ''
     });
 
-    const getUserInfo = async () => {
+    const login = async (username, password) => {
         const data = {
             username: username,
-            password: password,
+            password: password
         };
-        if (adminLogin) {
-            try {
-                const adminResp = await AdminApi.signIn(data).then(resp => resp.data);
-                localStorage.setItem('userToken', adminResp.token);
-                setIsLogin(true)
-            }
-            catch (err) {
-                throw err;
-            }
+        let response = null;
+
+        try {
+            if (adminLogin) response = await AdminApi.signIn(data).then(resp => resp.data);
+            else response = await UserApi.signIn(data).then(resp => resp.data);
+            localStorage.setItem('userToken', response.token);
+            setIsLogin(true);
         }
-        else {
-            try {
-                const userResp = await UserApi.signIn(data).then(resp => resp.data);
-                localStorage.setItem('userToken', userResp.token);
-                setIsLogin(true)
-            }
-            catch (err) {
-                throw err;
-            }
+        catch (err) {
+            throw err;
         }
         return;
-    }
+    };
 
     const onSignIn = async (ev) => {
         ev.preventDefault();
         if (isEmpty(username) || isEmpty(password)) return;
-        else getUserInfo();
+        else return login(username, password);
     };
 
     return (
