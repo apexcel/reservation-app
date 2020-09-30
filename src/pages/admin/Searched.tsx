@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import UpdateLessonDialog from './UpdateLessonDialog.tsx';
-import UserApi from '../../../api/UserApi'
+import UserApi from 'Api/UserApi'
+import jwtDecode from 'jwt-decode'
 
 export default function Searched({ match }) {
     const [searchedUserInfo, setSearchedUserInfo] = useState({});
@@ -13,8 +14,9 @@ export default function Searched({ match }) {
 
         if (match.params.name !== undefined || match.params.name !== '') {
             UserApi.getUserInfo(match.params.name).then(resp => {
+                console.log(resp)
                 if (isMounted) {
-                    setSearchedUserInfo(resp.data)
+                    setSearchedUserInfo(jwtDecode(resp.data.token));
                 }
             });
         }

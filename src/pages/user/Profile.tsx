@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import { Link, Route, Switch } from 'react-router-dom'
 import ReservationApi from '../../../api/ReservationApi'
 
-import 'Styles/profile.scss';
-import Table from '../../table/Table.tsx';
+import CardBox from 'Components/CardBox.tsx';
+import DescriptionList from 'Components/DescriptionList.tsx';
+import EditProfile from './EditProfile.tsx';
+
+import 'Styles/Profile.scss';
 
 export default function Profile({ userState }) {
 
-    const className = 'profile__page';
     const [reservations, setReservations] = useState([]);
     const [refined, setRefined] = useState([]);
 
@@ -32,15 +35,22 @@ export default function Profile({ userState }) {
         const data = {
             fullname: userState.fullname
         };
-        const response = await ReservationApi.getUserReservationList(data);
-        console.log(response)
-        return response;
+        try {
+            const response = await ReservationApi.getUserReservationList(data);
+            console.log(response)
+            return response;
+        }
+        catch (err) {
+            throw err;
+        }
     };
 
     const refinedReservations = () => {
         const bookedDate = [];
         const bookedDataList = [];
         const finalList = [];
+
+        console.log(reservations)
 
         reservations.map((el, idx) => {
             bookedDate.push(Object.keys(el)[0].slice(10));
@@ -79,59 +89,61 @@ export default function Profile({ userState }) {
         })
     };
 
-
-    const renderReservations = () => {
+    const renderReservationList = () => {
         const teacherNames = {
             so: '소정',
             hyun: '현영',
             jung: '상정'
         };
         const teacher = findTeacher();
-        console.log(teacher)
+        console.log(teacher);
+
         return refined.map((el, idx) =>
-            <div key={idx} className={`${className}-booked-list`}>
-                <span className={`${className}-booked-list-item`} >{el.bookedDate}</span>
-                <span className={`${className}-booked-list-item`} >{el.bookedTime}시</span>
-                <span className={`${className}-booked-list-item`} >{teacherNames[teacher[idx]]}</span>
-            </div>
+            <DescriptionList key={idx} title={el.bookedDate}>
+                <span>{el.bookedTime}시</span>
+                <span>{teacherNames[teacher[idx]]}</span>
+            </DescriptionList>
         );
-    }
+    };
 
     const renderLessonList = () => {
         console.log(userState.lessons)
         return userState.lessons.map((el, idx) => {
             return (
-                <div key={idx}>
-                    <div>레슨: {el.name}</div>
+                <DescriptionList key={idx} title={el.name}>
                     <div>시작일: {el.startDate}</div>
                     <div>종료일: {el.endDate}</div>
                     <div>남은 횟수: {el.counter}</div>
-                </div>
+                </DescriptionList>
             )
         })
     };
 
-    const th = [
-        { name: '레슨명', field: 'lessonName' },
-        { name: '시작일', field: 'startDate' },
-    ]
-
-    const tb = [
-        {lessonsName: 'A', startDate: 'today'}
-    ]
     return (
-        <div className={`${className}-container`}>
-            <div className={`${className}-userinfo`}>
-                <h1>My Information</h1>
-                <div>Your username: {userState.username}</div>
-                <div>Your realname: {userState.fullname}</div>
-                <h2>남은횟수와 레슨권 기간</h2>
-                {renderLessonList()}
-            </div>
-            <div className={`${className}-booked-list-container`}>
-                <h1>Recent Booked dates</h1>
-                {renderReservations()}
-            </div>
+        <div className={`profile-container`}>
+            <Switch>
+                <Route exact path="/profile/:id" component={EditProfile} />
+                <>
+                    <div className='column'>
+                        <CardBox title='내 정보' footer={<Link to={`/profile/@${userState.username}`}>수정하기</Link>}>
+                            <DescriptionList title='아이디'>
+                                {userState.username}
+                            </DescriptionList>
+                            <DescriptionList title='이름'>
+                                {userState.fullname}
+                            </DescriptionList>
+                        </CardBox>
+                        <CardBox title='예약 정보' footer={<Link to={`/profile/@${userState.username}`}>수정하기</Link>}>
+                            {renderReservationList()}
+                        </CardBox>
+                    </div>
+                    <div className='column'>
+                        <CardBox title='레슨권 정보'>
+                            {renderLessonList()}
+                        </CardBox>
+                    </div>
+                </>
+            </Switch>
         </div>
     )
 }

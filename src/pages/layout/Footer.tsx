@@ -32,7 +32,7 @@ export default function Footer() {
                         <span className='footer-desc'>PM 13:00 ~ 23:00 / Monday off.</span>
                     </div>
                     <div className='footer-item right-item'>
-                        <span>Dev & Designed by <a href='https://github.com/oogie826' target='_blank'>oogie826</a></span>
+                        <span>Copyright <a href='https://github.com/oogie826' target='_blank'>@oogie826</a></span>
                     </div>
                 </div>
             </section>

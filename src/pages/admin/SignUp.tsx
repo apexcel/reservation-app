@@ -7,7 +7,6 @@ import axios from 'axios';
 import Input from 'Components/modal/Input.tsx'
 import SelectOption from 'Components/modal/SelectOption.tsx';
 
-import 'Styles/common.scss'
 import 'Styles/signup.scss'
 
 export default function SignUp() {

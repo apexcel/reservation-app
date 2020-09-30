@@ -20,7 +20,8 @@ import ErrorPage from './pages/ErrorPage.tsx'
 import KakaoDevApp from './pages/KakaoDevApp.tsx'
 
 // styles
-import 'Styles/layout.scss'
+import 'Styles/App.scss'
+import 'Styles/Common.scss'
 
 // constants
 const kakaoSDK = 'https://developers.kakao.com/sdk/js/kakao.js';
@@ -56,21 +57,24 @@ export default function App() {
     });
 
     useEffect(() => {
-        hasUserCookieState();
+        probeUserCookie();
     }, [isLogin]);
 
-    const hasUserCookieState = () => {
+    const probeUserCookie = () => {
         const userCookie = getCookie('userToken');
+        console.log(isEmpty(userCookie))
         if (!isEmpty(userCookie)) {
             const token = jwtDecode(userCookie);
-            const isExpired = new Date(token.exp * 1000) < new Date() ? true : false;
+            const isExpired = new Date(token.exp * 1000) < new Date();
             if (!isExpired) {
                 setIsLogin(true);
                 setUserState(token);
             }
             else {
+                alert("세션이 만료되었습니다.");
                 setIsLogin(false);
                 deleteCookie('userToken');
+                globalThis.location.replace('/');
             }
         }
         else {

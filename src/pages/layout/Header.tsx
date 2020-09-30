@@ -3,14 +3,12 @@ import { Link } from 'react-router-dom'
 
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 
-import 'Styles/header.scss'
-
 export default function Header({ setIsLogin, userState }) {
 
     const logout = (ev) => {
         ev.preventDefault();
-        setIsLogin(false);
         deleteCookie('userToken');
+        setIsLogin(false);
         globalThis.location.replace('/');
     };
 

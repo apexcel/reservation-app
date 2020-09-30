@@ -1,0 +1,12 @@
+.profile-container {
+    display: flex;
+    min-height: 100vh;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 2rem;
+}
+
+.column {
+    display: blcok;
+}

@@ -48,7 +48,7 @@ export default function SignIn({ setIsLogin, adminLogin }) {
                 <Input id='username' name='username' className='common__input' onChange={onChangeInput} type='text' placeHolder='Username' />
                 <Input id='password' name='password' className='common__input' onChange={onChangeInput} type='password' placeHolder='Password' />
                 <div className='btn-field'>
-                    <button className='btn-primary' type='button' onClick={onSignIn}>Sign in</button>
+                    <button className='btn btn-primary' type='button' onClick={onSignIn}>Sign in</button>
                 </div>
             </fieldset>
         </form>
