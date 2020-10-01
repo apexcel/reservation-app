@@ -22,9 +22,10 @@ export default function SignIn({ setIsLogin, adminLogin }) {
         let response = null;
 
         try {
-            if (adminLogin) response = await AdminApi.signIn(data).then(resp => resp.data);
-            else response = await UserApi.signIn(data).then(resp => resp.data);
-            setCookie('userToken', response.token);
+            if (adminLogin) response = await AdminApi.signIn(data);
+            else response = await UserApi.signIn(data);
+            setCookie('userToken', response.data.access_token);
+            console.log(response)
             setIsLogin(true);
         }
         catch (err) {

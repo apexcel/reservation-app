@@ -59,12 +59,8 @@ exports.createToken = async function (req, resp, next) {
                 SECRET_KEY,
                 { expiresIn: '10m' }
             );
-
-            resp.status(201).json({
-                result: true,
-                desc: 'Token created',
-                token
-            });
+            resp.header('Authentication', token);
+            resp.status(201).json({access_token: token});
         }
         else {
             resp.status(400).json({ error: 'Invalid user' })
@@ -80,6 +76,7 @@ exports.createToken = async function (req, resp, next) {
 
 exports.signUpUser = async function (req, resp, next) {
     try {
+        console.log(req.body)
         mongoConn.conn();
         const updateQuery = {
             username: req.body.username,
@@ -103,11 +100,11 @@ exports.signUpUser = async function (req, resp, next) {
 
         await User.findOneAndUpdate(searchQuery, updateQuery, options, (err, res) => {
             if (err) throw err;
-            mongoConn.disconn();
             resp.status(201).json({
                 result: true,
                 desc: 'User registered'
             });
+            mongoConn.disconn();
         })
     }
     catch (err) {

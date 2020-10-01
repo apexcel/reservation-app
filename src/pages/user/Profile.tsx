@@ -27,8 +27,10 @@ export default function Profile({ userState }) {
     }, [])
 
     useEffect(() => {
-        console.log(reservations)
-        refinedReservations()
+        if (reservations) {
+            console.log(reservations)
+            refinedReservations()
+        }
     }, [reservations])
 
     const getUserBookedList = async () => {
@@ -107,16 +109,21 @@ export default function Profile({ userState }) {
     };
 
     const renderLessonList = () => {
-        console.log(userState.lessons)
-        return userState.lessons.map((el, idx) => {
-            return (
-                <DescriptionList key={idx} title={el.name}>
-                    <div>시작일: {el.startDate}</div>
-                    <div>종료일: {el.endDate}</div>
-                    <div>남은 횟수: {el.counter}</div>
-                </DescriptionList>
-            )
-        })
+        if (userState.lessons) {
+            return userState.lessons.reverse().map((el, idx) => {
+                const dateExp = new Date(el.endDate) < new Date();
+                return (
+                    <DescriptionList key={idx} title={el.name} className={dateExp ? 'expired' : ''}>
+                        <div>시작일: {el.startDate}</div>
+                        <div>종료일: {el.endDate}</div>
+                        <div>남은 횟수: {el.counter}</div>
+                    </DescriptionList>
+                )
+            })
+        }
+        else {
+            return;
+        }
     };
 
     return (
@@ -139,6 +146,7 @@ export default function Profile({ userState }) {
                     </div>
                     <div className='column'>
                         <CardBox title='레슨권 정보'>
+                            <div></div>
                             {renderLessonList()}
                         </CardBox>
                     </div>

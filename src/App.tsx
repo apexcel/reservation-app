@@ -7,7 +7,9 @@ import jwtDecode from 'jwt-decode'
 import { userStateAtom } from 'Atoms/globalAtoms.ts'
 import { isEmpty } from 'Utils/utils.ts'
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
+import { useInterval } from 'Reducers/useInterval.ts'
 import RestrictedRoute from 'Components/RestrictedRoute.tsx'
+import Loading from 'Components/Loading.tsx'
 
 // pages
 import Header from './pages/layout/Header.tsx'
@@ -56,10 +58,7 @@ export default function App() {
         setIsLoading(false);
     });
 
-    useEffect(() => {
-        probeUserCookie();
-    }, [isLogin]);
-
+    // TODO: 쿠키 이용 및 세션을 통한 로그인 검증
     const probeUserCookie = () => {
         const userCookie = getCookie('userToken');
         console.log(isEmpty(userCookie))
@@ -79,13 +78,14 @@ export default function App() {
         }
         else {
             setIsLogin(false);
+            deleteCookie('userToken');
         }
-        return
+        return;
     };
 
     return (
         <>
-            {isLoading ? 'Loading...' :
+            {isLoading ? <Loading /> :
                 <>
                     {isLogin ? <Header setIsLogin={setIsLogin} userState={userState} /> : null}
                     <div className='container'>

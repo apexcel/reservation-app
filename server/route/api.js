@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const router = express.Router();
 const cors = require('cors');
 
@@ -9,6 +10,7 @@ const adminRouter = require('./admin/admin.router');
 
 router.use(cors());
 router.use(bodyParser.json());
+router.use(cookieParser());
 
 router.use('/reservation', reservationRouter);
 router.use('/users', usersRouter);

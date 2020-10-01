@@ -33,7 +33,7 @@ export default function SignUp() {
 
     const callSignUpAPI = async (ev) => {
         ev.preventDefault();
-        const url = signUpForm.isAdmin ? `${baseURL}/api/admin/signup` : `${baseURL}/api/userinfo/signup`;
+        const url = signUpForm.isAdmin ? `${baseURL}/api/admin/signup` : `${baseURL}/api/users/signup`;
         const data = {
                 username: signUpForm.username,
                 password: signUpForm.password,
@@ -42,23 +42,22 @@ export default function SignUp() {
                 tel: signUpForm.tel,
                 isAdmin: signUpForm.isAdmin
             };
-
+        const firstEmptyItem = Object.values(signUpForm).map(el => el !== '');
+        
         try {
-            const firstEmptyItem = Object.values(signUpForm).map(el => el !== '');
             firstEmptyItem.map((el, idx) => {
                 let classList = document.getElementById(Object.keys(signUpForm)[idx]).classList;
                 el ? (classList.remove("empty-warn")) : (classList.add("empty-warn"));
             });
-            axios.post(url, data).then(res => console.log(res))
+            await axios.post(url, data).then(res => console.log(res));
         }
         catch (err) {
-            // redirect 503 error page;
             throw err;
         }
         finally {
             const userPower = signUpForm.isAdmin ? 'Admin' : '일반회원';
             alert(`${signUpForm.lastname}${signUpForm.firstname}의 ${userPower} 등록이 되었습니다.`)
-            window.location.replace(`/admin`)
+            globalThis.location.replace(`/admin`)
         }
     }
 
