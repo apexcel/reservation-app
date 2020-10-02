@@ -39,8 +39,6 @@ export default function App() {
     const [isLogin, setIsLogin] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
-    console.log(process.env.REACT_APP_KEY)
-
     useEffect(() => {
         setIsLoading(true);
         if (!globalThis.Kakao) {

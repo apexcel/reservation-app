@@ -3,8 +3,8 @@ const app = express();
 const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const cryptoJS = require('crypto-js');
-const crypto = require('crypto');
+// root는 server가 되기 때문에 최상단 루트로 path 변경함.
+require('dotenv').config({ path: path.join(__dirname, '..', '/.env') });
 
 const frontend = path.join(__dirname, '..', 'dist/');
 const api = require('./route/api');

@@ -10,6 +10,14 @@ import useInput from 'Reducers/useInput.ts'
 import AdminApi from 'Api/AdminApi'
 import UserApi from 'Api/UserApi'
 
+
+function encryptData(data: object) {
+    const AES_KEY = process.env.REACT_APP_AES_SECRET_KEY;
+    console.log('aeskey:',AES_KEY)
+    const cipher = CryptoJS.AES.encrypt(JSON.stringify(data), AES_KEY).toString();
+    return cipher;
+}
+
 export default function SignIn({ setIsLogin, adminLogin }) {
 
     const [{ username, password }, onChangeInput] = useInput({
@@ -23,15 +31,13 @@ export default function SignIn({ setIsLogin, adminLogin }) {
         };
         let response = null;
 
-        const encryptedData = (data: object) => {
-            const key = 'myKey'
-            const enc = AES.encrypt(JSON.stringify(data), key);
-        }
-        encryptedData(data);
+        const encData = encryptData(data);
+        console.log(encData)
 
         try {
-            if (adminLogin) response = await AdminApi.signIn(data);
-            else response = await UserApi.signIn(data);
+            if (adminLogin) response = await AdminApi.signIn({cipher: encData});
+            else response = await UserApi.signIn({cipher: encData});
+
             setCookie('userToken', response.data.access_token);
             console.log(response)
             setIsLogin(true);

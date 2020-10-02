@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
-const SECRET_KEY = 'secret_key_0815';
+const TOKEN_KEY = process.env.TOKEN_KEY;
 
 const createAccessToken = () => {
     const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
@@ -25,7 +25,7 @@ createAccessToken();
 // const verifyToken = (req, resp, next) => {
 //     try {
 //         const clientToken = req.body.userToken;
-//         const decoded = jwt.verify(clientToken, SECRET_KEY);
+//         const decoded = jwt.verify(clientToken, TOKEN_KEY);
 //         if (decoded) {
 //             resp.locals.username = decoded.username;
 //             resp.locals.fullname = decoded.fullname;
