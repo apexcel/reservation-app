@@ -22,8 +22,6 @@ function formattedDateString(date) {
 
 function decryptData(cipher) {
     const AES_KEY = process.env.REACT_APP_AES_SECRET_KEY;
-    console.log('AES:', AES_KEY)
-    console.log('TOKENKEY:', TOKEN_KEY)
     const bytes = CryptoJS.AES.decrypt(cipher, AES_KEY);
     return bytes.toString(CryptoJS.enc.Utf8);
 }
@@ -54,39 +52,38 @@ exports.createToken = async function (req, resp, next) {
     try {
         console.log(req.body.cipher)
 
-        decryptData(req.body.cipher);
-        // mongoConn.conn();
-        // const matchUser = await User.findOne(plainText);
-        // if (matchUser) {
-        //     mongoConn.disconn();
-        //     const token = jwt.sign(
-        //         {
-        //             username: matchUser.username,
-        //             fullname: matchUser.fullname,
-        //             dob: matchUser.dob,
-        //             lessons: matchUser.lessons,
-        //             reservations: matchUser.reservations,
-        //         },
-        //         TOKEN_KEY,
-        //         { expiresIn: '12h' }
-        //     );
-        //     resp.json({
-        //         token_type: 'bearer',
-        //         access_token: token,
-        //         access_token_expires_in: 43199,
-        //         refresh_token: 'Will be replaced',
-        //         refresh_token_expires_in: 2591999
-        //     });
-        // }
-        // else {
-        //     resp.status(400).json({ error: 'Invalid user' })
-        // }
+        const dec = JSON.parse(decryptData(req.body.cipher));
+        mongoConn.conn();
+        const matchUser = await User.findOne(dec);
+        if (matchUser) {
+            mongoConn.disconn();
+            const token = jwt.sign(
+                {
+                    username: matchUser.username,
+                    fullname: matchUser.fullname,
+                    dob: matchUser.dob,
+                    lessons: matchUser.lessons,
+                    reservations: matchUser.reservations,
+                },
+                TOKEN_KEY,
+                { expiresIn: '12h' }
+            );
+            resp.json({
+                token_type: 'bearer',
+                access_token: token,
+                access_token_expires_in: 43199,
+                refresh_token: 'Will be replaced',
+                refresh_token_expires_in: 2591999
+            });
+        }
+        else {
+            resp.status(400).json({ error: 'Invalid user' })
+        }
     }
     catch (err) {
         console.error(err);
         next(err);
     }
-    resp.send("TEST")
     return;
 }
 

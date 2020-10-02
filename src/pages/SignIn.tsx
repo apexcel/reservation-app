@@ -1,6 +1,5 @@
 import React from 'react';
-import AES from 'crypto-js/aes'
-import CryptoJS from 'crypto-js/'
+import * as CryptoJS from 'crypto-js/'
 
 import { isEmpty } from 'Utils/utils.ts'
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
@@ -13,7 +12,6 @@ import UserApi from 'Api/UserApi'
 
 function encryptData(data: object) {
     const AES_KEY = process.env.REACT_APP_AES_SECRET_KEY;
-    console.log('aeskey:',AES_KEY)
     const cipher = CryptoJS.AES.encrypt(JSON.stringify(data), AES_KEY).toString();
     return cipher;
 }
