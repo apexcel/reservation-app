@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-
+const Dotenv = require('dotenv-webpack')
 
 module.exports = {
     mode: 'development',
@@ -82,6 +82,8 @@ module.exports = {
         }),
 
         new CleanWebpackPlugin(),
+
+        new Dotenv(),
     ],
 
     optimization: {

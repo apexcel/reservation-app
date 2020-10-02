@@ -1,4 +1,6 @@
 import React from 'react';
+import AES from 'crypto-js/aes'
+import CryptoJS from 'crypto-js/'
 
 import { isEmpty } from 'Utils/utils.ts'
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
@@ -20,6 +22,12 @@ export default function SignIn({ setIsLogin, adminLogin }) {
             password: password
         };
         let response = null;
+
+        const encryptedData = (data: object) => {
+            const key = 'myKey'
+            const enc = AES.encrypt(JSON.stringify(data), key);
+        }
+        encryptedData(data);
 
         try {
             if (adminLogin) response = await AdminApi.signIn(data);

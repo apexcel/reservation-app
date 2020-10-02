@@ -46,8 +46,8 @@ exports.createToken = async function (req, resp, next) {
         console.log(req.body)
         mongoConn.conn();
         const matchUser = await User.findOne(req.body);
-
         if (matchUser) {
+            mongoConn.disconn();
             const token = jwt.sign(
                 {
                     username: matchUser.username,
@@ -57,15 +57,19 @@ exports.createToken = async function (req, resp, next) {
                     reservations: matchUser.reservations,
                 },
                 SECRET_KEY,
-                { expiresIn: '10m' }
+                { expiresIn: '12h' }
             );
-            resp.header('Authentication', token);
-            resp.status(201).json({access_token: token});
+            resp.json({
+                token_type: 'bearer',
+                access_token: token,
+                access_token_expires_in: 43199,
+                refresh_token: 'Will be replaced',
+                refresh_token_expires_in: 2591999
+            });
         }
         else {
             resp.status(400).json({ error: 'Invalid user' })
         }
-        mongoConn.disconn();
     }
     catch (err) {
         console.error(err);

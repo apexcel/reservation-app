@@ -3,6 +3,8 @@ const app = express();
 const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cryptoJS = require('crypto-js');
+const crypto = require('crypto');
 
 const frontend = path.join(__dirname, '..', 'dist/');
 const api = require('./route/api');
@@ -13,6 +15,7 @@ app.use(bodyParser.json());
 app.use(express.static(frontend));
 app.use('/api', api);
 
+//TODO: 암호화 복호화 기능 추가
 app.get('*', (req, resp) => {
     resp.sendFile(frontend, (err) => {
         if (err) resp.sendStatus(500).end(err);

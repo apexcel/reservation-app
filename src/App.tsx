@@ -7,7 +7,6 @@ import jwtDecode from 'jwt-decode'
 import { userStateAtom } from 'Atoms/globalAtoms.ts'
 import { isEmpty } from 'Utils/utils.ts'
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
-import { useInterval } from 'Reducers/useInterval.ts'
 import RestrictedRoute from 'Components/RestrictedRoute.tsx'
 import Loading from 'Components/Loading.tsx'
 
@@ -43,6 +42,8 @@ export default function App() {
     const [userState, setUserState] = useRecoilState(userStateAtom)
     const [isLogin, setIsLogin] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
+
+    console.log(process.env.REACT_APP_KEY)
 
     useEffect(() => {
         setIsLoading(true);
