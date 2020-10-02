@@ -5,8 +5,8 @@ const axios = require('axios')
 const querystring = require('querystring');
 
 //TODO: 키 따로 관리하기
-const SECRET_KEY = 'secret_key_0815';
-const KAKAO_REST_API_KEY = '52d0e38dadbfb480d5daa3566df71c2f';
+const TOKEN_KEY = process.env.TOKEN_KEY;
+const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
 
 function formattedDateString(date) {
     let yy = date.getFullYear();
@@ -56,7 +56,7 @@ exports.createToken = async function (req, resp, next) {
                     lessons: matchUser.lessons,
                     reservations: matchUser.reservations,
                 },
-                SECRET_KEY,
+                TOKEN_KEY,
                 { expiresIn: '12h' }
             );
             resp.json({
@@ -134,7 +134,7 @@ exports.getUserInfo = async function (req, resp, next) {
                     lessons: result.lessons,
                     reservations: result.reservations
                 },
-                SECRET_KEY,
+                TOKEN_KEY,
                 { expiresIn: '10m' }
             )
             resp.status(200).json({

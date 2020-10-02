@@ -24,17 +24,13 @@ import KakaoDevApp from './pages/KakaoDevApp.tsx'
 import 'Styles/App.scss'
 import 'Styles/Common.scss'
 
-// constants
-const kakaoSDK = 'https://developers.kakao.com/sdk/js/kakao.js';
-const jsKey = 'ea144ad47a8a64a6e0b341fbc81d29f5';
-
 async function addKakaoScript() {
     const script = document.createElement('script');
     script.id = 'kakao-sdk';
-    script.src = kakaoSDK;
+    script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
     script.async = true;
     document.body.append(script);
-    globalThis.Kakao.init(jsKey);
+    globalThis.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
     console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized());
 }
 
@@ -52,7 +48,7 @@ export default function App() {
         }
         else {
             if (!globalThis.Kakao.isInitialized()) {
-                globalThis.Kakao.init('ea144ad47a8a64a6e0b341fbc81d29f5')
+                globalThis.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY)
                 console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
             }
         }

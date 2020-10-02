@@ -7,8 +7,8 @@ const axios = require('axios')
 const querystring = require('querystring')
 
 // TODO: 키 따로 관리하기
-const SECRET_KEY = 'secret_key_0815';
-const KAKAO_REST_API_KEY = '52d0e38dadbfb480d5daa3566df71c2f';
+const TOKEN_KEY = process.env.TOKEN_KEY;
+const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
 
 exports.kakaoAuthToken = async function (req, resp, next) {
     try {
@@ -135,7 +135,7 @@ exports.createToken = async function (req, resp, next) {
                     fullname: admin.fullname,
                     isAdmin: admin.isAdmin
                 },
-                SECRET_KEY,
+                TOKEN_KEY,
                 { expiresIn: '30m' }
             );
 
