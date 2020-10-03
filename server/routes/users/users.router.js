@@ -3,7 +3,7 @@ const router = express.Router();
 const usersController = require('./users.controller');
 
 router.post('/signin', (req, resp, next) => {
-    usersController.createToken(req, resp, next)
+    usersController.signInUser(req, resp, next)
 })
 
 router.post('/signup', (req, resp, next) => {

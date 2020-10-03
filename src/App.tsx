@@ -9,6 +9,7 @@ import { isEmpty } from 'Utils/utils.ts'
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 import RestrictedRoute from 'Components/RestrictedRoute.tsx'
 import Loading from 'Components/Loading.tsx'
+import {useInterval} from 'Reducers/useInterval.ts'
 
 // pages
 import Header from './pages/layout/Header.tsx'
@@ -53,19 +54,24 @@ export default function App() {
         setIsLoading(false);
     });
 
+    useEffect(() => {
+        probeUserCookie();
+    }, [])
+
     // TODO: 쿠키 이용 및 세션을 통한 로그인 검증
     const probeUserCookie = () => {
         const userCookie = getCookie('userToken');
         console.log(isEmpty(userCookie))
         if (!isEmpty(userCookie)) {
             const token = jwtDecode(userCookie);
+            console.log(token);
             const isExpired = new Date(token.exp * 1000) < new Date();
             if (!isExpired) {
                 setIsLogin(true);
                 setUserState(token);
             }
             else {
-                alert("세션이 만료되었습니다.");
+                alert("로그인 정보가 만료되었습니다.");
                 setIsLogin(false);
                 deleteCookie('userToken');
                 globalThis.location.replace('/');
@@ -77,6 +83,10 @@ export default function App() {
         }
         return;
     };
+
+    useInterval(() => {
+        probeUserCookie()
+    }, 7198 * 1000);
 
     return (
         <>

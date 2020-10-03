@@ -1,8 +1,9 @@
 import SendTo from './SendTo';
 
 export default {
-    signIn(data) {
+    signIn(headers, data) {
         return SendTo({
+            headers: headers,
             url: '/admin/signin',
             method: 'post',
             data: data

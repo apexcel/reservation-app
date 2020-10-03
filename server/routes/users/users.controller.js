@@ -3,10 +3,13 @@ const mongoConn = require('../../database/mongo/mongoConn');
 const jwt = require('jsonwebtoken');
 const axios = require('axios')
 const querystring = require('querystring');
-const CryptoJS = require('crypto-js')
+const CryptoJS = require('crypto-js');
+const sha256 = require('crypto-js/sha256');
+const { response } = require('express');
 
 //TODO: 키 따로 관리하기
 const TOKEN_KEY = process.env.TOKEN_KEY;
+const AES_KEY = process.env.REACT_APP_AES_SECRET_KEY;
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
 
 function formattedDateString(date) {
@@ -20,13 +23,26 @@ function formattedDateString(date) {
     return [yy, mm, dd].join('-');
 }
 
-function decryptData(cipher) {
-    const AES_KEY = process.env.REACT_APP_AES_SECRET_KEY;
-    const bytes = CryptoJS.AES.decrypt(cipher, AES_KEY);
+function encryptData(data) {
+    return CryptoJS.AES.encrypt(JSON.stringify(data), AES_KEY).toString();
+}
+
+function decryptData(encryptData) {
+    const bytes = CryptoJS.AES.decrypt(encryptData, AES_KEY);
     return bytes.toString(CryptoJS.enc.Utf8);
 }
 
-exports.kakaoAuthToken = async function(req, resp, next) {
+// TODO: refresh token도 만들기
+function createTokens(payload) {
+    const accessTokenExpireTime = 7199;
+    const accessToken = jwt.sign({ ...payload }, TOKEN_KEY, { expiresIn: accessTokenExpireTime * 1000 });
+    return {
+        accessToken: accessToken,
+        accessTokenExpireTime: accessTokenExpireTime
+    };
+}
+
+exports.kakaoAuthToken = async function (req, resp, next) {
     try {
         const host = 'https://kauth.kakao.com';
         const path = '/oauth/token';
@@ -48,37 +64,36 @@ exports.kakaoAuthToken = async function(req, resp, next) {
     return;
 }
 
-exports.createToken = async function (req, resp, next) {
+exports.signInUser = async function (req, resp, next) {
     try {
-        console.log(req.body.cipher)
-
-        const dec = JSON.parse(decryptData(req.body.cipher));
         mongoConn.conn();
-        const matchUser = await User.findOne(dec);
-        if (matchUser) {
+        const signInForm = JSON.parse(decryptData(req.body.sign_in_form));
+        const user = await User.findOne(signInForm);
+
+        if (user) {
+            const userInfo = {
+                username: user.username,
+                fullname: user.fullname,
+                dob: user.dob,
+                lessons: user.lessons,
+                reservations: user.reservations
+            };
+
+            const tokens = createTokens(userInfo);
+            user.access_token = tokens.access_token;
+            await user.save();
             mongoConn.disconn();
-            const token = jwt.sign(
-                {
-                    username: matchUser.username,
-                    fullname: matchUser.fullname,
-                    dob: matchUser.dob,
-                    lessons: matchUser.lessons,
-                    reservations: matchUser.reservations,
-                },
-                TOKEN_KEY,
-                { expiresIn: '12h' }
-            );
-            resp.json({
-                token_type: 'bearer',
-                access_token: token,
-                access_token_expires_in: 43199,
+
+            const response = {
+                token_type: 'Bearer',
+                access_token: tokens.accessToken,
+                access_token_expires_in: tokens.accessTokenExpireTime,
                 refresh_token: 'Will be replaced',
-                refresh_token_expires_in: 2591999
-            });
+                refresh_token_expires_in: 'Will be replaced'
+            };
+            resp.json(response);
         }
-        else {
-            resp.status(400).json({ error: 'Invalid user' })
-        }
+        return;
     }
     catch (err) {
         console.error(err);
@@ -151,9 +166,6 @@ exports.getUserInfo = async function (req, resp, next) {
                 desc: 'Get user infomation',
                 token
             });
-        }
-        else {
-            resp.status(500).json({ error: 'Invalid user' });
         }
         mongoConn.disconn()
     }

@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config({ path: path.join(__dirname, '..', '/.env') });
 
 const frontend = path.join(__dirname, '..', 'dist/');
-const api = require('./route/api');
+const api = require('./routes/api');
 const port = process.env.PORT || 9000;
 
 app.use(cors());
