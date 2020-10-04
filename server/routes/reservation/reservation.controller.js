@@ -7,10 +7,10 @@ exports.getBookedData = async function (req, resp, next) {
         conn.query(query, queryParams, (err, row) => {
             if (err) {
                 console.error(err);
-                resp.status(500).json({msg: "Can not find table"});
+                return resp.status(500).json({msg: "Can not find table"});
             }
-            resp.status(200).json(row)
             conn.release()
+            return resp.status(200).json(row)
         });
     });
     return;

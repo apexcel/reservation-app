@@ -1,16 +1,15 @@
 const User = require('../../database/mongo/schema/user');
 const mongoConn = require('../../database/mongo/mongoConn');
 const jwt = require('jsonwebtoken');
+const jwtDecode = require('jwt-decode');
 const axios = require('axios')
 const querystring = require('querystring');
 const CryptoJS = require('crypto-js');
-const sha256 = require('crypto-js/sha256');
-const { response } = require('express');
 
-//TODO: 키 따로 관리하기
 const TOKEN_KEY = process.env.TOKEN_KEY;
 const AES_KEY = process.env.REACT_APP_AES_SECRET_KEY;
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
+const SHA256_KEY = process.env.REACT_SHA256_KEY
 
 function formattedDateString(date) {
     let yy = date.getFullYear();
@@ -23,23 +22,12 @@ function formattedDateString(date) {
     return [yy, mm, dd].join('-');
 }
 
-function encryptData(data) {
-    return CryptoJS.AES.encrypt(JSON.stringify(data), AES_KEY).toString();
-}
-
-function decryptData(encryptData) {
-    const bytes = CryptoJS.AES.decrypt(encryptData, AES_KEY);
-    return bytes.toString(CryptoJS.enc.Utf8);
-}
-
-// TODO: refresh token도 만들기
-function createTokens(payload) {
-    const accessTokenExpireTime = 7199;
-    const accessToken = jwt.sign({ ...payload }, TOKEN_KEY, { expiresIn: accessTokenExpireTime * 1000 });
-    return {
-        accessToken: accessToken,
-        accessTokenExpireTime: accessTokenExpireTime
-    };
+function generateJWT(payload) {
+    return jwt.sign(
+        payload,
+        TOKEN_KEY,
+        { expiresIn: '30m' }
+    );
 }
 
 exports.kakaoAuthToken = async function (req, resp, next) {
@@ -64,47 +52,9 @@ exports.kakaoAuthToken = async function (req, resp, next) {
     return;
 }
 
-exports.signInUser = async function (req, resp, next) {
-    try {
-        mongoConn.conn();
-        const signInForm = JSON.parse(decryptData(req.body.sign_in_form));
-        const user = await User.findOne(signInForm);
-
-        if (user) {
-            const userInfo = {
-                username: user.username,
-                fullname: user.fullname,
-                dob: user.dob,
-                lessons: user.lessons,
-                reservations: user.reservations
-            };
-
-            const tokens = createTokens(userInfo);
-            user.access_token = tokens.access_token;
-            await user.save();
-            mongoConn.disconn();
-
-            const response = {
-                token_type: 'Bearer',
-                access_token: tokens.accessToken,
-                access_token_expires_in: tokens.accessTokenExpireTime,
-                refresh_token: 'Will be replaced',
-                refresh_token_expires_in: 'Will be replaced'
-            };
-            resp.json(response);
-        }
-        return;
-    }
-    catch (err) {
-        console.error(err);
-        next(err);
-    }
-    return;
-}
-
 exports.signUpUser = async function (req, resp, next) {
     try {
-        console.log(req.body)
+        //console.log(req.body)
         mongoConn.conn();
         const updateQuery = {
             username: req.body.username,
@@ -144,36 +94,29 @@ exports.signUpUser = async function (req, resp, next) {
 
 exports.getUserInfo = async function (req, resp, next) {
     try {
+        console.log('getInfo')
         mongoConn.conn();
-        const result = await User.findOne({ 'fullname': req.params.name });
-
-        if (result !== null) {
-            const token = jwt.sign(
-                {
-                    username: result.username,
-                    fullname: result.fullname,
-                    password: result.password,
-                    dob: result.dob,
-                    tel: result.tel,
-                    lessons: result.lessons,
-                    reservations: result.reservations
-                },
-                TOKEN_KEY,
-                { expiresIn: '10m' }
-            )
-            resp.status(200).json({
-                result: true,
-                desc: 'Get user infomation',
-                token
-            });
-        }
+        const user = await User.findById(resp.locals.user.id)
         mongoConn.disconn()
+
+        if (user !== null) {
+            const { username, fullname, dob, tel, lessons, reservations } = user;
+            const userInfo = {
+                username: username,
+                fullname: fullname,
+                dob: dob,
+                tel: tel,
+                lessons: lessons,
+                reservations: reservations
+            };
+            return resp.json({token: generateJWT(userInfo)});
+        }
+        return resp.status(503).json({ error: 'Invalid user' })
     }
     catch (err) {
         console.error(err);
-        next(err)
+        return next(err)
     }
-    return;
 }
 
 exports.getAllUserInfo = async function (req, resp, next) {

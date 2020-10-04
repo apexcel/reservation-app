@@ -5,6 +5,7 @@ import { createEmptyTableRow, fulfillEmptyObject } from 'Utils/tableUtils.ts'
 import { genTableName } from 'Utils/utils.ts'
 import { tableHeadStateAtom, tableBodyStateAtom } from 'Atoms/tableAtoms.ts'
 import { currentSelectedDateAtom, getTableHeadersEachDay } from 'Atoms/globalAtoms.ts'
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 
 import TableDialog from './TableDialog.tsx'
 import Calendar from 'Components/calendar/Calendar.tsx'
@@ -41,11 +42,13 @@ export default function Main() {
         openDialog();
     };
 
+    // TODO: API 수정하기 헤더 달아야함
     const getBookedList = async (selectedDate) => {
         const data = {
             date: genTableName(selectedDate)
         };
-        const response = await ReservationApi.getReservationList(data);
+        const token = getCookie('userToken');
+        const response = await ReservationApi.getReservationList(token, data);
         const emptyTableRow = createEmptyTableRow(tableHead);
         const newTableBody = fulfillEmptyObject(response.data, emptyTableRow);
         setTableBody(newTableBody)

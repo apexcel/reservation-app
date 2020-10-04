@@ -10,6 +10,8 @@ import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 import RestrictedRoute from 'Components/RestrictedRoute.tsx'
 import Loading from 'Components/Loading.tsx'
 import {useInterval} from 'Reducers/useInterval.ts'
+import UserApi from 'Api/UserApi'
+import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts'
 
 // pages
 import Header from './pages/layout/Header.tsx'
@@ -31,7 +33,7 @@ async function addKakaoScript() {
     script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
     script.async = true;
     document.body.append(script);
-    globalThis.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
+    await globalThis.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
     console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized());
 }
 
@@ -59,14 +61,23 @@ export default function App() {
     }, [])
 
     // TODO: 쿠키 이용 및 세션을 통한 로그인 검증
-    const probeUserCookie = () => {
+    const probeUserCookie = async () => {
         const userCookie = getCookie('userToken');
-        console.log(isEmpty(userCookie))
         if (!isEmpty(userCookie)) {
             const token = jwtDecode(userCookie);
-            console.log(token);
             const isExpired = new Date(token.exp * 1000) < new Date();
             if (!isExpired) {
+                const id = decryptAES(token.payload).id;
+                const userInfo = await UserApi.getUserInfo(token, id).then(res => jwtDecode(res.data.token));
+                setUserState({
+                    username: userInfo.username,
+                    fullname: userInfo.fullname,
+                    dob: userInfo.dob,
+                    tel: userInfo.tel,
+                    lessons: userInfo.lessons,
+                    reservations: userInfo.reservations
+                });
+                // 사용자 정보 요청
                 setIsLogin(true);
                 setUserState(token);
             }
@@ -84,9 +95,9 @@ export default function App() {
         return;
     };
 
-    useInterval(() => {
-        probeUserCookie()
-    }, 7198 * 1000);
+    // useInterval(() => {
+    //     probeUserCookie()
+    // }, 1800 * 1000);
 
     return (
         <>

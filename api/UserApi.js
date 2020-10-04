@@ -1,17 +1,12 @@
 import SendTo from './SendTo';
 
 export default {
-    signIn(data) {
+    getUserInfo(token, id) {
         return SendTo({
-            url: '/users/signin',
-            method: 'post',
-            data: data
-        })
-    },
-
-    getUserInfo(fullname) {
-        return SendTo({
-            url: `/users/getuser/${fullname}`,
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            url: `/users/getuser/${id}`,
             method: 'get',
         })
     },

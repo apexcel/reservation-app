@@ -2,16 +2,11 @@ const express = require('express')
 const router = express.Router();
 const usersController = require('./users.controller');
 
-router.post('/signin', (req, resp, next) => {
-    usersController.signInUser(req, resp, next)
-})
-
 router.post('/signup', (req, resp, next) => {
     usersController.signUpUser(req, resp, next)
 });
 
-router.get('/getuser/:name', (req, resp, next) => {
-    console.log('param: ', req.params)
+router.get('/getuser/:id', (req, resp, next) => {
     usersController.getUserInfo(req, resp, next)
 })
 

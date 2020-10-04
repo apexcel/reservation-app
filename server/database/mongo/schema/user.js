@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     dob: { type: Date, required: true },
     tel: { type: String, required: true },
     point: { type: Number, default: 0 },
-    access_token: { type: String },
+    isAdmin: { type: Boolean, default: false },
     lessons: [LessonSchema],
     reservations: [reservationSchema],
 });

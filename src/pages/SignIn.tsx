@@ -5,13 +5,16 @@ import * as CryptoJS from 'crypto-js/'
 
 import { isEmpty } from 'Utils/utils.ts'
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
-import { encryptData, decryptData } from 'Utils/cryptoUtils.ts'
+import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts'
 import jwtDecode from 'jwt-decode'
 
 import Input from 'Components/modal/Input.tsx'
 import useInput from 'Reducers/useInput.ts'
 import AdminApi from 'Api/AdminApi'
 import UserApi from 'Api/UserApi'
+import AuthApi from 'Api/AuthApi'
+import { DH_UNABLE_TO_CHECK_GENERATOR } from 'constants';
+
 
 export default function SignIn({ setIsLogin, adminLogin }) {
 
@@ -24,17 +27,28 @@ export default function SignIn({ setIsLogin, adminLogin }) {
     const login = async (username, password) => {
         const data = {
             username: username,
-            password: password
+            password: password,
         };
-        const encData = encryptData(data);
+        
+        const encData = encryptAES(data);
         let response = null;
 
         try {
             if (adminLogin) response = await AdminApi.signIn({sign_in_form: encData});
-            else response = await UserApi.signIn({sign_in_form: encData});
+            else response = await AuthApi.signIn({sign_in_form: encData});
 
-            setCookie('userToken', response.data.access_token);
-            setUserState(jwtDecode(response.data.access_token));
+            const token = response.data.token;
+            const id = decryptAES(jwtDecode(token).payload).id;
+            const userInfo = await UserApi.getUserInfo(response.data.token, id).then(res => jwtDecode(res.data.token));
+            setUserState({
+                username: userInfo.username,
+                fullname: userInfo.fullname,
+                dob: userInfo.dob,
+                tel: userInfo.tel,
+                lessons: userInfo.lessons,
+                reservations: userInfo.reservations
+            });
+            setCookie('userToken', token);
             setIsLogin(true);
         }
         catch (err) {

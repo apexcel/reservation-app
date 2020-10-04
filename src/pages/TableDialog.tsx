@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode'
 import { tableBodyStateAtom, tableHeadStateAtom } from 'Atoms/tableAtoms.ts'
 import { userStateAtom } from 'Atoms/globalAtoms.ts'
 import { genTableName, isEmpty } from 'Utils/utils.ts'
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 
 import ReservationApi from 'Api/ReservationApi'
 import UserApi from 'Api/UserApi'
@@ -101,13 +102,14 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     };
 
     const setBookedList = async (rowIndex, newTableState, selectedDate) => {
+        const token = getCookie('userToken');
         const data = {
             date: genTableName(selectedDate),
             time: (rowIndex + 1),
             booked_data: JSON.stringify(newTableState)
         };
 
-        await ReservationApi.setReservationList(data).then(res => console.log(res));
+        await ReservationApi.setReservationList(token, data).then(res => console.log(res));
         return;
     };
 

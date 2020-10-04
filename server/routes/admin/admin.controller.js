@@ -10,6 +10,19 @@ const querystring = require('querystring')
 const TOKEN_KEY = process.env.TOKEN_KEY;
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
 
+function createTokens(payload) {
+    console.log(payload.id)
+    const tokenExpiresIn = 7199;
+    const token = jwt.sign({
+        id: payload.id,
+        username: payload.username,
+        fullname: payload.fullname,
+        is_admin: Boolean(payload.isAdmin),
+    }, TOKEN_KEY,
+        { expiresIn: tokenExpiresIn * 1000 });
+    return { token, tokenExpiresIn };
+}
+
 exports.kakaoAuthToken = async function (req, resp, next) {
     try {
         const host = 'https://kauth.kakao.com';
@@ -119,36 +132,19 @@ exports.kakaoCheckToken = async function (req, resp, next) {
     })
 }
 
-exports.createToken = async function (req, resp, next) {
+exports.signInAdmin = async function (req, resp, next) {
     try {
         mongoConn.conn();
-        const query = {
-            username: req.body.username,
-            password: req.body.password,
-        };
-        const admin = await Admin.findOne(query);
+        const admin = await Admin.findOne(resp.locals.signInForm);
+        mongoConn.disconn();
 
         if (admin) {
-            const token = jwt.sign(
-                {
-                    username: admin.username,
-                    fullname: admin.fullname,
-                    isAdmin: admin.isAdmin
-                },
-                TOKEN_KEY,
-                { expiresIn: '30m' }
-            );
-
-            resp.status(201).json({
-                result: true,
-                desc: 'Token created',
-                token
+            const token = createTokens(admin);
+            resp.json({
+                access_token: token.token,
+                access_token_expires_in: token.tokenExpiresIn,
             });
         }
-        else {
-            resp.status(400).json({ error: 'Invalid admin' })
-        }
-        mongoConn.disconn();
     }
     catch (err) {
         console.error(err);

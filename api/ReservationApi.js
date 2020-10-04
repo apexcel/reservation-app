@@ -1,16 +1,22 @@
 import SendTo from './SendTo';
 
 export default {
-    setReservationList(data) {
+    setReservationList(token, data) {
         return SendTo({
+            headers: {
+                authorization: `Bearer ${token}`
+            },
             url: '/reservation/set-booked-data',
             method: 'post',
             data: data
         })
     },
 
-    getReservationList(data) {
+    getReservationList(token, data) {
         return SendTo({
+            headers: {
+                authorization: `Bearer ${token}`
+            },
             url: '/reservation/get-booked-data',
             method: 'post',
             data: data
