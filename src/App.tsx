@@ -63,12 +63,15 @@ export default function App() {
     // TODO: 쿠키 이용 및 세션을 통한 로그인 검증
     const probeUserCookie = async () => {
         const userCookie = getCookie('userToken');
+        console.log(userCookie)
         if (!isEmpty(userCookie)) {
             const token = jwtDecode(userCookie);
-            const isExpired = new Date(token.exp * 1000) < new Date();
-            if (!isExpired) {
+            console.log(token)
+            const isExpired = new Date(token.exp * 1000) > new Date();
+            console.log(isExpired)
+            if (isExpired) {
                 const id = decryptAES(token.payload).id;
-                const userInfo = await UserApi.getUserInfo(token, id).then(res => jwtDecode(res.data.token));
+                const userInfo = await UserApi.getUserInfo(userCookie, id).then(res => jwtDecode(res.data.token));
                 setUserState({
                     username: userInfo.username,
                     fullname: userInfo.fullname,
@@ -89,6 +92,7 @@ export default function App() {
             }
         }
         else {
+            alert("로그인 정보가 없습니다.");
             setIsLogin(false);
             deleteCookie('userToken');
         }
