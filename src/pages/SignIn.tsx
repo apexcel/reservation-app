@@ -7,6 +7,7 @@ import { isEmpty } from 'Utils/utils.ts'
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts'
 import jwtDecode from 'jwt-decode'
+import * as jwt from 'jsonwebtoken'
 
 import Input from 'Components/modal/Input.tsx'
 import useInput from 'Reducers/useInput.ts'
@@ -38,7 +39,9 @@ export default function SignIn({ setIsLogin, adminLogin }) {
             if (response !== null) {
                 console.log(response)
                 const token = response.data.token;
-                const id = decryptAES(jwtDecode(token).payload).id;
+                const decoded = decryptAES(jwtDecode(token).access_code)
+                const id = decoded.id;
+                console.log(id)
                 const userInfo = await UserApi.getUserInfo(response.data.token, id).then(res => jwtDecode(res.data.token));
                 setUserState({
                     username: userInfo.username,

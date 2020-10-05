@@ -64,14 +64,13 @@ export default function App() {
     const probeUserCookie = async () => {
         const userCookie = getCookie('userToken');
         console.log(userCookie)
-        if (!isEmpty(userCookie)) {
+        console.log(userState)
+        if (isEmpty(userState) && !isEmpty(userCookie)) {
             const token = jwtDecode(userCookie);
             console.log(token)
-            const isExpired = new Date(token.exp * 1000) > new Date();
-            console.log(isExpired)
-            if (isExpired) {
-                const id = decryptAES(token.payload).id;
-                const userInfo = await UserApi.getUserInfo(userCookie, id).then(res => jwtDecode(res.data.token));
+            if (token.exp > new Date().valueOf()) {
+                const id = decryptAES(token.access_code).id;
+                const userInfo = await UserApi.getUserInfo(userCookie, id).then(res => res.data);
                 setUserState({
                     username: userInfo.username,
                     fullname: userInfo.fullname,
@@ -82,13 +81,14 @@ export default function App() {
                 });
                 // 사용자 정보 요청
                 setIsLogin(true);
-                setUserState(token);
+                return;
             }
             else {
                 alert("로그인 정보가 만료되었습니다.");
                 setIsLogin(false);
                 deleteCookie('userToken');
                 globalThis.location.replace('/');
+                return;
             }
         }
         return;

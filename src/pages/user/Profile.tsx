@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
 import ReservationApi from '../../../api/ReservationApi'
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 
 import CardBox from 'Components/CardBox.tsx';
 import DescriptionList from 'Components/DescriptionList.tsx';
@@ -38,7 +39,7 @@ export default function Profile({ userState }) {
             fullname: userState.fullname
         };
         try {
-            const response = await ReservationApi.getUserReservationList(data);
+            const response = await ReservationApi.getUserReservationList(getCookie('userToken'), data);
             console.log(response)
             return response;
         }

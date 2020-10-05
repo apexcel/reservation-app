@@ -23,8 +23,11 @@ export default {
         })
     },
 
-    getUserReservationList(data) {
+    getUserReservationList(token, data) {
         return SendTo({
+            headers: {
+                authorization: `Bearer ${token}`
+            },
             url: '/reservation/find',
             method: 'post',
             data: data

@@ -2,10 +2,8 @@ const CryptoJS = require('crypto-js');
 const mongoConn = require('../../database/mongo/mongoConn');
 const User = require('../../database/mongo/schema/user');
 const jwt = require('jsonwebtoken');
-const jwtDecode = require('jwt-decode');
 
 const TOKEN_KEY = process.env.TOKEN_KEY;
-const SHA256_KEY = process.env.REACT_APP_SHA256_KEY;
 const AES_KEY = process.env.REACT_APP_AES_KEY;
 
 const isValidUser = async (signInForm) => {
@@ -36,39 +34,22 @@ const decryptAES = (cipher, key) => {
     return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 }
 
-const generateJWT = (payload, key) => {
+const generateJWT = (access_code, key) => {
+    const expiresIn = 1799000
     return jwt.sign(
-        { payload: payload },
-        key,
-        { expiresIn: 1799000 });
-}
-
-exports.verifyAuth = async function (req, resp, next) {
-    if (req.headers.authorization) {
-        console.log('Auth:', req.headers.authorization)
-        const bearer = jwtDecode(req.headers.authorization.split(' ')[1]);
-        console.log(bearer)
-        if (new Date().valueOf() < new Date(bearer.exp * 1000)) {
-            resp.locals.user = decryptAES(bearer.payload, AES_KEY)
-            return next();
-        }
-        return resp.json({
-            error: 'Token expired'
-        });
-    }
-    else {
-        return resp.json({
-            error: 'Token does not exist'
-        });
-    }
+        { 
+            iat: new Date().valueOf(),
+            exp: new Date().valueOf() + expiresIn,
+            access_code: access_code 
+        }, key);
 }
 
 exports.provideToken = async function (req, resp, next) {
     const signInForm = decryptAES(req.body.sign_in_form, AES_KEY);
     const user = await isValidUser(signInForm);
     if (user) {
-        const payload = encryptAES(user, AES_KEY)
-        const token = generateJWT(payload, TOKEN_KEY)
+        const access_code = encryptAES(user, AES_KEY)
+        const token = generateJWT(access_code, TOKEN_KEY)
         return resp.json({ token: token });
     }
     else {
