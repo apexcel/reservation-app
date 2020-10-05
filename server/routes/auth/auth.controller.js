@@ -47,6 +47,7 @@ exports.verifyAuth = async function (req, resp, next) {
     if (req.headers.authorization) {
         console.log('Auth:', req.headers.authorization)
         const bearer = jwtDecode(req.headers.authorization.split(' ')[1]);
+        console.log(bearer)
         if (new Date().valueOf() < new Date(bearer.exp * 1000)) {
             resp.locals.user = decryptAES(bearer.payload, AES_KEY)
             return next();
@@ -56,17 +57,21 @@ exports.verifyAuth = async function (req, resp, next) {
         });
     }
     else {
-        console.log('No authorization header')
-        console.log(req.headers)
-        const signInForm = decryptAES(req.body.sign_in_form, AES_KEY);
-        const user = await isValidUser(signInForm);
-        if (user) {
-            const payload = encryptAES(user, AES_KEY)
-            const token = generateJWT(payload, TOKEN_KEY)
-            return resp.json({ token: token });
-        }
-        else {
-            return resp.json({ error: 'Invalid user' });
-        }
+        return resp.json({
+            error: 'Token does not exist'
+        });
+    }
+}
+
+exports.provideToken = async function (req, resp, next) {
+    const signInForm = decryptAES(req.body.sign_in_form, AES_KEY);
+    const user = await isValidUser(signInForm);
+    if (user) {
+        const payload = encryptAES(user, AES_KEY)
+        const token = generateJWT(payload, TOKEN_KEY)
+        return resp.json({ token: token });
+    }
+    else {
+        return resp.json({ error: 'Invalid user' });
     }
 }

@@ -15,7 +15,7 @@ router.use(bodyParser.json());
 router.use(cookieParser());
 
 // TODO: auth 라우터 이용
-router.use('/*', authRouter);
+router.use('/auth', authRouter);
 router.use('/users', usersRouter);
 router.use('/reservation', reservationRouter);
 router.use('/admin', adminRouter);

@@ -28,27 +28,29 @@ export default function SignIn({ setIsLogin, adminLogin }) {
             username: username,
             password: password,
         };
-        
+
         const encData = encryptAES(data);
         let response = null;
 
         try {
-            if (adminLogin) response = await AdminApi.signIn({sign_in_form: encData});
-            else response = await AuthApi.signIn({sign_in_form: encData});
-
-            const token = response.data.token;
-            const id = decryptAES(jwtDecode(token).payload).id;
-            const userInfo = await UserApi.getUserInfo(response.data.token, id).then(res => jwtDecode(res.data.token));
-            setUserState({
-                username: userInfo.username,
-                fullname: userInfo.fullname,
-                dob: userInfo.dob,
-                tel: userInfo.tel,
-                lessons: userInfo.lessons,
-                reservations: userInfo.reservations
-            });
-            setCookie('userToken', token);
-            setIsLogin(true);
+            if (adminLogin) response = await AdminApi.signIn({ sign_in_form: encData });
+            else response = await AuthApi.signIn({ sign_in_form: encData });
+            if (response !== null) {
+                console.log(response)
+                const token = response.data.token;
+                const id = decryptAES(jwtDecode(token).payload).id;
+                const userInfo = await UserApi.getUserInfo(response.data.token, id).then(res => jwtDecode(res.data.token));
+                setUserState({
+                    username: userInfo.username,
+                    fullname: userInfo.fullname,
+                    dob: userInfo.dob,
+                    tel: userInfo.tel,
+                    lessons: userInfo.lessons,
+                    reservations: userInfo.reservations
+                });
+                setCookie('userToken', token);
+                setIsLogin(true);
+            }
         }
         catch (err) {
             throw err;

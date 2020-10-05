@@ -3,10 +3,7 @@ import SendTo from './SendTo';
 export default {
     signIn(data) {
         return SendTo({
-            headers:{
-                path: '/'
-            },
-            url: '/',
+            url: '/auth/sign-in',
             method: 'post',
             data: data
         })
