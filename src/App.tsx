@@ -91,17 +91,12 @@ export default function App() {
                 globalThis.location.replace('/');
             }
         }
-        else {
-            alert("로그인 정보가 없습니다.");
-            setIsLogin(false);
-            deleteCookie('userToken');
-        }
         return;
     };
 
-    // useInterval(() => {
-    //     probeUserCookie()
-    // }, 1800 * 1000);
+    useInterval(() => {
+        probeUserCookie()
+    }, 1800 * 1000);
 
     return (
         <>
