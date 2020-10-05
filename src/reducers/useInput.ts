@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from 'react'
+import { useCallback, useReducer } from 'react';
 
 function reducer(state, action) {
     switch (action.type) {
@@ -9,7 +9,7 @@ function reducer(state, action) {
         case "CHECKBOX_CHANGE":
             return {
                 ...state, [action.name]: action.checked
-            }
+            };
         case "RESET":
             return Object.keys(state).reduce((acc, current) => {
                 acc[current] = '';

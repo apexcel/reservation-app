@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react"
-import { useRecoilState } from "recoil"
-import { maxDateAtom, minDateAtom, calendarStateAtom, dateRangeAtom } from '../../atoms/calendarAtoms.ts'
+import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { maxDateAtom, minDateAtom, calendarStateAtom, dateRangeAtom } from '../../atoms/calendarAtoms.ts';
 import Navigation from "./Navigation.tsx";
 import DayOfWeek from "./DayOfWeek.tsx";
-import Weeks from "./Weeks.tsx"
+import Weeks from "./Weeks.tsx";
 
-import "../../styles/calendar.scss"
+import "../../styles/calendar.scss";
 
-interface Calendar {
+interface CalendarProps {
     onDateClick?: () => void,
     maxDate?: Date,
     minDate?: Date,
@@ -18,7 +18,7 @@ export default function Calendar({
     onDateClick, 
     maxDate, 
     minDate,
-    dateRange }: Calendar) {
+    dateRange }: CalendarProps):React.ReactElement {
 
     const className = "simple__calendar";
 
@@ -29,8 +29,8 @@ export default function Calendar({
     useEffect(() => {
         if (maxDate) setMaxDateState(maxDate);
         if (minDate) setMinDateState(minDate);
-        if (dateRange) setDateRangeState(dateRange)
-    }, [])
+        if (dateRange) setDateRangeState(dateRange);
+    }, []);
     
     const [calendarState, setCalendarState] = useRecoilState(calendarStateAtom);
     
@@ -50,5 +50,5 @@ export default function Calendar({
                 onDateClick={onDateClick}
             />
         </div>
-    )
+    );
 }

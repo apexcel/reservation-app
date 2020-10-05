@@ -1,4 +1,4 @@
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import { atom, selector } from 'recoil';
 
 export const baseURLAtom = atom({
     key: 'baseURL',
@@ -21,7 +21,7 @@ export const userBookedCounter = atom({
 export const userLimitBookedCounter = atom({
     key: 'userLimitBookedCounter',
     default: 0
-})
+});
 
 export const currentSelectedDateAtom = atom({
     key: 'currentSelectedDateAtom',
@@ -35,7 +35,7 @@ export const getTableHeadersEachDay = selector({
         switch (currentSelectedDate.getDay()) {
             case 0:
                 return [
-                    { name: "현영", field: "hyun" },
+                    { name: "현영", field: "hyun" }
                 ];
             case 1:
                 return [];
@@ -46,18 +46,18 @@ export const getTableHeadersEachDay = selector({
                 ];
             case 3:
                 return [
-                    { name: "소정", field: "so" },
+                    { name: "소정", field: "so" }
                 ];
             case 4:
                 return [
                     { name: "소정", field: "so" },
                     { name: "현영", field: "hyun" },
-                    { name: "상정", field: "jung" },
+                    { name: "상정", field: "jung" }
                 ];
             case 5:
                 return [
                     { name: "소정", field: "so", range: [6, 10] },
-                    { name: "현영", field: "hyun" },
+                    { name: "현영", field: "hyun" }
                 ];
             case 6:
                 return [

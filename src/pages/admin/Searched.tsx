@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import UpdateLessonDialog from './UpdateLessonDialog.tsx';
-import UserApi from 'Api/UserApi'
-import jwtDecode from 'jwt-decode'
+import UserApi from 'Api/UserApi.ts';
+import jwtDecode from 'jwt-decode';
 
 export default function Searched({ match }) {
     const [searchedUserInfo, setSearchedUserInfo] = useState({});
@@ -14,7 +14,7 @@ export default function Searched({ match }) {
 
         if (match.params.name !== undefined || match.params.name !== '') {
             UserApi.getUserInfo(match.params.name).then(resp => {
-                console.log(resp)
+                console.log(resp);
                 if (isMounted) {
                     setSearchedUserInfo(jwtDecode(resp.data.token));
                 }
@@ -25,15 +25,15 @@ export default function Searched({ match }) {
 
         return () => {
             isMounted = false;
-        }
-    }, [match.params.name])
+        };
+    }, [match.params.name]);
 
     useEffect(() => {
-        console.log(searchedUserInfo)
-    }, [searchedUserInfo])
+        console.log(searchedUserInfo);
+    }, [searchedUserInfo]);
 
-    const openDialog = () => { setVisible(true) };
-    const closeDialog = () => { setVisible(false) };
+    const openDialog = () => { setVisible(true); };
+    const closeDialog = () => { setVisible(false); };
 
     // TODO:User Lessons update method
     const updateUserLessons = (ev) => {
@@ -53,7 +53,7 @@ export default function Searched({ match }) {
     };
 
     const renderSearchedUserInfo = () => {
-        console.log(searchedUserInfo.fullname)
+        console.log(searchedUserInfo.fullname);
         return (
             <div>
                 <div>
@@ -79,8 +79,8 @@ export default function Searched({ match }) {
                 </div>
                 <button type='button' onClick={updateUserLessons}>New Lessons Update</button>
             </div>
-        )
-    }
+        );
+    };
 
     //TODO: 해당 유저 info 및 lesson 등 기타 업데이트 가능하도록
     return (
@@ -89,5 +89,5 @@ export default function Searched({ match }) {
                 (Object.keys(searchedUserInfo).length > 0 ? renderSearchedUserInfo() : '')}
             {visible ? <UpdateLessonDialog fullname={searchedUserInfo.fullname} closeDialog={closeDialog} /> : null}
         </>
-    )
+    );
 }

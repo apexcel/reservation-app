@@ -1,8 +1,21 @@
 import React from 'react'
 
-interface InputProps<CommonFormType> {
-    CommonFormType,
-    
+interface InputProps {
+    className: string,
+    name: string,
+    id: string,
+    type: string,
+    maxLength: number,
+    minLength: number,
+    max: number,
+    min: number,
+    checked: boolean,
+    placeHolder: string,
+    step: number,
+    value: any,
+    disabled: boolean,
+    readOnly: boolean,
+    onChange: () => void
 }
 
 export default function Input({
@@ -21,7 +34,7 @@ export default function Input({
     disabled,
     readOnly,
     onChange
-}) {
+}: InputProps): React.ReactElement {
 
     return (
         <div className='common__input--container'>

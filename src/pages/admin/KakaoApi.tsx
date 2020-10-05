@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
 
-import AdminApi from 'Api/AdminApi';
+import AdminApi from 'Api/AdminApi.ts';
 
-import {autoComplete} from 'Utils/browserUtils.ts'
-import useInput from 'Reducers/useInput.ts'
+import {autoComplete} from 'Utils/browserUtils.ts';
+import useInput from 'Reducers/useInput.ts';
 
-import Input from 'Components/modal/Input.tsx'
+import Input from 'Components/modal/Input.tsx';
 
-import 'Styles/kakaoapi.scss'
+import 'Styles/kakaoapi.scss';
 
 const initForm = {
     nickname: '',
@@ -20,15 +20,15 @@ const initForm = {
 function kakaoLogin() {
     globalThis.Kakao.Auth.authorize({
         redirectUri: 'http://localhost:3001/admin/kakao-api',
-        scope: 'profile, birthday, talk_message, friends',
+        scope: 'profile, birthday, talk_message, friends'
     });
     return;
-};
+}
 
 function kakaoLogOut() {
     globalThis.Kakao.Auth.logout(function () {
         console.log(globalThis.Kakao.Auth.getAccessToken());
-        globalThis.location.replace('/admin')
+        globalThis.location.replace('/admin');
     });
 }
 
@@ -36,20 +36,20 @@ function getQueryString() {
     const { search } = globalThis.location;
     const index = search.indexOf('=');
     return search.slice(index + 1);
-};
+}
 
 // TODO: 도메인 등록해서 사용하는 것이 안전
 // 호스트 ip변경에 따라 접속 불가능 할 수도 있다
 function loginFormWithKakao() {
     globalThis.Kakao.Auth.loginForm({
         success: function (authObj) {
-            console.log(authObj)
+            console.log(authObj);
         },
         fail: function (err) {
-            console.log(err)
-        },
-    })
-};
+            console.log(err);
+        }
+    });
+}
 
 function unlinkKakao() {
     globalThis.Kakao.API.request({
@@ -61,85 +61,85 @@ function unlinkKakao() {
         fail: function (error) {
             //alert('Kakao unlink error: ${error}')
             console.log(error);
-        },
+        }
     });
 }
 
 export default function KakaoAPI() {
     const [friendsList, setFriendsList] = useState([]);
     const [friendsNameList, setFriendsNameList] = useState([]);
-    const [msgList, setMsgList] = useState([])
-    const [refreshToken, setRefreshToken] = useState({})
+    const [msgList, setMsgList] = useState([]);
+    const [refreshToken, setRefreshToken] = useState({});
     const [searchWord, setSearchWord] = useState('');
-    const test = ['김동익', '김말순', '김제인', '김말숙', '김제제', '김지지']
+    const test = ['김동익', '김말순', '김제인', '김말숙', '김제제', '김지지'];
 
     const [messageForm, onChangeInput] = useInput(initForm);
 
     useEffect(() => {
         let isMounted = false;
         if (!isMounted) {
-            autoComplete(document.getElementById('nickname'), friendsNameList)
+            autoComplete(document.getElementById('nickname'), friendsNameList);
         }
-        console.log(msgList)
-        console.log(refreshToken)
-        console.log(messageForm)
+        console.log(msgList);
+        console.log(refreshToken);
+        console.log(messageForm);
         if (globalThis.location.search.length > 0) {
-            getKakaoAuthToken()
+            getKakaoAuthToken();
         }
         return () => isMounted = true;
-    })
+    });
 
     useEffect(() => {
         messageForm.nickname = document.getElementById('nickname').value;
-        messageForm.uuid = inputValue()[0]?.uuid
-    }, [messageForm])
+        messageForm.uuid = inputValue()[0].uuid;
+    }, [messageForm]);
 
     const getKakaoAuthToken = async () => {
         if (!globalThis.Kakao.Auth.getAccessToken()) {
             if (globalThis.location.search.length > 0) {
                 const res = await AdminApi.getKakaoAccessToken({ code: getQueryString() });
-                globalThis.Kakao.Auth.setAccessToken(res.data.access_token)
+                globalThis.Kakao.Auth.setAccessToken(res.data.access_token);
             }
         }
         return;
-    }
+    };
 
     const getKakaoFriendsList = () => {
         globalThis.Kakao.API.request({
             url: '/v1/api/talk/friends',
             success: function (response) {
-                const friendNames = response.elements.map(el => el.profile_nickname)
-                setFriendsList(response.elements)
-                setFriendsNameList(friendNames)
+                const friendNames = response.elements.map(el => el.profile_nickname);
+                setFriendsList(response.elements);
+                setFriendsNameList(friendNames);
                 console.log(response);
             },
             fail: function (error) {
                 console.log(error);
             }
         });
-    }
+    };
 
     const kakaoSetBookMessage = async () => {
-        await AdminApi.kakaoBookMessage(msgList).then(res => console.log(res))
-    }
+        await AdminApi.kakaoBookMessage(msgList).then(res => console.log(res));
+    };
 
     const kakaoCheckToken = async () => {
-        console.log(globalThis.Kakao.Auth.getAccessToken())
-        await AdminApi.kakaoCheckToken({ token: globalThis.Kakao.Auth.getAccessToken() })
-    }
+        console.log(globalThis.Kakao.Auth.getAccessToken());
+        await AdminApi.kakaoCheckToken({ token: globalThis.Kakao.Auth.getAccessToken() });
+    };
 
     const kakaoRefreshAccessToken = async () => {
-        await AdminApi.kakaoRefreshAccessToken()
-    }
+        await AdminApi.kakaoRefreshAccessToken();
+    };
 
     const setBookingMessage = (ev) => {
         ev.preventDefault();
-        setMsgList([...msgList, messageForm])
-    }
+        setMsgList([...msgList, messageForm]);
+    };
 
     const inputValue = () => {
-        return friendsList.filter(el => el.profile_nickname === messageForm.nickname)
-    }
+        return friendsList.filter(el => el.profile_nickname === messageForm.nickname);
+    };
 
     const renderFriendsList = () => {
         return friendsList.map((el, idx) =>
@@ -148,13 +148,13 @@ export default function KakaoAPI() {
                 <div>{el.profile_nickname}</div>
             </div>
         );
-    }
+    };
 
     const renderMsgList = () => {
         function delMsg(name) {
-            const index = msgList.findIndex(el => el.nickname === name)
+            const index = msgList.findIndex(el => el.nickname === name);
             const newList = [].concat(msgList.slice(0, index), msgList.slice(index + 1));
-            setMsgList(newList)
+            setMsgList(newList);
         }
 
         return msgList.map((el, idx) =>
@@ -165,7 +165,7 @@ export default function KakaoAPI() {
                 {el.message}
                 <div onClick={() => delMsg(el.nickname)}>삭제</div>
             </div>
-        )
+        );
     };
 
 
@@ -213,5 +213,5 @@ export default function KakaoAPI() {
                 {renderMsgList()}
             </div>
         </div>
-    )
+    );
 }

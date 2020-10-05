@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
 
@@ -23,5 +23,5 @@ export default function Header({ setIsLogin, userState }) {
                 </div>
             </nav>
         </header>
-    )
+    );
 }

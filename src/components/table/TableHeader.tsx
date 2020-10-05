@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 interface TableHeaderProps {
     className: string,
@@ -14,18 +14,18 @@ interface Columns {
 export default function TableHeader({ className, tHeadState }: TableHeaderProps) {
 
     const renderTableHeader = () => {
-        let headerNames = [];
-        for (let headers of tHeadState) {
-            headerNames.push(Object.values(headers)[0])
+        const headerNames = [];
+        for (const headers of tHeadState) {
+            headerNames.push(Object.values(headers)[0]);
         }
         return headerNames.map((el, idx) =>
             <div key={idx} className={`${className}-header`}>{el}</div>
-        )
-    }
+        );
+    };
 
     return (
         <div className={`${className}-header-container`}>
             {renderTableHeader()}
         </div>
-    )
+    );
 }

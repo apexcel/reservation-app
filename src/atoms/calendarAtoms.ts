@@ -1,15 +1,15 @@
-import { atom, selector } from 'recoil'
-import { createMonthDays } from "Utils/dateUtils.ts"
+import { atom, selector } from 'recoil';
+import { createMonthDays } from "Utils/dateUtils.ts";
 
 export const maxDateAtom = atom({
     key: 'maxDateAtom',
     default: null
-})
+});
 
 export const minDateAtom = atom({
     key: 'minDateAtom',
     default: null
-})
+});
 
 export const dateRangeAtom = atom({
     key: 'dateRangeAtom',
@@ -17,7 +17,7 @@ export const dateRangeAtom = atom({
         start: new Date(),
         end: new Date()
     }
-})
+});
 
 export const calendarStateAtom = atom({
     key: 'calendarStateAtom',
@@ -25,9 +25,9 @@ export const calendarStateAtom = atom({
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
         today: new Date().getDate(),
-        currentDays: createMonthDays(new Date().getFullYear(), new Date().getMonth()),
+        currentDays: createMonthDays(new Date().getFullYear(), new Date().getMonth())
     }
-})
+});
 
 export const nextMonthSelector = selector({
     key: 'nextMonthSelector',
@@ -40,10 +40,10 @@ export const nextMonthSelector = selector({
             ...calendarState,
             year: year,
             month: month,
-            currentDays: currentDays,
+            currentDays: currentDays
         };
     }
-})
+});
 
 export const prevMonthSelector = selector({
     key: 'prevMonthSelector',
@@ -56,7 +56,7 @@ export const prevMonthSelector = selector({
             ...calendarState,
             year: year,
             month: month,
-            currentDays: currentDays,
+            currentDays: currentDays
         };
     }
 });

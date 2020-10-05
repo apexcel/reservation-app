@@ -1,5 +1,5 @@
-import React from 'react'
-import RowData from './TableRow.tsx'
+import React from 'react';
+import RowData from './TableRow.tsx';
 
 export default function TableBody({ 
     className, 
@@ -16,12 +16,12 @@ export default function TableBody({
             rowItem={el} 
             tHeadState={tHeadState}
             onTableRowClick={onTableRowClick}
-            />)
-    }
+            />);
+    };
 
     return (
         <div className={`${className}-body-wrapper`}>
             {renderTableBody()}
         </div>
-    )
+    );
 }

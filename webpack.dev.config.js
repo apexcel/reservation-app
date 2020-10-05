@@ -3,11 +3,12 @@ const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     mode: 'development',
     entry: {
-        main: './src/index.js'
+        main: './src/index.tsx'
     },
 
     output: {
@@ -15,7 +16,7 @@ module.exports = {
         path: path.resolve('./dist'),
         publicPath: '/'
     },
-
+    devtool: 'eval-cheap-module-source-map',
     devServer: {
         overlay: true,
         stats: 'errors-only',
@@ -76,17 +77,15 @@ module.exports = {
         new webpack.BannerPlugin({
             banner: `Build: ${new Date().toLocaleDateString()}`
         }),
-
         new HtmlWebPackPlugin({
             template: './src/index.html',
         }),
-
         new CleanWebpackPlugin(),
-
         new Dotenv(),
     ],
 
     optimization: {
-
+        minimize: true,
+        minimizer: [new TerserPlugin()]
     },
 };

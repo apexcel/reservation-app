@@ -1,11 +1,13 @@
-import React from 'react'
+import React from 'react';
 
-import 'Styles/Loading.scss'
+import 'Styles/Loading.scss';
 
-export default function Loading() {
+const Loading = (): React.ReactElement => {
     return (
         <>
             <div className='loading-dual-ring'></div>
         </>
-    )
-}
+    );
+};
+
+export default Loading;

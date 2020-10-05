@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 interface ErrorPageProps {
     httpStatus: number
@@ -19,12 +19,12 @@ export default function ErrorPage({ httpStatus }: ErrorPageProps) {
                 <h1>{httpStatus}</h1>
                 <div>{codes[httpStatus]}</div>
             </>
-        )
-    }
+        );
+    };
 
     return (
         <>
             {renderHttpStatusCode()}
         </>
-    )
+    );
 }

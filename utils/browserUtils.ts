@@ -138,6 +138,6 @@ export function autoComplete(input: HTMLInputElement, arr: Array<String>) {
 
     document.addEventListener('click', (ev) => {
         destoryAllSuggestList(ev.target);
-    })
+    });
 }
 

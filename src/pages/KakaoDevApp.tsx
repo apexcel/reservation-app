@@ -1,41 +1,41 @@
-import React, { useEffect, useState } from 'react'
-import UserApi from 'Api/UserApi'
+import React, { useEffect, useState } from 'react';
+import UserApi from 'Api/UserApi.ts';
 
-import 'Styles/kakaodevapp.scss'
+import 'Styles/kakaodevapp.scss';
 
 export default function KakaoDevApp() {
 
     const Kakao = globalThis.Kakao;
     const [accessCode, setAccessCode] = useState('');
-    const [tokenData, setTokenData] = useState({})
+    const [tokenData, setTokenData] = useState({});
 
     useEffect(() => {
         if (globalThis.location.search.length > 0) {
             getCode();
             if (accessCode.length > 0 && !Kakao.Auth.getAccessToken()) {
-                getKakaoAuthToken()
+                getKakaoAuthToken();
             }
         }
-    })
+    });
 
     const getCode = () => {
         const { search } = globalThis.location;
         const index = search.indexOf('=');
         const code = search.slice(index + 1);
-        setAccessCode(code)
+        setAccessCode(code);
         return code;
     };
 
     const getKakaoAuthToken = async () => {
         const res = await UserApi.getKakaoAccessToken({ code: accessCode });
-        Kakao.Auth.setAccessToken(res.data.access_token)
+        Kakao.Auth.setAccessToken(res.data.access_token);
         return;
-    }
+    };
 
     const getKakaoAuthCode = async () => {
         Kakao.Auth.authorize({
             redirectUri: 'http://localhost:3001/kakao-devapp',
-            scope: 'profile, birthday, talk_message, friends',
+            scope: 'profile, birthday, talk_message, friends'
         });
         return;
     };
@@ -50,25 +50,25 @@ export default function KakaoDevApp() {
                 console.log(error);
             }
         });
-    }
+    };
 
     const unlinkKaKao = () => {
         Kakao.API.request({
             url: '/v1/user/unlink',
             success: function (response) {
                 console.log(response);
-                alert('앱 연결이 종료되었습니다.')
-                setAccessCode('')
-                setTokenData({})
-                globalThis.location.replace('/kakao-devapp')
+                alert('앱 연결이 종료되었습니다.');
+                setAccessCode('');
+                setTokenData({});
+                globalThis.location.replace('/kakao-devapp');
             },
             fail: function (error) {
                 console.log(error);
-                alert(`Error: ${error}`)
-                globalThis.location.replace('/kakao-devapp')
-            },
+                alert(`Error: ${error}`);
+                globalThis.location.replace('/kakao-devapp');
+            }
         });
-    }
+    };
 
     const renderDevAppDesc = () => {
         return (
@@ -101,8 +101,8 @@ export default function KakaoDevApp() {
                     </div>
                 </article>
             </div>
-        )
-    }
+        );
+    };
 
     return (
         <>
@@ -121,5 +121,5 @@ export default function KakaoDevApp() {
             </div>
             {renderDevAppDesc()}
         </>
-    )
+    );
 }

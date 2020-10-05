@@ -12,7 +12,7 @@ export default function DescriptionList({
     className, title, children}: DescriptionListProps) {
 
     return (
-        <dl className={`desc_list ${(className ? className : '')?.toString().trim()}`}>
+        <dl className={`desc_list ${(className ? className : '')}`}>
             <dt>{title}</dt>
             <dd>{children}</dd>
         </dl>

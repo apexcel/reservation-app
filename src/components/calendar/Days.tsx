@@ -1,10 +1,10 @@
-import React from 'react'
-import Day from './Day.tsx'
+import React from 'react';
+import Day from './Day.tsx';
 
 type Days = {
     className: string,
     currentDays: Array<Date>,
-    onDateClick: Function,
+    onDateClick: () => void
 }
 
 export default function Days({
@@ -28,5 +28,5 @@ export default function Days({
         <div className={`${className}-body`}>
             {renderDays()}
         </div>
-    )
+    );
 }

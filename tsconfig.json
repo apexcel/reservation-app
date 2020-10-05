@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "target": "ES6",
-        "module": "esnext",
-        "moduleResolution": "node",
+        "target": "ES5",
+        "module": "ESNext",
+        "moduleResolution": "Node",
         "noResolve": false,
         "noImplicitAny": false,
         "removeComments": false,
@@ -11,14 +11,12 @@
         "jsx": "react",
         "allowSyntheticDefaultImports": true,
         "keyofStringsOnly": true,
-        "baseUrl": "./src"
+        "baseUrl": "./"
     },
     "include": [
+        "./src/**/*.ts",
         "./src/**/*.tsx",
         "@type", 
-        "src/App.tsx", 
-        "../tulib/src/calendar/Calendar.ts", 
-        "src/reducers/useInput.ts",
         "utils",
         "types"
     ],
@@ -28,5 +26,7 @@
         "scripts",
         "webpack",
         "jest",
+        "api",
+        "server"
     ]
 }

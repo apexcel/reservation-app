@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from 'react'
-import { useRecoilState } from 'recoil'
-import { Redirect, Switch } from 'react-router-dom'
-import jwtDecode from 'jwt-decode'
+import React, { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { Redirect, Switch } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 // custom
-import { userStateAtom } from 'Atoms/globalAtoms.ts'
-import { isEmpty } from 'Utils/utils.ts'
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
-import RestrictedRoute from 'Components/RestrictedRoute.tsx'
-import Loading from 'Components/Loading.tsx'
-import {useInterval} from 'Reducers/useInterval.ts'
-import UserApi from 'Api/UserApi'
-import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts'
+import { userStateAtom } from 'Atoms/globalAtoms.ts';
+import { isEmpty } from 'Utils/utils.ts';
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
+import RestrictedRoute from 'Components/RestrictedRoute.tsx';
+import Loading from 'Components/Loading.tsx';
+import {useInterval} from 'Reducers/useInterval.ts';
+import UserApi from 'Api/UserApi.ts';
+import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts';
 
 // pages
-import Header from './pages/layout/Header.tsx'
-import Footer from './pages/layout/Footer.tsx'
-import Profile from './pages/user/Profile.tsx'
-import Main from './pages/Main.tsx'
-import SignIn from './pages/SignIn.tsx'
-import Admin from './pages/admin/Admin.tsx'
-import ErrorPage from './pages/ErrorPage.tsx'
-import KakaoDevApp from './pages/KakaoDevApp.tsx'
+import Header from './pages/layout/Header.tsx';
+import Footer from './pages/layout/Footer.tsx';
+import Profile from './pages/user/Profile.tsx';
+import Main from './pages/Main.tsx';
+import SignIn from './pages/SignIn.tsx';
+import Admin from './pages/admin/Admin.tsx';
+import ErrorPage from './pages/ErrorPage.tsx';
+import KakaoDevApp from './pages/KakaoDevApp.tsx';
 
 // styles
-import 'Styles/App.scss'
-import 'Styles/Common.scss'
+import 'Styles/App.scss';
+import 'Styles/Common.scss';
 
 async function addKakaoScript() {
     const script = document.createElement('script');
@@ -38,9 +38,9 @@ async function addKakaoScript() {
 }
 
 export default function App() {
-    const [userState, setUserState] = useRecoilState(userStateAtom)
-    const [isLogin, setIsLogin] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
+    const [userState, setUserState] = useRecoilState(userStateAtom);
+    const [isLogin, setIsLogin] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setIsLoading(true);
@@ -49,8 +49,8 @@ export default function App() {
         }
         else {
             if (!globalThis.Kakao.isInitialized()) {
-                globalThis.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY)
-                console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized())
+                globalThis.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
+                console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized());
             }
         }
         setIsLoading(false);
@@ -58,16 +58,16 @@ export default function App() {
 
     useEffect(() => {
         probeUserCookie();
-    }, [])
+    }, []);
 
     // TODO: 쿠키 이용 및 세션을 통한 로그인 검증
     const probeUserCookie = async () => {
         const userCookie = getCookie('userToken');
-        console.log(userCookie)
-        console.log(userState)
+        console.log(userCookie);
+        console.log(userState);
         if (isEmpty(userState) && !isEmpty(userCookie)) {
             const token = jwtDecode(userCookie);
-            console.log(token)
+            console.log(token);
             if (token.exp > new Date().valueOf()) {
                 const id = decryptAES(token.access_code).id;
                 const userInfo = await UserApi.getUserInfo(userCookie, id).then(res => res.data);
@@ -95,7 +95,7 @@ export default function App() {
     };
 
     useInterval(() => {
-        probeUserCookie()
+        probeUserCookie();
     }, 1800 * 1000);
 
     return (
@@ -137,5 +137,5 @@ export default function App() {
                 </>
             }
         </>
-    )
+    );
 }

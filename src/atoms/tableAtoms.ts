@@ -1,10 +1,10 @@
-import { atom, atomFamily, selector } from 'recoil'
+import { atom } from 'recoil';
 
 export const tableHeadStateAtom = atom({
     key: 'tableHeadStateAtom',
     default: [{
         name: "",
-        field: "",
+        field: ""
     }]
 });
 

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import React, { useState, useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { createEmptyTableRow, fulfillEmptyObject } from 'Utils/tableUtils.ts'
-import { genTableName } from 'Utils/utils.ts'
-import { tableHeadStateAtom, tableBodyStateAtom } from 'Atoms/tableAtoms.ts'
-import { currentSelectedDateAtom, getTableHeadersEachDay } from 'Atoms/globalAtoms.ts'
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
+import { createEmptyTableRow, fulfillEmptyObject } from 'Utils/tableUtils.ts';
+import { genTableName } from 'Utils/utils.ts';
+import { tableHeadStateAtom, tableBodyStateAtom } from 'Atoms/tableAtoms.ts';
+import { currentSelectedDateAtom, getTableHeadersEachDay } from 'Atoms/globalAtoms.ts';
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
 
-import TableDialog from './TableDialog.tsx'
-import Calendar from 'Components/calendar/Calendar.tsx'
+import TableDialog from './TableDialog.tsx';
+import Calendar from 'Components/calendar/Calendar.tsx';
 
-import ReservationApi from 'Api/ReservationApi'
+import ReservationApi from 'Api/ReservationApi.ts';
 
 export default function Main() {
 
@@ -24,7 +24,7 @@ export default function Main() {
     // Calendar
     const now = new Date().valueOf();
     const maxDate = new Date(now + (86400000 * 31));
-    const minDate = new Date(now - (86400000 * 1))
+    const minDate = new Date(now - (86400000 * 1));
 
     // Dialog
     const openDialog = () => setIsDialogVisible(true);
@@ -33,7 +33,7 @@ export default function Main() {
     useEffect(() => {
         setTableHead(getHeaders);
         getBookedList(selectedDateState);
-    }, [selectedDateState])
+    }, [selectedDateState]);
 
     const onDateClick = async (ev, selectedDate) => {
         //console.log(ev, selectedDate);
@@ -51,7 +51,7 @@ export default function Main() {
         const response = await ReservationApi.getReservationList(token, data);
         const emptyTableRow = createEmptyTableRow(tableHead);
         const newTableBody = fulfillEmptyObject(response.data, emptyTableRow);
-        setTableBody(newTableBody)
+        setTableBody(newTableBody);
     };
 
     return (
@@ -75,5 +75,5 @@ export default function Main() {
                 selectedDateState={selectedDateState}
             />
         </>
-    )
+    );
 }

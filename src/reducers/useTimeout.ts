@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 
 export function useTimeout(callback, wait) {
     useEffect(() => {
@@ -9,4 +9,4 @@ export function useTimeout(callback, wait) {
             return () => clearTimeout(paused);
         }
     }, [wait]);
-};
+}

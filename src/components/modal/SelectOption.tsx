@@ -1,7 +1,6 @@
-import React from 'react'
+import React from 'react';
 
 interface SelectOptionProps {
-    CommonFormType,
     optionArray: Array<string>,
     onChange: () => void,
 }
@@ -16,7 +15,7 @@ export default function SelectOption({
     max,
     min,
     optionArray,
-    onChange }: SelectOptionProps) {
+    onChange }) {
 
     const options = optionArray.map((el, idx) =>
         <option key={idx}>{el}</option>);
@@ -33,5 +32,5 @@ export default function SelectOption({
                 {options}
             </select>
         </div>
-    )
+    );
 }

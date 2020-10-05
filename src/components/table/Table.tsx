@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
-import TableBody from './TableBody.tsx'
-import TableHeader from './TableHeader.tsx'
+import React from 'react';
+import TableBody from './TableBody.tsx';
+import TableHeader from './TableHeader.tsx';
 
-import '../../styles/table.scss'
+import '../../styles/table.scss';
 
 interface Columns {
     name: string,
@@ -39,5 +39,5 @@ export default function Table({
                 onTableRowClick={onTableRowClick}
             />
         </div>
-    )
+    );
 }

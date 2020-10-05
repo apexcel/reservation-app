@@ -1,11 +1,11 @@
-import React, { useEffect, useReducer, useState } from 'react'
-import UserApi from 'Api/UserApi'
-import AdminApi from 'Api/AdminApi'
-import { formattedDateString } from 'Utils/utils.ts'
-import useInput from 'Reducers/useInput.ts'
+import React, { useEffect, useState } from 'react';
+import UserApi from 'Api/UserApi.ts';
+import AdminApi from 'Api/AdminApi.ts';
+import { formattedDateString } from 'Utils/utils.ts';
+import useInput from 'Reducers/useInput.ts';
 import SelectOption from 'Components/modal/SelectOption.tsx';
-import Dialog from 'Components/modal/Dialog.tsx'
-import Input from 'Components/modal/Input.tsx'
+import Dialog from 'Components/modal/Dialog.tsx';
+import Input from 'Components/modal/Input.tsx';
 
 const initForm = {
     lessonName: '',
@@ -17,8 +17,8 @@ const initForm = {
     additionalDays: 0,
     discount: 0,
     point: 0,
-    price: 0,
-}
+    price: 0
+};
 
 export default function UpdateLessonDialog({ fullname, closeDialog }) {
 
@@ -37,34 +37,34 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
     ];
 
     useEffect(() => {
-        adminListFromAPI()
-    }, [])
+        adminListFromAPI();
+    }, []);
 
     useEffect(() => {
-        const val = setFormValue(lessonForm.lessonName)
-        lessonForm.price = calculatedValues.price
+        const val = setFormValue(lessonForm.lessonName);
+        lessonForm.price = calculatedValues.price;
         lessonForm.endDate = val;
-        lessonForm.counter = calculatedValues.counter
-        console.log(lessonForm)
-    }, [lessonForm])
+        lessonForm.counter = calculatedValues.counter;
+        console.log(lessonForm);
+    }, [lessonForm]);
 
     const adminListFromAPI = async () => {
         const res = await AdminApi.getAdminList();
         res.data.unshift('Admin Names');
         setAdminList(res.data);
-    }
+    };
 
     const addLessonToUser = async (ev) => {
         ev.preventDefault();
         const data = {
             fullname: fullname,
-            lesson: lessonForm,
+            lesson: lessonForm
         };
-        console.log('Add Lesson API')
+        console.log('Add Lesson API');
         await UserApi.addLesson(data);
         window.location.reload();
         closeDialog();
-    }
+    };
 
     const calcDiscount = (price, discount) => {
         return (discount === 0) ? price :
@@ -79,50 +79,50 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
                     counter: 4,
                     price: calcDiscount(210000, lessonForm.discount),
                     endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 31) + (lessonForm.additionalDays * 86400000)))
-                })
-                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 31) + (lessonForm.additionalDays * 86400000)))
+                });
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 31) + (lessonForm.additionalDays * 86400000)));
             case 'M2C5':
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 5,
                     price: calcDiscount(330000, lessonForm.discount),
                     endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
-                })
-                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
+                });
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)));
             case 'M2C9':
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 9,
                     price: calcDiscount(420000, lessonForm.discount),
                     endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
-                })
-                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)))
+                });
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 61) + (lessonForm.additionalDays * 86400000)));
             case 'M3C13':
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 13,
                     price: calcDiscount(630000, lessonForm.discount),
                     endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 91) + (lessonForm.additionalDays * 86400000)))
-                })
-                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 91) + (lessonForm.additionalDays * 86400000)))
+                });
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 91) + (lessonForm.additionalDays * 86400000)));
             case 'M6C26':
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 26,
                     price: calcDiscount(1260000, lessonForm.discount),
                     endDate: formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 182) + (lessonForm.additionalDays * 86400000)))
-                })
-                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 182) + (lessonForm.additionalDays * 86400000)))
+                });
+                return formattedDateString(new Date(new Date(lessonForm.startDate).valueOf() + (86400000 * 182) + (lessonForm.additionalDays * 86400000)));
             default:
                 setCalculatedValues({
                     ...calculatedValues,
                     counter: 0,
                     price: 0,
                     endDate: formattedDateString(new Date())
-                })
-                return formattedDateString(new Date())
+                });
+                return formattedDateString(new Date());
         }
-    }
+    };
 
 
     const renderDialogBody = () => {
@@ -162,8 +162,8 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
                     <button type='button' onClick={addLessonToUser}>Confirm</button>
                 </div>
             </>
-        )
-    }
+        );
+    };
 
     return (
         <Dialog
@@ -171,5 +171,5 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
             dialogHeader={'Update Lesson'}
             dialogBody={renderDialogBody()}
         />
-    )
+    );
 }

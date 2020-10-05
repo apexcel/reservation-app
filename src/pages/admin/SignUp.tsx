@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import { useRecoilValue } from 'recoil'
-import { baseURLAtom } from 'Atoms/globalAtoms.ts'
+import { useRecoilValue } from 'recoil';
+import { baseURLAtom } from 'Atoms/globalAtoms.ts';
 import useInput from 'Reducers/useInput.ts';
 import axios from 'axios';
 
-import Input from 'Components/modal/Input.tsx'
+import Input from 'Components/modal/Input.tsx';
 import SelectOption from 'Components/modal/SelectOption.tsx';
 
-import 'Styles/signup.scss'
+import 'Styles/signup.scss';
 
 export default function SignUp() {
 
@@ -21,15 +21,15 @@ export default function SignUp() {
         dobMonth: '',
         dobDate: '',
         tel: '',
-        isAdmin: false,
-    }
+        isAdmin: false
+    };
 
-    const [signUpForm, onChangeInput, onChangeCheck] = useInput(initForm)
+    const [signUpForm, onChangeInput, onChangeCheck] = useInput(initForm);
     const baseURL = useRecoilValue(baseURLAtom);
 
     useEffect(() => {
-        console.log(signUpForm)
-    })
+        console.log(signUpForm);
+    });
 
     const callSignUpAPI = async (ev) => {
         ev.preventDefault();
@@ -46,7 +46,7 @@ export default function SignUp() {
         
         try {
             firstEmptyItem.map((el, idx) => {
-                let classList = document.getElementById(Object.keys(signUpForm)[idx]).classList;
+                const classList = document.getElementById(Object.keys(signUpForm)[idx]).classList;
                 el ? (classList.remove("empty-warn")) : (classList.add("empty-warn"));
             });
             await axios.post(url, data).then(res => console.log(res));
@@ -59,13 +59,13 @@ export default function SignUp() {
             alert(`${signUpForm.lastname}${signUpForm.firstname}의 ${userPower} 등록이 되었습니다.`)
             globalThis.location.replace(`/admin`)
         }
-    }
+    };
 
 
     const isSamePassword = () => {
         if (signUpForm.password === signUpForm.passwordCheck) return true;
         return false;
-    }
+    };
 
     //TODO: 아이디 중복 확인 하기, 비밀번호 2중 확인 일치, 생년월일 제대로된 입력인지 확인
     // 휴대폰양식 확인, 알맞은 이메일 양식확인
@@ -182,5 +182,5 @@ export default function SignUp() {
                 </div>
             </fieldset>
         </form>
-    )
+    );
 }

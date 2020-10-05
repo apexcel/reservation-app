@@ -1,4 +1,4 @@
-import SendTo from './SendTo';
+import SendTo from './SendTo.ts';
 
 export default {
     signIn(data) {

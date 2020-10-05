@@ -1,10 +1,10 @@
-import React from 'react'
-import { Link, Switch, Route, Redirect } from 'react-router-dom'
-import Search from './Search.tsx'
-import SignUp from './SignUp.tsx'
-import KakaoAPI from './KakaoApi.tsx'
+import React from 'react';
+import { Link, Switch, Route, Redirect } from 'react-router-dom';
+import Search from './Search.tsx';
+import SignUp from './SignUp.tsx';
+import KakaoAPI from './KakaoApi.tsx';
 
-import 'Styles/admin.scss'
+import 'Styles/admin.scss';
 
 export default function Admin() {
 
@@ -28,5 +28,5 @@ export default function Admin() {
             </Switch>
         </section>
         </div>
-    )
+    );
 }

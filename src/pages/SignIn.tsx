@@ -1,20 +1,19 @@
 import React from 'react';
-import { useSetRecoilState } from 'recoil'
-import { userStateAtom } from 'Atoms/globalAtoms.ts'
-import * as CryptoJS from 'crypto-js/'
+import { useSetRecoilState } from 'recoil';
+import { userStateAtom } from 'Atoms/globalAtoms.ts';
+import * as CryptoJS from 'crypto-js/';
 
-import { isEmpty } from 'Utils/utils.ts'
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
-import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts'
-import jwtDecode from 'jwt-decode'
-import * as jwt from 'jsonwebtoken'
+import { isEmpty } from 'Utils/utils.ts';
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
+import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts';
+import jwtDecode from 'jwt-decode';
+import * as jwt from 'jsonwebtoken';
 
-import Input from 'Components/modal/Input.tsx'
-import useInput from 'Reducers/useInput.ts'
-import AdminApi from 'Api/AdminApi'
-import UserApi from 'Api/UserApi'
-import AuthApi from 'Api/AuthApi'
-
+import Input from 'Components/modal/Input.tsx';
+import useInput from 'Reducers/useInput.ts';
+import AdminApi from 'Api/AdminApi.ts';
+import UserApi from 'Api/UserApi.ts';
+import AuthApi from 'Api/AuthApi.ts';
 
 export default function SignIn({ setIsLogin, adminLogin }) {
 
@@ -27,7 +26,7 @@ export default function SignIn({ setIsLogin, adminLogin }) {
     const login = async (username, password) => {
         const data = {
             username: username,
-            password: password,
+            password: password
         };
 
         const encData = encryptAES(data);

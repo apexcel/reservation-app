@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import { useRecoilState } from 'recoil'
-import jwtDecode from 'jwt-decode'
+import React, { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import jwtDecode from 'jwt-decode';
 
-import { tableBodyStateAtom, tableHeadStateAtom } from 'Atoms/tableAtoms.ts'
-import { userStateAtom } from 'Atoms/globalAtoms.ts'
-import { genTableName, isEmpty } from 'Utils/utils.ts'
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
+import { tableBodyStateAtom, tableHeadStateAtom } from 'Atoms/tableAtoms.ts';
+import { userStateAtom } from 'Atoms/globalAtoms.ts';
+import { genTableName, isEmpty } from 'Utils/utils.ts';
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
 
-import ReservationApi from 'Api/ReservationApi'
-import UserApi from 'Api/UserApi'
+import ReservationApi from 'Api/ReservationApi.ts';
+import UserApi from 'Api/UserApi.ts';
 
-import Table from 'Components/table/Table.tsx'
-import Dialog from 'Components/modal/Dialog.tsx'
-import LessonDialog from './user/LessonDialog.tsx'
+import Table from 'Components/table/Table.tsx';
+import Dialog from 'Components/modal/Dialog.tsx';
+import LessonDialog from './user/LessonDialog.tsx';
 
-import socketio from 'socket.io-client'
+import * as socketio from 'socket.io-client';
 const io = socketio.connect('http://localhost:9000');
 
-import 'Styles/dialog.scss'
+import 'Styles/dialog.scss';
 
 interface DialogProps {
     isDialogVisible: boolean,
@@ -28,30 +28,30 @@ interface DialogProps {
 export default function TableDialog({ isDialogVisible, closeDialog, selectedDateState }: DialogProps) {
 
     const [lessonDialogShow, setLessonDialogShow] = useState(false);
-    const openL = () => { setLessonDialogShow(true) }
-    const closeL = () => { setLessonDialogShow(false) }
+    const openL = () => { setLessonDialogShow(true); };
+    const closeL = () => { setLessonDialogShow(false); };
 
-    const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom)
+    const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom);
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
-    const [userState, setUserState] = useRecoilState(userStateAtom)
+    const [userState, setUserState] = useRecoilState(userStateAtom);
 
     const updateTableBodyState = (index, field, name?) => {
         if (name) {
             return (tableBody.map((el, idx) => {
-                return index === idx ? { ...tableBody[idx], [field]: name } : el
-            }))
+                return index === idx ? { ...tableBody[idx], [field]: name } : el;
+            }));
         }
         return (tableBody.map((el, idx) => {
-            return index === idx ? { ...tableBody[idx], [field]: userState.fullname } : el
-        }))
+            return index === idx ? { ...tableBody[idx], [field]: userState.fullname } : el;
+        }));
     };
 
     useEffect(() => {
         io.on('set', (table) => {
-            console.log(table)
-            setTableBody(table)
-        })
-    }, [])
+            console.log(table);
+            setTableBody(table);
+        });
+    }, []);
 
     const onTableRowClick = async (ev, rowIndex, currentTableRowValue, selectedHeadState) => {
         const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIndex + 13);
@@ -61,9 +61,9 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
             const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);
             if (ans && !userState.isAdmin) {
                 const updated = updateTableBodyState(rowIndex, selectedHeadState.field)
-                setTableBody(updated)
+                setTableBody(updated);
                 setBookedList(rowIndex, updated[rowIndex], selectedDate);
-                io.emit('get', { table: updated })
+                io.emit('get', { table: updated });
                 //updateLesson()
                 return;
             }
@@ -72,20 +72,20 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                 const willSetName = prompt('이름을 입력해주세요.');
                 if (!isEmpty(willSetName)) {
                     const updated = updateTableBodyState(rowIndex, selectedHeadState.field, willSetName)
-                    setTableBody(updated)
+                    setTableBody(updated);
                     setBookedList(rowIndex, updated[rowIndex], selectedDate);
-                    io.emit('get', { table: updated })
+                    io.emit('get', { table: updated });
                     return;
                 }
             }
         }
         // 예약 취소
         if ((currentTableRowValue === userState.fullname) || (!isEmpty(currentTableRowValue) && userState.isAdmin === true)) {
-            const ans = confirm(`예약 취소 하시겠습니까?`)
+            const ans = confirm(`예약 취소 하시겠습니까?`);
             if (ans) {
-                let removed = tableBody.map((el, idx) => {
+                const removed = tableBody.map((el, idx) => {
                     if (el[selectedHeadState.field] === currentTableRowValue && rowIndex === idx) {
-                        console.log("true", el, idx)
+                        console.log("true", el, idx);
                         return { ...el, [selectedHeadState.field]: "" };
                     }
                     else {
@@ -94,7 +94,7 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                 });
                 setTableBody(removed);
                 await setBookedList(rowIndex, removed[rowIndex], selectedDate);
-                io.emit('get', { table: removed })
+                io.emit('get', { table: removed });
                 return;
             }
         }
@@ -120,16 +120,16 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
             new Date(el.endDate) > new Date()
         );
         return validLessons.length > 0 ? true : false;
-    }
+    };
 
     const updateLesson = async () => {
         const updated = await UserApi.subtractLesson(userState.fullname);
         if (updated.status === 200) {
-            const userResp = await UserApi.getUserInfo(userState.fullname).then(res => res.data)
-            setUserState(jwtDecode(userResp.token))
+            const userResp = await UserApi.getUserInfo(userState.fullname).then(res => res.data);
+            setUserState(jwtDecode(userResp.token));
         }
         else {
-            alert('Unknown Error!')
+            alert('Unknown Error!');
         }
     };
 
@@ -142,7 +142,7 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                 <span>{selectedDateState.getDate()}</span>
                 <span>{dow[selectedDateState.getDay()]}</span>
             </div>
-        )
+        );
     };
 
     return (
@@ -160,5 +160,5 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                 </Dialog> : null}
             {lessonDialogShow ? <LessonDialog closeDialog={closeL} /> : null}
         </>
-    )
+    );
 }

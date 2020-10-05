@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-import 'Styles/CardBox.scss'
+import 'Styles/CardBox.scss';
 
 interface CardBoxProps {
     children: any
@@ -12,7 +12,7 @@ export default function CardBox({
     children,
     title,
     footer
-}: CardBoxProps) {
+}: CardBoxProps):React.ReactElement{
 
     return (
         <div className={`cardbox-container`}>
@@ -33,5 +33,5 @@ export default function CardBox({
                 </div>
             </div>
         </div>
-    )
+    );
 }

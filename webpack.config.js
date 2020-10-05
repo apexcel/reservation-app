@@ -3,18 +3,16 @@ const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
-
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     mode: 'production',
-    
     entry: {
-        main: './src/index.js'
+        main: './src/index.tsx'
     },
-
     output: {
         filename: '[name].js',
-        path: path.resolve('./dist'),
+        path: path.join(__dirname, 'dist/'),
         publicPath: '/'
     },
 
@@ -25,13 +23,13 @@ module.exports = {
             Api: path.resolve(__dirname, "api/"),
             Components: path.resolve(__dirname, "src/components/"),
             Reducers: path.resolve(__dirname, "src/reducers/"),
-            Styles: path.resolve(__dirname, "src/styles/")
+            Styles: path.resolve(__dirname, "src/styles/"),
         }
     },
 
     module: {
         rules: [
-            {   
+            {
                 test: /\.(js|jsx)$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/
@@ -40,7 +38,7 @@ module.exports = {
                 test: /\.(ts|tsx)$/,
                 loader: 'ts-loader',
                 options: {
-                    transpileOnly: true,
+                    transpileOnly: true
                 },
                 exclude: /node_modules/
             },
@@ -69,18 +67,15 @@ module.exports = {
         new webpack.BannerPlugin({
             banner: `Build: ${new Date().toLocaleDateString()}`
         }),
-
         new HtmlWebPackPlugin({
-            template: './src/index.html',
+            template: './src/index.html'
         }),
-
         new CleanWebpackPlugin(),
-
-        new Dotenv(),
-
+        new Dotenv()
     ],
 
     optimization: {
-
-    },
+        minimize: true,
+        minimizer: [new TerserPlugin()]
+    }
 };

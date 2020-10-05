@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { Route, Switch, useHistory } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
-import useInput from 'Reducers/useInput.ts'
-import UserApi from 'Api/UserApi'
+import useInput from 'Reducers/useInput.ts';
+import UserApi from 'Api/UserApi.ts';
 
-import Input from 'Components/modal/Input.tsx'
-import Searched from './Searched.tsx'
+import Input from 'Components/modal/Input.tsx';
+import Searched from './Searched.tsx';
 
-import 'Styles/search.scss'
+import 'Styles/search.scss';
 
 export default function Search() {
 
@@ -30,34 +30,34 @@ export default function Search() {
         }
         return () => {
             isMounted = false;
-        }
-    }, [])
+        };
+    }, []);
 
     const onSearch = (ev) => {
         ev.preventDefault();
-        setNameForSearch(searchName.name)
-        history.push(`/admin/search/getuser/${searchName.name}`)
+        setNameForSearch(searchName.name);
+        history.push(`/admin/search/getuser/${searchName.name}`);
         searchName.name = '';
-    }
+    };
 
     const onClickUserList = (ev, name) => {
-        ev.preventDefault()
-        console.log(name)
+        ev.preventDefault();
+        console.log(name);
     };
 
     const renderUserList = () => {
         return userList.map((el, idx) => {
             const _onClick = (ev: React.MouseEvent , name = el.fullname) => {
                 ev.preventDefault();
-                onClickUserList.call(this, ev, name)
-            }
+                onClickUserList.call(this, ev, name);
+            };
 
             return (<div className='user-list-container' onClick={_onClick} key={idx}>
                 <div>{el.fullname}</div>
                 <div>{el.username}</div>
                 <div>{el.tel}</div>
             </div>);
-        })
+        });
     };
 
     return (
@@ -73,5 +73,5 @@ export default function Search() {
                 {(searchName.name === '' && history.location.pathname === '/admin/search') ? renderUserList() : ''}
             </div>
         </div>
-    )
+    );
 }

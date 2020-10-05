@@ -1,10 +1,9 @@
-import React from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { isEmpty } from '../../../utils/utils.ts'
+import React from 'react';
+import { isEmpty } from '../../../utils/utils.ts';
 
 interface TableRowProps {
     className: string,
-    rowItem: Array<object>
+    rowItem: Array<Record<string, unknown>>
     tHeadState: Array<Columns>,
     index: number,
     onTableRowClick: () => void
@@ -25,7 +24,7 @@ export default function TableRow({
 }: TableRowProps) {
 
     const renderRows = () => {
-        let rows = [];
+        const rows = [];
 
         for (let i = 0; i < tHeadState.length; i += 1) {
             //console.log(rowItem)
@@ -34,11 +33,11 @@ export default function TableRow({
 
             const _onTableRowClick = (ev: React.MouseEvent, rowIndex = index, currentTableRowValue = rowItem[tHeadState[i].field]) => {
                 ev.preventDefault();
-                onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i])
+                onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i]);
             };
             const classNames = [`${className}-row-cell`];
             let isClickable = true;
-            const children = rowItem[tHeadState[i].field]
+            const children = rowItem[tHeadState[i].field];
 
             // row가 비어있는지 확인
             isEmpty(rowItem[tHeadState[i].field]) ? classNames.push(`${className}-not-booked`) : classNames.push(`${className}-booked`);
@@ -47,15 +46,15 @@ export default function TableRow({
             // unabled table range 확인
             if (tHeadState[i].range) {
                 if (tHeadState[i].range[0] <= index && tHeadState[i].range[1] > index) {
-                    classNames.push(`${className}-unable`)
+                    classNames.push(`${className}-unable`);
                     isClickable = false;
                 }
             }
 
-            rows[i] = row(i, children, classNames, (isClickable ? _onTableRowClick : null))
+            rows[i] = row(i, children, classNames, (isClickable ? _onTableRowClick : null));
         }
         return rows;
-    }
+    };
 
     const row = (key, children, classNames, onClick) => {
         const className = ''.concat(classNames.join(' '));
@@ -66,12 +65,12 @@ export default function TableRow({
                 onClick={onClick ? onClick : null}>
                 {children}
             </div>
-        )
+        );
     };
 
     return (
         <div className={`${className}-body`}>
             {renderRows()}
         </div>
-    )
+    );
 }

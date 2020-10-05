@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { maxDateAtom, minDateAtom, dateRangeAtom } from '../../atoms/calendarAtoms.ts'
-import { atom, useRecoilValue } from 'recoil'
+import React from 'react'
+import { maxDateAtom, minDateAtom } from '../../atoms/calendarAtoms.ts'
+import { useRecoilValue } from 'recoil'
 
 interface DateValues {
     date: Date,
@@ -10,8 +10,8 @@ interface DateValues {
 
 interface DayProps {
     className: string,
-    currentDay: DateValues
-    onDateClick: () => void,
+    currentDay: DateValues,
+    onDateClick: () => void
 }
 export default function Day({
     className,
@@ -30,10 +30,10 @@ export default function Day({
 
     const renderDay = () => {
         //console.log(currentDay)
-        let adjacent = currentDay.status !== "current" ? true : false;
+        const adjacent = currentDay.status !== "current" ? true : false;
+        const sat = currentDay.day === 6 ? true : false;
+        const sun = currentDay.day === 0 ? true : false;
         let today = false;
-        let sat = currentDay.day === 6 ? true : false;
-        let sun = currentDay.day === 0 ? true : false;
 
 
         // TODO: Date-range 구간 Refactor
