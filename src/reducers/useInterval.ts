@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
-export function useInterval(callback, delay) {
+export function useInterval(callback: ()=>void, delay: number): void {
     useEffect(() => {
         const tick = () => callback();
 

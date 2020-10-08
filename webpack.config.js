@@ -17,6 +17,7 @@ module.exports = {
     },
 
     resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
         alias: {
             Utils: path.resolve(__dirname, "utils/"),
             Atoms: path.resolve(__dirname, "src/atoms/"),
@@ -75,6 +76,11 @@ module.exports = {
     ],
 
     optimization: {
+        splitChunks: {
+            name: 'vendor',
+            chunks: 'initial',
+            filename: '[name]-[hash].js'
+        },
         minimize: true,
         minimizer: [new TerserPlugin()]
     }

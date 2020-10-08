@@ -29,10 +29,10 @@ export default function Profile({ userState }) {
 
     useEffect(() => {
         if (reservations) {
-            console.log(reservations)
-            refinedReservations()
+            console.log(reservations);
+            refinedReservations();
         }
-    }, [reservations])
+    }, [reservations]);
 
     const getUserBookedList = async () => {
         const data = {

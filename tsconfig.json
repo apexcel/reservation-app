@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES5",
-        "module": "ESNext",
+        "module": "ES6",
         "moduleResolution": "Node",
         "noResolve": false,
         "noImplicitAny": false,

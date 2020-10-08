@@ -7,12 +7,12 @@ import jwtDecode from 'jwt-decode';
 import { userStateAtom } from 'Atoms/globalAtoms.ts';
 import { isEmpty } from 'Utils/utils.ts';
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
-import RestrictedRoute from 'Components/RestrictedRoute.tsx';
+import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts';
 import Loading from 'Components/Loading.tsx';
 import {useInterval} from 'Reducers/useInterval.ts';
 import UserApi from 'Api/UserApi.ts';
-import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts';
 
+import RestrictedRoute from 'Components/RestrictedRoute.tsx';
 // pages
 import Header from './pages/layout/Header.tsx';
 import Footer from './pages/layout/Footer.tsx';
@@ -34,7 +34,6 @@ async function addKakaoScript() {
     script.async = true;
     document.body.append(script);
     await globalThis.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
-    console.log('Kakao SDK Init:', globalThis.Kakao.isInitialized());
 }
 
 export default function App() {
