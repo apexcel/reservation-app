@@ -25,7 +25,7 @@ export default function Table({
     onTableRowClick }: TableProps) {
 
     const className = "simple__table";
-
+        console.log(tBodyState)
     return (
         <div className={`${className}-container`}>
             <TableHeader

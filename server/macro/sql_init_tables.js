@@ -24,7 +24,7 @@ async function generateDataBase(dbName) {
 
 async function generateTable(tableName) {
     try {
-        const query = "CREATE TABLE IF NOT EXISTS ?? (id int(4), time_stamp DATETIME, booked_data JSON, PRIMARY KEY(id)) AUTO_INCREMENT = 1";
+        const query = "CREATE TABLE IF NOT EXISTS ?? (time_stamp varchar(30), booked_data JSON, PRIMARY KEY (time_stamp) )";
         connection.query("USE dilettante");
         connection.query(query, tableName, (err, res) => {
             if (err) throw err;

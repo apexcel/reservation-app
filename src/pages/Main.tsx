@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import qs from 'qs';
+import moment from 'moment';
 
 import { createEmptyTableRow, fulfillEmptyObject } from 'Utils/tableUtils.ts';
 // import { genTableName } from 'Utils/utils.ts';
@@ -46,10 +47,12 @@ export default function Main(): React.ReactElement {
 
     // TODO: API 수정하기 헤더 달아야함
     const getBookedList = async (selectedDate: Date) => {
+        moment.locale('ko');
         const token = getCookie('userToken');
-        const response = await ReservationApi.getReservationList(token, selectedDate);
+        const formatDate = moment(selectedDate).format('YYYY-MM-DD');
+        const response = await ReservationApi.getReservationList(token, formatDate);
+        console.log(response)
         const emptyTableRow = createEmptyTableRow(tableHead);
-        //const emptyTableRow = createEmptyTableRow(getTableHeaders);
         const newTableBody = fulfillEmptyObject(response.data, emptyTableRow);
         setTableBody(newTableBody);
     };

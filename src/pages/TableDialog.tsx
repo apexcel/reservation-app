@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import jwtDecode from 'jwt-decode';
+import moment from 'moment';
 
 import { tableBodyStateAtom, tableHeadStateAtom } from 'Atoms/tableAtoms.ts';
 import { userStateAtom } from 'Atoms/globalAtoms.ts';
-import { genTableName, isEmpty } from 'Utils/utils.ts';
+import { isEmpty } from 'Utils/utils.ts';
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
 
 import ReservationApi from 'Api/ReservationApi.ts';
@@ -56,12 +57,12 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     const onTableRowClick = async (ev, rowIndex, currentTableRowValue, selectedHeadState) => {
         const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIndex + 13);
         // 예약
-        console.log('CAlled');
         if (isEmpty(currentTableRowValue)) {
 
             const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);
             if (ans && !userState.isAdmin) {
                 const updated = updateTableBodyState(rowIndex, selectedHeadState.field)
+                console.log(updated)
                 setTableBody(updated);
                 setBookedList(rowIndex, updated[rowIndex], selectedDate);
                 io.emit('get', { table: updated });
@@ -73,7 +74,6 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                 const willSetName = prompt('이름을 입력해주세요.');
                 if (!isEmpty(willSetName)) {
                     const updated = updateTableBodyState(rowIndex, selectedHeadState.field, willSetName)
-                    setTableBody(updated);
                     setBookedList(rowIndex, updated[rowIndex], selectedDate);
                     io.emit('get', { table: updated });
                     return;
@@ -103,13 +103,11 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     };
 
     const setBookedList = async (rowIndex, newTableState, selectedDate) => {
-        console.log(rowIndex)
-        console.log(newTableState)
-        console.log(selectedDate)
+        moment.locale('ko');
         const token = getCookie('userToken');
+        const formatDate = moment(selectedDate).format('YYYY-MM-DD:HH');
         const data = {
-            date: genTableName(selectedDate),
-            time: (rowIndex + 1),
+            time_stamp: formatDate,
             booked_data: JSON.stringify(newTableState)
         };
 

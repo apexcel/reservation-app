@@ -27,13 +27,12 @@ export default function TableRow({
         const rows = [];
 
         for (let i = 0; i < tHeadState.length; i += 1) {
-            //console.log(rowItem)
-            //console.log(logs(i))
+            //console.log(rowItem);
             //console.log(tHeadState[i]);
-
+            //console.log(index)
+            
             const _onTableRowClick = (ev: React.MouseEvent, rowIndex = index, currentTableRowValue = rowItem[tHeadState[i].field]) => {
                 ev.preventDefault();
-                console.log('Table Row onClicked');
                 onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i]);
             };
             const classNames = [`${className}-row-cell`];

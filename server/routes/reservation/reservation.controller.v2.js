@@ -1,14 +1,15 @@
 const getConn = require('../../database/mysql/mysqlConn');
+const moment = require('moment');
 const initDb = require('../../macro/sql_init_tables');
+initDb();
 
-const DB_NAME = 'dilettante';
 const TABLE_NAME = 'schedules';
 
 exports.getBookedData = async function (req, resp, next) {
     try {
         await getConn((conn) => {
-            console.log(req.params)
-            const selectedDate = `${new Date(req.params.date).toDateString()}%`;
+            const selectedDate = `${req.params.date}%`;
+            console.log(selectedDate)
             const query = "SELECT * FROM ?? WHERE time_stamp LIKE ?";
             const queryParams = [TABLE_NAME, selectedDate];
             conn.query(query, queryParams, (err, row) => {
@@ -31,11 +32,14 @@ exports.getBookedData = async function (req, resp, next) {
 exports.setBookedData = async function (req, resp, next) {
     try {
         await getConn((conn) => {
-            const query = "UPDATE ?? SET booked_data = (?) WHERE time_stamp = ?;";
+            console.log(req.body)
+            const query = "INSERT INTO ?? (time_stamp, booked_data) VALUES (?, ?) ON DUPLICATE KEY UPDATE time_stamp=?, booked_data=?";
             const queryParams = [
-                DB_NAME,
-                req.body.booked_data, // JSON.stringify
-                req.body.time_stamp // DATETIME 타입
+                TABLE_NAME,
+                req.body.time_stamp,
+                req.body.booked_data,
+                req.body.time_stamp,
+                req.body.booked_data,
             ];
 
             conn.query(query, queryParams, (err, row) => {

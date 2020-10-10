@@ -94,7 +94,6 @@ exports.signUpUser = async function (req, resp, next) {
 
 exports.getUserInfo = async function (req, resp, next) {
     try {
-        console.log('getInfo')
         mongoConn.conn();
         const user = await User.findById(resp.locals.user.id)
         mongoConn.disconn()

@@ -42,6 +42,7 @@ export default function SignIn({ setIsLogin, adminLogin }) {
                 const id = decoded.id;
                 console.log(id)
                 const userInfo = await UserApi.getUserInfo(response.data.token, id).then(res => jwtDecode(res.data.token));
+                console.log(userInfo)
                 setUserState({
                     username: userInfo.username,
                     fullname: userInfo.fullname,

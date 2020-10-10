@@ -69,7 +69,8 @@ export default function App() {
             console.log(token);
             if (token.exp > new Date().valueOf()) {
                 const id = decryptAES(token.access_code).id;
-                const userInfo = await UserApi.getUserInfo(userCookie, id).then(res => res.data);
+                const response = await UserApi.getUserInfo(userCookie, id).then(res => res.data.token);
+                const userInfo = jwtDecode(response);
                 setUserState({
                     username: userInfo.username,
                     fullname: userInfo.fullname,

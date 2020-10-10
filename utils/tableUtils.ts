@@ -1,4 +1,5 @@
 import { isEmpty } from './utils.ts'
+import moment from 'moment'
 
 interface TableHead {
     name: string,
@@ -6,7 +7,7 @@ interface TableHead {
 }
 
 interface DBValues {
-    time_stamp: Date,
+    time_stamp: string,
     booked_data: string | null | undefined
 }
 
@@ -24,9 +25,16 @@ export function createEmptyTableRow(tableHeadState: TableHead[]) {
 }
 
 export function fulfillEmptyObject(dataList: Array<DBValues>, emptyTableBody: object) {
-    let list = Array(10);
+    let list = [];
     for (let i = 0; i < 10; i += 1) {
-        isEmpty(dataList[i]?.booked_data) ? list.push(emptyTableBody) : list.push(JSON.parse(dataList[i].booked_data));
+        list[i] = emptyTableBody;
+    }
+
+    for (let j = 0; j <dataList.length; j += 1) {
+        if (!isEmpty(dataList[j])) {
+            const time = parseInt(dataList[j].time_stamp.split(':')[1]) % 12;
+            list[time - 1] = JSON.parse(dataList[j].booked_data);
+        }
     }
     return list;
 }
