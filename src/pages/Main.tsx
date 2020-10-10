@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import qs from 'qs';
 
 import { createEmptyTableRow, fulfillEmptyObject } from 'Utils/tableUtils.ts';
-import { genTableName } from 'Utils/utils.ts';
+// import { genTableName } from 'Utils/utils.ts';
 import { tableHeadStateAtom, tableBodyStateAtom } from 'Atoms/tableAtoms.ts';
 import { currentSelectedDateAtom, getTableHeadersEachDay } from 'Atoms/globalAtoms.ts';
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
@@ -12,14 +13,15 @@ import Calendar from 'Components/calendar/Calendar.tsx';
 
 import ReservationApi from 'Api/ReservationApi.ts';
 
-export default function Main() {
+export default function Main(): React.ReactElement {
 
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom);
     const getHeaders = useRecoilValue(getTableHeadersEachDay);
 
     const [isDialogVisible, setIsDialogVisible] = useState(false);
-    const [selectedDateState, setSelectedDateState] = useRecoilState(currentSelectedDateAtom);
+    const [selectedDateState, setSelectedDateState] = useRecoilState<Date>(currentSelectedDateAtom);
+
 
     // Calendar
     const now = new Date().valueOf();
@@ -35,7 +37,7 @@ export default function Main() {
         getBookedList(selectedDateState);
     }, [selectedDateState]);
 
-    const onDateClick = async (ev, selectedDate) => {
+    const onDateClick = async (ev, selectedDate: Date) => {
         //console.log(ev, selectedDate);
         await setSelectedDateState(selectedDate);
         getBookedList(selectedDateState);
@@ -43,12 +45,9 @@ export default function Main() {
     };
 
     // TODO: API 수정하기 헤더 달아야함
-    const getBookedList = async (selectedDate) => {
-        const data = {
-            date: genTableName(selectedDate)
-        };
+    const getBookedList = async (selectedDate: Date) => {
         const token = getCookie('userToken');
-        const response = await ReservationApi.getReservationList(token, data);
+        const response = await ReservationApi.getReservationList(token, selectedDate);
         const emptyTableRow = createEmptyTableRow(tableHead);
         const newTableBody = fulfillEmptyObject(response.data, emptyTableRow);
         setTableBody(newTableBody);

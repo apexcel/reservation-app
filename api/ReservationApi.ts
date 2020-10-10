@@ -12,14 +12,13 @@ export default {
         })
     },
 
-    getReservationList(token, data) {
+    getReservationList(token, params) {
         return SendTo({
             headers: {
                 authorization: `Bearer ${token}`
             },
-            url: '/reservation/get-booked-data',
-            method: 'post',
-            data: data
+            url: `/reservation/get-booked-data/${params}`,
+            method: 'get',
         })
     },
 

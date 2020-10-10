@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const reservationController = require('./reservation.controller')
+const reservationController = require('./reservation.controller.v2')
 
-router.post("/get-booked-data", (req, resp, next) => {
+router.all("/*", (req, resp, next) => {
+    reservationController.init(req, resp, next);
+})
+
+router.get("/get-booked-data/:date", (req, resp, next) => {
     reservationController.getBookedData(req, resp, next)
 });
 
