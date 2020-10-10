@@ -28,8 +28,8 @@ interface DialogProps {
 export default function TableDialog({ isDialogVisible, closeDialog, selectedDateState }: DialogProps) {
 
     const [lessonDialogShow, setLessonDialogShow] = useState(false);
-    const openL = () => { setLessonDialogShow(true); };
-    const closeL = () => { setLessonDialogShow(false); };
+    const openLessonDialog = () => { setLessonDialogShow(true); };
+    const closeLessonDialog = () => { setLessonDialogShow(false); };
 
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom);
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
@@ -56,6 +56,7 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     const onTableRowClick = async (ev, rowIndex, currentTableRowValue, selectedHeadState) => {
         const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIndex + 13);
         // 예약
+        console.log('CAlled');
         if (isEmpty(currentTableRowValue)) {
 
             const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);
@@ -102,6 +103,9 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     };
 
     const setBookedList = async (rowIndex, newTableState, selectedDate) => {
+        console.log(rowIndex)
+        console.log(newTableState)
+        console.log(selectedDate)
         const token = getCookie('userToken');
         const data = {
             date: genTableName(selectedDate),
@@ -134,13 +138,13 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     };
 
     const renderDialogHeader = () => {
-        const dow = ['일', '월', '화', '수', '목', '금', '토'];
+        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
         return (
             <div className='dialog-selected-date'>
                 <span>{selectedDateState.getFullYear()}</span>
                 <span>{selectedDateState.getMonth() + 1}</span>
                 <span>{selectedDateState.getDate()}</span>
-                <span>{dow[selectedDateState.getDay()]}</span>
+                <span>{daysOfWeek[selectedDateState.getDay()]}</span>
             </div>
         );
     };
@@ -158,7 +162,7 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                         onTableRowClick={onTableRowClick} 
                     />
                 </Dialog> : null}
-            {lessonDialogShow ? <LessonDialog closeDialog={closeL} /> : null}
+            {lessonDialogShow ? <LessonDialog closeDialog={closeLessonDialog} /> : null}
         </>
     );
 }

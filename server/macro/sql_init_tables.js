@@ -16,7 +16,7 @@ const TABLE_NAME = "schedules";
 
 async function generateDataBase(dbName) {
     const query = "CREATE DATABASE IF NOT EXISTS ??";
-    await connection.query(query, dbName, (err, res) => {
+    connection.query(query, dbName, (err, res) => {
         if (err) throw err;
     });
     return;
@@ -26,7 +26,7 @@ async function generateTable(tableName) {
     try {
         const query = "CREATE TABLE IF NOT EXISTS ?? (id int(4), time_stamp DATETIME, booked_data JSON, PRIMARY KEY(id)) AUTO_INCREMENT = 1";
         connection.query("USE dilettante");
-        await connection.query(query, tableName, (err, res) => {
+        connection.query(query, tableName, (err, res) => {
             if (err) throw err;
         });
     }

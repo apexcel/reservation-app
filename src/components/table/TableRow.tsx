@@ -33,11 +33,12 @@ export default function TableRow({
 
             const _onTableRowClick = (ev: React.MouseEvent, rowIndex = index, currentTableRowValue = rowItem[tHeadState[i].field]) => {
                 ev.preventDefault();
+                console.log('Table Row onClicked');
                 onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i]);
             };
             const classNames = [`${className}-row-cell`];
-            let isClickable = true;
             const children = rowItem[tHeadState[i].field];
+            let isClickable = true;
 
             // row가 비어있는지 확인
             isEmpty(rowItem[tHeadState[i].field]) ? classNames.push(`${className}-not-booked`) : classNames.push(`${className}-booked`);
@@ -56,13 +57,13 @@ export default function TableRow({
         return rows;
     };
 
-    const row = (key, children, classNames, onClick) => {
+    const row = (key: number, children: any, classNames: string[], onClick) => {
         const className = ''.concat(classNames.join(' '));
         return (
             <div
                 key={key}
                 className={className}
-                onClick={onClick ? onClick : null}>
+                onClick={onClick}>
                 {children}
             </div>
         );

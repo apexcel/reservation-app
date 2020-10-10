@@ -4,18 +4,6 @@ const initDb = require('../../macro/sql_init_tables');
 const DB_NAME = 'dilettante';
 const TABLE_NAME = 'schedules';
 
-exports.init = async function (req, resp, next) {
-    try {
-        initDb();
-        next();
-    }
-    catch (err) {
-        console.error(err);
-        next(err);
-    }
-    return;
-}
-
 exports.getBookedData = async function (req, resp, next) {
     try {
         await getConn((conn) => {

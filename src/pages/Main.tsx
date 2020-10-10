@@ -17,7 +17,7 @@ export default function Main(): React.ReactElement {
 
     const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom);
-    const getHeaders = useRecoilValue(getTableHeadersEachDay);
+    const getTableHeaders = useRecoilValue(getTableHeadersEachDay);
 
     const [isDialogVisible, setIsDialogVisible] = useState(false);
     const [selectedDateState, setSelectedDateState] = useRecoilState<Date>(currentSelectedDateAtom);
@@ -33,14 +33,14 @@ export default function Main(): React.ReactElement {
     const closeDialog = () => setIsDialogVisible(false);
 
     useEffect(() => {
-        setTableHead(getHeaders);
+        setTableHead(getTableHeaders);
         getBookedList(selectedDateState);
     }, [selectedDateState]);
 
     const onDateClick = async (ev, selectedDate: Date) => {
         //console.log(ev, selectedDate);
         await setSelectedDateState(selectedDate);
-        getBookedList(selectedDateState);
+        getBookedList(selectedDate);
         openDialog();
     };
 
@@ -49,6 +49,7 @@ export default function Main(): React.ReactElement {
         const token = getCookie('userToken');
         const response = await ReservationApi.getReservationList(token, selectedDate);
         const emptyTableRow = createEmptyTableRow(tableHead);
+        //const emptyTableRow = createEmptyTableRow(getTableHeaders);
         const newTableBody = fulfillEmptyObject(response.data, emptyTableRow);
         setTableBody(newTableBody);
     };

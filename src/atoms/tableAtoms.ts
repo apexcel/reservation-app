@@ -4,7 +4,8 @@ export const tableHeadStateAtom = atom({
     key: 'tableHeadStateAtom',
     default: [{
         name: "",
-        field: ""
+        field: "",
+        range: []
     }]
 });
 

@@ -1,10 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const reservationController = require('./reservation.controller.v2')
-
-router.all("/*", (req, resp, next) => {
-    reservationController.init(req, resp, next);
-})
+const reservationController = require('./reservation.controller.v2');
 
 router.get("/get-booked-data/:date", (req, resp, next) => {
     reservationController.getBookedData(req, resp, next)

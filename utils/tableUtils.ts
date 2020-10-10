@@ -6,7 +6,7 @@ interface TableHead {
 }
 
 interface DBValues {
-    time: number,
+    time_stamp: Date,
     booked_data: string | null | undefined
 }
 
@@ -24,7 +24,9 @@ export function createEmptyTableRow(tableHeadState: TableHead[]) {
 }
 
 export function fulfillEmptyObject(dataList: Array<DBValues>, emptyTableBody: object) {
-    return dataList.map((el, idx) => {
-        return (isEmpty(el.booked_data)) ? emptyTableBody : JSON.parse(el.booked_data);
-    });
+    let list = Array(10);
+    for (let i = 0; i < 10; i += 1) {
+        isEmpty(dataList[i]?.booked_data) ? list.push(emptyTableBody) : list.push(JSON.parse(dataList[i].booked_data));
+    }
+    return list;
 }
