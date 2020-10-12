@@ -3,14 +3,16 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 
 import useInput from 'Reducers/useInput.ts';
 import UserApi from 'Api/UserApi.ts';
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
+import { getCookie } from 'Utils/browserUtils.ts';
 
-
-import Input from 'Components/modal/Input.tsx';
 import Searched from './Searched.tsx';
+import SearchInput from '@/components/SearchInput.tsx';
+
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import 'Styles/search.scss';
-import SearchInput from '@/components/SearchInput.tsx';
 
 export default function Search() {
 
@@ -45,7 +47,7 @@ export default function Search() {
         }
         return;
     };
-    
+
     const renderUserList = () => {
         return userList.map((el, idx) => {
             const _onClick = (ev: React.MouseEvent, name = el.fullname) => {
@@ -53,11 +55,12 @@ export default function Search() {
                 onSearch.call(this, ev, name);
             };
 
-            return (<div className='user-list-container' onClick={_onClick} key={idx}>
-                <div>{el.fullname}</div>
-                <div>{el.username}</div>
-                <div>{el.tel}</div>
-            </div>);
+            return (
+                <ListItem key={idx} button onClick={_onClick}>
+                    <ListItemText primary={el.fullname} secondary={`${el.tel} ${el.username}`} />
+                    {/* 가장 최신 레슨권 표시 */}
+                </ListItem>
+            );
         });
     };
 
@@ -76,7 +79,9 @@ export default function Search() {
                 <Switch>
                     <Route path='/admin/search/finduser/:name' component={Searched} />
                 </Switch>
-                {(searchName.name === '' && history.location.pathname === '/admin/search') ? renderUserList() : ''}
+                <List component="nav" aria-label="secondary mailbox folders">
+                    {(searchName.name === '' && history.location.pathname === '/admin/search') ? renderUserList() : ''}
+                </List>
             </div>
         </div>
     );
