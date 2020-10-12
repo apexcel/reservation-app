@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
-import ReservationApi from '../../../api/ReservationApi.ts';
+import ReservationApi from '../../api/ReservationApi.ts';
 import { getCookie } from 'Utils/browserUtils.ts';
 import qs from 'qs';
 

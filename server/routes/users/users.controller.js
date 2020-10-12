@@ -1,15 +1,11 @@
 const User = require('../../database/mongo/schema/user');
 const mongoConn = require('../../database/mongo/mongoConn');
 const jwt = require('jsonwebtoken');
-const jwtDecode = require('jwt-decode');
 const axios = require('axios')
 const querystring = require('querystring');
-const CryptoJS = require('crypto-js');
 
 const TOKEN_KEY = process.env.TOKEN_KEY;
-const AES_KEY = process.env.REACT_APP_AES_SECRET_KEY;
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
-const SHA256_KEY = process.env.REACT_SHA256_KEY
 
 function formattedDateString(date) {
     let yy = date.getFullYear();
@@ -62,6 +58,7 @@ exports.signUpUser = async function (req, resp, next) {
             password: req.body.password,
             dob: req.body.dob,
             tel: req.body.tel,
+            isAdmin: req.body.is_admin
         };
 
         const searchQuery = {
@@ -137,7 +134,6 @@ exports.getAllUserInfo = async function (req, resp, next) {
 
 exports.findUser = async function (req, resp, next) {
     try {
-        console.log(req.params)
         mongoConn.conn();
         const user = await User.findOne({fullname: req.params.fullname});
         mongoConn.disconn()

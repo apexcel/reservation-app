@@ -26,8 +26,8 @@ export default {
             },
             url: '/admin/kakao-book-message',
             method: 'post',
-            data: data,
-        })
+            data: data
+        });
     },
 
     kakaoCheckToken(token, data) {

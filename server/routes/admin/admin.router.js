@@ -2,10 +2,6 @@ const express = require('express')
 const router = express.Router();
 const adminController = require('./admin.controller')
 
-router.post('/signup', (req, resp, next) => {
-    adminController.signUpAdmin(req, resp, next)
-});
-
 router.get('/adminlist', (req, resp, next) => {
     adminController.getAdminList(req, resp, next);
 })

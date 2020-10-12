@@ -2,14 +2,15 @@ import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { baseURLAtom } from 'Atoms/globalAtoms.ts';
 import useInput from 'Reducers/useInput.ts';
-import axios from 'axios';
+import UserApi from '@/api/UserApi.ts';
 
 import Input from 'Components/modal/Input.tsx';
 import SelectOption from 'Components/modal/SelectOption.tsx';
 
 import 'Styles/signup.scss';
+import { getCookie } from 'Utils/browserUtils.ts';
 
-export default function SignUp() {
+export default function SignUp(): React.ReactElement {
 
     const initForm = {
         username: '',
@@ -31,34 +32,22 @@ export default function SignUp() {
         console.log(signUpForm);
     });
 
-    const callSignUpAPI = async (ev) => {
+    const signUp = async (ev: React.MouseEvent) => {
         ev.preventDefault();
-        const url = signUpForm.isAdmin ? `${baseURL}/api/admin/signup` : `${baseURL}/api/users/signup`;
         const data = {
-                username: signUpForm.username,
-                password: signUpForm.password,
-                fullname: signUpForm.lastname + signUpForm.firstname,
-                dob: new Date(signUpForm.dobYear, signUpForm.dobMonth - 1, signUpForm.dobDate),
-                tel: signUpForm.tel,
-                isAdmin: signUpForm.isAdmin
-            };
-        const firstEmptyItem = Object.values(signUpForm).map(el => el !== '');
-        
-        try {
-            firstEmptyItem.map((el, idx) => {
-                const classList = document.getElementById(Object.keys(signUpForm)[idx]).classList;
-                el ? (classList.remove("empty-warn")) : (classList.add("empty-warn"));
-            });
-            await axios.post(url, data).then(res => console.log(res));
-        }
-        catch (err) {
-            throw err;
-        }
-        finally {
-            const userPower = signUpForm.isAdmin ? 'Admin' : '일반회원';
-            alert(`${signUpForm.lastname}${signUpForm.firstname}의 ${userPower} 등록이 되었습니다.`)
-            globalThis.location.replace(`/admin`)
-        }
+            username: signUpForm.username,
+            password: signUpForm.password,
+            fullname: signUpForm.lastname + signUpForm.firstname,
+            dob: new Date(signUpForm.dobYear, signUpForm.dobMonth - 1, signUpForm.dobDate),
+            tel: signUpForm.tel,
+            isAdmin: signUpForm.isAdmin
+        };
+        const userRole = signUpForm.isAdmin ? 'Admin' : '일반회원';
+
+        await UserApi.signUp(getCookie('userToken'), data).then(res => console.log(res));
+        alert(`${signUpForm.lastname}${signUpForm.firstname}의 ${userRole} 등록이 되었습니다.`);
+        globalThis.location.replace(`/admin`);
+        return;
     };
 
 
@@ -178,7 +167,7 @@ export default function SignUp() {
                 />
 
                 <div className='btn-area'>
-                    <button type="button" onClick={callSignUpAPI} className='btn_primary'>Sign Up</button>
+                    <button type="button" onClick={signUp} className='btn_primary'>Sign Up</button>
                 </div>
             </fieldset>
         </form>

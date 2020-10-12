@@ -2,11 +2,9 @@ const User = require('../../database/mongo/schema/user');
 const KakaoMsg = require('../../database/mongo/schema/kakaomsg');
 const KakaoToken = require('../../database/mongo/schema/kakaotoken');
 const mongoConn = require('../../database/mongo/mongoConn');
-const jwt = require('jsonwebtoken');
 const axios = require('axios')
 const querystring = require('querystring')
 
-// TODO: 키 따로 관리하기
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
 
 exports.kakaoAuthToken = async function (req, resp, next) {
@@ -119,44 +117,6 @@ exports.kakaoCheckToken = async function (req, resp, next) {
         desc: 'Kakao user access token checked.'
     })
 }
-
-exports.signUpAdmin = async function (req, resp, next) {
-    try {
-        mongoConn.conn();
-        const userInfo = {
-            username: req.body.username,
-            fullname: req.body.fullname,
-            password: req.body.password,
-            isAdmin: req.body.isAdmin
-        };
-
-        const query = {
-            username: req.body.username,
-            fullname: req.body.fullname,
-        };
-
-        const options = {
-            upsert: true,
-            new: true,
-            setDefaultOnInsert: true
-        };
-
-        await User.findOneAndUpdate(query, userInfo, options, (err, res) => {
-            if (err) throw err;
-        })
-        mongoConn.disconn();
-        resp.status(201).json({
-            result: true,
-            desc: 'Admin registered'
-        });
-    }
-    catch (err) {
-        console.error(err);
-        next(err);
-    }
-    return;
-}
-
 
 exports.getAdminList = async function (req, resp, next) {
     try {

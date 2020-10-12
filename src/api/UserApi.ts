@@ -1,14 +1,26 @@
+import { AxiosRequestConfig } from 'axios';
 import SendTo from './SendTo.ts';
 
 export default {
-    getUserInfo(token, id) {
+    signUp(token, data) {
+        return SendTo({
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            url: `/users/signup`,
+            method: 'post',
+            data: data
+        });
+    },
+
+    getUserInfo(token: string, id: string): AxiosRequestConfig {
         return SendTo({
             headers: {
                 Authorization: `Bearer ${token}`
             },
             url: `/users/getuser/${id}`,
-            method: 'get',
-        })
+            method: 'get'
+        });
     },
 
     findUser(token, id) {
@@ -17,15 +29,15 @@ export default {
                 Authorization: `Bearer ${token}`
             },
             url: `/users/finduser/${id}`,
-            method: 'get',
-        })
+            method: 'get'
+        });
     },
 
     subtractLesson(fullname) {
         return SendTo({
             url: `/users/subtract-lesson/${fullname}`,
-            method: 'put',
-        })
+            method: 'put'
+        });
     },
 
     getAllUserInfo(token) {
@@ -34,7 +46,7 @@ export default {
                 Authorization: `Bearer ${token}`
             },
             url: `/users/alluser`,
-            method: 'get',
+            method: 'get'
         })
     },
 
@@ -43,14 +55,14 @@ export default {
             url: `/users/add-lesson`,
             method: 'put',
             data: data
-        })
+        });
     },
 
     getKakaoAccessToken(data) {
         return SendTo({
             url: '/users/kakao-token',
             method: 'post',
-            data: data,
-        })
+            data: data
+        });
     }
 };

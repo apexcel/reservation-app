@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {useHistory} from 'react-router-dom'
-import UpdateLessonDialog from './UpdateLessonDialog.tsx';
-import UserApi from 'Api/UserApi.ts';
 import jwtDecode from 'jwt-decode';
+
+import UpdateLessonDialog from './UpdateLessonDialog.tsx';
+import Loading from '@/components/Loading.tsx';
+
+import UserApi from 'Api/UserApi.ts';
 
 export default function Searched({ match }) {
     const [searchedUserInfo, setSearchedUserInfo] = useState({});
@@ -89,7 +92,7 @@ export default function Searched({ match }) {
     //TODO: 해당 유저 info 및 lesson 등 기타 업데이트 가능하도록
     return (
         <>
-            {isLoading ? 'loading...' :
+            {isLoading ? <Loading /> :
                 (Object.keys(searchedUserInfo).length > 0 ? renderSearchedUserInfo() : '')}
             {visible ? <UpdateLessonDialog fullname={searchedUserInfo.fullname} closeDialog={closeDialog} /> : null}
         </>
