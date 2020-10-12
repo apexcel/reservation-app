@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import jwtDecode from 'jwt-decode';
 
 import UpdateLessonDialog from './UpdateLessonDialog.tsx';
@@ -7,14 +7,16 @@ import Loading from '@/components/Loading.tsx';
 
 import UserApi from 'Api/UserApi.ts';
 
-export default function Searched({ match }) {
-    const [searchedUserInfo, setSearchedUserInfo] = useState({});
+import '@/styles/Searched.scss';
+
+export default function Searched({ match }): React.ReactElement {
+    const [searchedUserInfo, setSearchedUserInfo] = useState<IObject>({});
     const [isLoading, setIsLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const history = useHistory();
 
     console.log(history);
-    console.log(match)
+    console.log(match);
     useEffect(() => {
         let isMounted = true;
         setIsLoading(true);
@@ -46,7 +48,7 @@ export default function Searched({ match }) {
     const updateUserLessons = (ev) => {
         ev.preventDefault();
         openDialog();
-    }
+    };
 
     const renderLessonList = () => {
         return searchedUserInfo.lessons.reverse().map((el, idx) =>
@@ -56,13 +58,13 @@ export default function Searched({ match }) {
                 <div>시작일: {el.startDate}</div>
                 <div>종료일: {el.endDate}</div>
             </div>
-        )
+        );
     };
 
     const renderSearchedUserInfo = () => {
         console.log(searchedUserInfo.fullname);
         return (
-            <div>
+            <div className='searched__userinfo-wrapper'>
                 <div>
                     Username: {searchedUserInfo.username}
                 </div>
@@ -91,10 +93,10 @@ export default function Searched({ match }) {
 
     //TODO: 해당 유저 info 및 lesson 등 기타 업데이트 가능하도록
     return (
-        <>
+        <div className='searched__userinfo-container'>
             {isLoading ? <Loading /> :
                 (Object.keys(searchedUserInfo).length > 0 ? renderSearchedUserInfo() : '')}
             {visible ? <UpdateLessonDialog fullname={searchedUserInfo.fullname} closeDialog={closeDialog} /> : null}
-        </>
+        </div>
     );
 }

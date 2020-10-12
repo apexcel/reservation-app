@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 import SendTo from './SendTo.ts';
 
 export default {
-    signUp(token, data) {
+    signUp(token: string, data: IObject): AxiosRequestConfig {
         return SendTo({
             headers: {
                 Authorization: `Bearer ${token}`

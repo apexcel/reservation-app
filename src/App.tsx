@@ -62,15 +62,15 @@ export default function App(): React.ReactElement {
     // TODO: 쿠키 이용 및 세션을 통한 로그인 검증
     const probeUserCookie = async () => {
         const userCookie = getCookie('userToken');
-        console.log(userCookie);
-        console.log(userState);
+
         if (isEmpty(userState) && !isEmpty(userCookie)) {
             const token = jwtDecode(userCookie);
-            console.log(token);
+
             if (token.exp > new Date().valueOf()) {
                 const id = decryptAES(token.access_code).id;
                 const response = await UserApi.getUserInfo(userCookie, id).then(res => res.data.token);
                 const userInfo = jwtDecode(response);
+
                 setUserState({
                     username: userInfo.username,
                     fullname: userInfo.fullname,
@@ -80,7 +80,7 @@ export default function App(): React.ReactElement {
                     reservations: userInfo.reservations,
                     isAdmin: userInfo.isAdmin
                 });
-                // 사용자 정보 요청
+                
                 setIsLogin(true);
                 return;
             }

@@ -50,7 +50,6 @@ exports.kakaoAuthToken = async function (req, resp, next) {
 
 exports.signUpUser = async function (req, resp, next) {
     try {
-        //console.log(req.body)
         mongoConn.conn();
         const updateQuery = {
             username: req.body.username,

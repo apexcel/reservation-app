@@ -1,9 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
+import { deleteCookie } from 'Utils/browserUtils.ts';
 
-export default function Header({ setIsLogin, userState }) {
+interface HeaderProps {
+    userState: IObject,
+    setIsLogin: (set: boolean) => void
+}
+
+export default function Header({ setIsLogin, userState }: HeaderProps): React.ReactElement {
 
     const logout = (ev) => {
         ev.preventDefault();
@@ -15,9 +20,8 @@ export default function Header({ setIsLogin, userState }) {
     return (
         <header className='main-top-header'>
             <nav className='main-nav'>
-                { userState.isAdmin ? <Link className='link' to='/admin'>Admin</Link> : null}
+                {userState.isAdmin ? <Link className='link' to='/admin'>Admin</Link> : <Link className='link' to='/profile'>Profile</Link>}
                 <Link className='link' to='/'>Main</Link>
-                { userState.isAdmin ? null : <Link className='link' to='/profile'>Profile</Link> }
                 <div className='main-nav-about-user'>
                     <button className='signout-btn' type='button' onClick={logout}>Sign Out</button>
                 </div>

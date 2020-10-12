@@ -10,6 +10,7 @@ import Input from 'Components/modal/Input.tsx';
 import Searched from './Searched.tsx';
 
 import 'Styles/search.scss';
+import SearchInput from '@/components/SearchInput.tsx';
 
 export default function Search() {
 
@@ -35,27 +36,21 @@ export default function Search() {
         };
     }, []);
 
-    const onSearch = (ev) => {
-        ev.preventDefault();
-        setNameForSearch(searchName.name);
-        history.push(`/admin/search/finduser/${searchName.name}`, getCookie('userToken'));
-        searchName.name = '';
+    const onSearch = (ev: React.MouseEvent<HTMLButtonElement> & React.KeyboardEvent, name?: string) => {
+        if (ev.key === 'Enter' || ev.button === 0) {
+            ev.preventDefault();
+            setNameForSearch(name ? name : searchName.name);
+            history.push(`/admin/search/finduser/${name ? name : searchName.name}`, getCookie('userToken'));
+            searchName.name = '';
+        }
         return;
     };
-
-    const onClickUserList = (ev, name) => {
-        ev.preventDefault();
-        setNameForSearch(name);
-        history.push(`/admin/search/finduser/${name}`, getCookie('userToken'));
-        searchName.name = '';
-        return;
-    };
-
+    
     const renderUserList = () => {
         return userList.map((el, idx) => {
-            const _onClick = (ev: React.MouseEvent , name = el.fullname) => {
+            const _onClick = (ev: React.MouseEvent, name = el.fullname) => {
                 ev.preventDefault();
-                onClickUserList.call(this, ev, name);
+                onSearch.call(this, ev, name);
             };
 
             return (<div className='user-list-container' onClick={_onClick} key={idx}>
@@ -68,10 +63,15 @@ export default function Search() {
 
     return (
         <div>
-            <div>
-                <Input labelTitle='Search User name' onChange={onChangeInput} id='name' name='name' type='text' maxLength={20} />
-                <button type='button' onClick={onSearch}>Search</button>
-            </div>
+            <SearchInput
+                onChange={onChangeInput}
+                id='name'
+                name='name'
+                type='text'
+                maxLength={20}
+                placeholder='검색어를 입력하세요'
+                searchEvent={onSearch}
+            />
             <div>
                 <Switch>
                     <Route path='/admin/search/finduser/:name' component={Searched} />

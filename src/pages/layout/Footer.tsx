@@ -1,7 +1,7 @@
 import React from 'react';
 import SVG from 'Components/modal/SVG.tsx';
 
-export default function Footer() {
+export default function Footer(): React.ReactElement {
 
     return (
         <footer>

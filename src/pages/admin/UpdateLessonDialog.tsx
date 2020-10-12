@@ -27,7 +27,7 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
     const [lessonForm, onChangeInput] = useInput(initForm);
 
     // TEST Array
-    const testArr = [
+    const lessons = [
         'Lessons',
         'M1C4',
         'M2C5',
@@ -129,7 +129,7 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
         return (
             <>
                 <label htmlFor='lessonName'>Lesson</label>
-                <SelectOption onChange={onChangeInput} className='dialog__input common__select' id='lessonName' name='lessonName' optionArray={testArr} />
+                <SelectOption onChange={onChangeInput} className='dialog__input common__select' id='lessonName' name='lessonName' optionArray={lessons} />
 
                 <label htmlFor='employee'>Employee</label>
                 <SelectOption onChange={onChangeInput} className='dialog__input common__select' id='employee' name='employee' optionArray={adminList} />

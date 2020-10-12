@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
-import { baseURLAtom } from 'Atoms/globalAtoms.ts';
 import useInput from 'Reducers/useInput.ts';
 import UserApi from '@/api/UserApi.ts';
 
@@ -26,7 +24,6 @@ export default function SignUp(): React.ReactElement {
     };
 
     const [signUpForm, onChangeInput, onChangeCheck] = useInput(initForm);
-    const baseURL = useRecoilValue(baseURLAtom);
 
     useEffect(() => {
         console.log(signUpForm);
