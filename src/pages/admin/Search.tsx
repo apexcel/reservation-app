@@ -14,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import 'Styles/search.scss';
 
-export default function Search() {
+export default function Search(): React.ReactElement {
 
     const [searchName, onChangeInput] = useInput({ name: '' });
     const [nameForSearch, setNameForSearch] = useState('');
