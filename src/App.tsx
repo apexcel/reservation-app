@@ -9,7 +9,7 @@ import { isEmpty } from 'Utils/utils.ts';
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
 import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts';
 import Loading from 'Components/Loading.tsx';
-import {useInterval} from 'Reducers/useInterval.ts';
+import { useInterval } from 'Reducers/useInterval.ts';
 import UserApi from 'Api/UserApi.ts';
 
 import RestrictedRoute from 'Components/RestrictedRoute.tsx';
@@ -36,8 +36,8 @@ async function addKakaoScript() {
     await globalThis.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
 }
 
-export default function App() {
-    const [userState, setUserState] = useRecoilState(userStateAtom);
+export default function App(): React.ReactElement {
+    const [userState, setUserState] = useRecoilState<IObject>(userStateAtom);
     const [isLogin, setIsLogin] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 

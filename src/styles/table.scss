@@ -9,11 +9,11 @@
     flex-direction: row;
     justify-content: center;
     text-align: center;
-    background-color: #c06a1a;
+    background-color: #252525;
+    color: #adadad;
+    font-size: 1.2rem;
     margin-top: 1rem;
     border-bottom: 1px solid #292929;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
 }
 .simple__table-header {
     background-color: transparent;
@@ -40,18 +40,6 @@
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
-        
-    &:nth-last-child(1) {
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-
-        & .simple__table-row-cell:nth-child(1) {
-            border-bottom-left-radius: 20px;
-        }
-        & .simple__table-row-cell:nth-last-child(1) {
-            border-bottom-right-radius: 20px;
-        }
-    }
 
     // &::before {
     //     justify-content: center;
@@ -82,7 +70,7 @@
 }
 
 .simple__table-booked {
-    background-color: #863b0a;
+    background-color: #3b3b3b;
 }
 .simple__table-not-booked {
     background-color: #646464;
@@ -93,7 +81,7 @@
 }
 .simple__table-break-time {
     pointer-events: none;
-    background-color: #3a3a3a;
+    background-color: #252525;
 }
 .transparent {
     color: transparent;

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { Link, Route, Switch } from 'react-router-dom'
-import ReservationApi from '../../../api/ReservationApi.ts'
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
+import React, { useEffect, useState } from 'react';
+import { Link, Route, Switch } from 'react-router-dom';
+import ReservationApi from '../../../api/ReservationApi.ts';
+import { getCookie } from 'Utils/browserUtils.ts';
 import qs from 'qs';
 
 import CardBox from 'Components/CardBox.tsx';
@@ -11,10 +11,14 @@ import EditProfile from './EditProfile.tsx';
 import 'Styles/Profile.scss';
 import { isEmpty } from '../../../utils/utils.ts';
 
-export default function Profile({ userState }) {
+interface ProfileProps {
+    userState: IObject
+}
+
+export default function Profile({ userState }: ProfileProps): React.ReactElement {
 
     const [reservations, setReservations] = useState([]);
-    const [refined, setRefined] = useState([]);
+    const [bookingList, setBookingList] = useState([]);
 
     useEffect(() => {
         // Mounted 되었을 경우 re-rendering 하지 않도록 함
@@ -31,19 +35,16 @@ export default function Profile({ userState }) {
 
     useEffect(() => {
         if (reservations) {
-            console.log(reservations);
-            v2();
+            refineReservationList();
         }
     }, [reservations]);
 
     const getUserBookedList = async () => {
-        const response = await ReservationApi.getUserReservationList(getCookie('userToken'), userState.fullname);
-        console.log(response);
-        return response;
+        return await ReservationApi.getUserReservationList(getCookie('userToken'), userState.fullname);
     };
 
     // TODO: 받은 데이터 추출해서 예약현황 만들기
-    const v2 = () => {
+    const refineReservationList = () => {
         const list = [];
         reservations.map((el, idx) => {
             const bookedItem = {
@@ -61,69 +62,30 @@ export default function Profile({ userState }) {
             }
             list.push(bookedItem);
         });
-        console.log(list);
+        //console.log(list);
+        setBookingList(list);
         return;
     };
 
-    const refinedReservations = () => {
-        const bookedDate = [];
-        const bookedDataList = [];
-        const finalList = [];
-
-        console.log(reservations)
-
-        reservations.map((el, idx) => {
-            bookedDate.push(Object.keys(el)[0].slice(10));
-            bookedDataList.push(Object.values(el)[0])
-        });
-
-        bookedDataList.map((bookedInfo, idx) => {
-            bookedInfo.map(el => {
-                const emptyObj = {};
-                let item = Object.defineProperties(emptyObj, {
-                    'bookedDate': {
-                        value: bookedDate[idx],
-                        enumerable: true
-                    },
-                    'bookedTime': {
-                        value: el.time,
-                        enumerable: true
-                    },
-                    'reservation': {
-                        value: JSON.parse(el.booked_data),
-                        enumerable: true
-                    }
-                });
-                finalList.push(item);
-            })
-        })
-        setRefined(finalList)
-    }
-
-    const findTeacher = () => {
-        return refined.map((el, idx) => {
-            const match = Object.values(el.reservation).map((el2, idx2) => {
-                return el2 === userState.fullname ? Object.keys(el.reservation)[idx2] : null;
-            });
-            return match.find(name => name !== null);
-        })
-    };
-
-    const renderReservationList = () => {
+    const renderBookingList = () => {
         const teacherNames = {
             so: '소정',
             hyun: '현영',
             jung: '상정'
         };
-        const teacher = findTeacher();
-        console.log(teacher);
+        return bookingList.reverse().map((el, idx) => {
+            const dateTime = el.timeStamp.split(':');
+            const date = dateTime[0];
+            const time = dateTime[1];
+            const isExpired = new Date(date) < new Date();
 
-        return refined.map((el, idx) =>
-            <DescriptionList key={idx} title={el.bookedDate}>
-                <span>{el.bookedTime}시</span>
-                <span>{teacherNames[teacher[idx]]}</span>
-            </DescriptionList>
-        );
+            return (
+                <DescriptionList key={idx} title={date} className={isExpired ? 'expired' : ''}>
+                    <span>{teacherNames[el.teacher]} </span>
+                    <span>{time}시</span>
+                </DescriptionList>
+            );
+        });
     };
 
     const renderLessonList = () => {
@@ -136,8 +98,8 @@ export default function Profile({ userState }) {
                         <div>종료일: {el.endDate}</div>
                         <div>남은 횟수: {el.counter}</div>
                     </DescriptionList>
-                )
-            })
+                );
+            });
         }
         else {
             return;
@@ -159,7 +121,7 @@ export default function Profile({ userState }) {
                             </DescriptionList>
                         </CardBox>
                         <CardBox title='예약 정보' footer={<Link to={`/profile/@${userState.username}`}>수정하기</Link>}>
-                            {renderReservationList()}
+                            {renderBookingList()}
                         </CardBox>
                     </div>
                     <div className='column'>
@@ -171,5 +133,5 @@ export default function Profile({ userState }) {
                 </>
             </Switch>
         </div>
-    )
+    );
 }

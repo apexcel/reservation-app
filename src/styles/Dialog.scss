@@ -1,0 +1,87 @@
+.dialog-background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    top: 0;
+    left: 0;
+}
+
+.dialog {
+    position: fixed;
+    display: block;
+    padding: 25px;
+    margin: auto 0;
+    min-width: 60vw;
+    min-height: 60vh;
+    background: #3c3d3e;
+    color: #dddddd;
+    z-index: 999;
+}
+
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .dialog-selected-date {
+        font-size: 1.7rem;
+        color: #dddddd;
+    }
+
+    .dialog-close-btn {
+        display: block;
+        position: relative;
+        width: 30px;
+        height: 30px;
+        background-color: #da3e3e;
+        border-radius: 15px;
+
+        &:hover {
+            opacity: 0.7;
+        }
+        &:active {
+            opacity: 1;
+        }
+    }
+}
+
+.dialog__input {
+    height: 1.5rem !important;
+    font-size: 1.1rem !important;
+}
+
+.toast {
+    animation: toast 0.5s ease-in-out forwards;
+}
+
+.untoast {
+    animation: untoast 0.5s ease-in-out;
+}
+
+@keyframes toast {
+    from {
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 50%) scale(.5, .5);
+    }
+    to {
+        bottom: 50%;
+        left: 50%;
+        transform: translate(-50%, 50%);
+    }
+}
+
+@keyframes untoast {
+    from {
+        bottom: 50%;
+        left: 50%;
+        transform: translate(-50%, 50%);
+    }
+    to {
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 100%) scale(.5, .5);
+    }
+}

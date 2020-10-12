@@ -20,7 +20,10 @@ export default function Main(): React.ReactElement {
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom);
     const getTableHeaders = useRecoilValue(getTableHeadersEachDay);
 
-    const [isDialogVisible, setIsDialogVisible] = useState(false);
+    const [dialogState, setDialogState] = useState({
+        component: false,
+        style: false
+    });
     const [selectedDateState, setSelectedDateState] = useRecoilState<Date>(currentSelectedDateAtom);
 
 
@@ -30,8 +33,17 @@ export default function Main(): React.ReactElement {
     const minDate = new Date(now - (86400000 * 1));
 
     // Dialog
-    const openDialog = () => setIsDialogVisible(true);
-    const closeDialog = () => setIsDialogVisible(false);
+    const openDialog = () => {
+        setDialogState({component: true, style: true});
+        document.body.style.overflow = 'hidden';
+    };
+    const closeDialog = () => {
+        setDialogState({component: true, style: false});
+        document.body.style.overflow = 'auto';
+        setTimeout(() => {
+            setDialogState({component: false, style: false});
+        }, 500);
+    };
 
     useEffect(() => {
         setTableHead(getTableHeaders);
@@ -51,7 +63,6 @@ export default function Main(): React.ReactElement {
         const token = getCookie('userToken');
         const formatDate = moment(selectedDate).format('YYYY-MM-DD');
         const response = await ReservationApi.getReservationList(token, formatDate);
-        console.log(response)
         const emptyTableRow = createEmptyTableRow(tableHead);
         const newTableBody = fulfillEmptyObject(response.data, emptyTableRow);
         setTableBody(newTableBody);
@@ -73,7 +84,7 @@ export default function Main(): React.ReactElement {
                 }
             />
             <TableDialog
-                isDialogVisible={isDialogVisible}
+                dialogState={dialogState}
                 closeDialog={closeDialog}
                 selectedDateState={selectedDateState}
             />

@@ -140,4 +140,3 @@ export function autoComplete(input: HTMLInputElement, arr: Array<String>) {
         destoryAllSuggestList(ev.target);
     });
 }
-

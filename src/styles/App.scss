@@ -39,10 +39,12 @@ html, body {
     overflow: hidden;
 }
 
-button, ul, ol, dl, dt, dd, a, input {
+button, ul, ol, dl, dt, dd, a, input,
+dialog {
     margin: 0;
     padding: 0;
     border: none;
+    outline: none;
     text-decoration: none;
     color: $default-font-color;
 }

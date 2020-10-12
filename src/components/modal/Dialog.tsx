@@ -1,14 +1,15 @@
 import React from 'react'
 
 interface DialogProps {
+    className: string,
     dialogHeader: string | HTMLElement,
     children: any,
     closeDialog: () => void
 }
 
-export default function Dialog({ closeDialog, dialogHeader, children}: DialogProps) {
+export default function Dialog({ className, closeDialog, dialogHeader, children}: DialogProps): React.ReactElement {
     return (
-        <dialog className='dialog'>
+        <dialog className={`dialog ${className}`}>
             <div className='dialog-header'>
                 <div className='dialog-close-btn' onClick={closeDialog}>
                     <div className='cross-line'></div>
@@ -18,5 +19,5 @@ export default function Dialog({ closeDialog, dialogHeader, children}: DialogPro
             </div>
             {children}
         </dialog>
-    )
+    );
 }

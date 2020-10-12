@@ -16,7 +16,7 @@ module.exports = {
         path: path.resolve('./dist'),
         publicPath: '/'
     },
-    devtool: 'eval-cheap-module-source-map',
+    // devtool: 'eval-cheap-module-source-map',
     devServer: {
         overlay: true,
         stats: 'errors-only',

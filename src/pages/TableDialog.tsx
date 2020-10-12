@@ -19,18 +19,18 @@ import * as socketio from 'socket.io-client';
 const io = socketio.connect('http://localhost:9000');
 
 // Styles
-import 'Styles/dialog.scss';
+import 'Styles/Dialog.scss';
 
 // Types
 import { IColumn, IRow } from 'types/@oogie826/table';
 
 interface DialogProps {
-    isDialogVisible: boolean,
+    dialogState: IObject,
     closeDialog: () => void,
     selectedDateState: Date
 }
 
-export default function TableDialog({ isDialogVisible, closeDialog, selectedDateState }: DialogProps) {
+export default function TableDialog({ dialogState, closeDialog, selectedDateState }: DialogProps) {
 
     const [lessonDialogShow, setLessonDialogShow] = useState(false);
     const openLessonDialog = () => { setLessonDialogShow(true); };
@@ -150,9 +150,10 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     };
 
     return (
-        <>
-            {isDialogVisible ?
+        <div className={`${dialogState.style ? 'dialog-background' : ''}`}>
+            {dialogState.component ?
                 <Dialog
+                    className={`${dialogState.style ? 'toast' : 'untoast'}`}
                     closeDialog={closeDialog}
                     dialogHeader={renderDialogHeader()}
                 >
@@ -163,6 +164,6 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                     />
                 </Dialog> : null}
             {lessonDialogShow ? <LessonDialog closeDialog={closeLessonDialog} /> : null}
-        </>
+        </div>
     );
 }

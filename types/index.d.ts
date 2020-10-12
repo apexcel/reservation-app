@@ -1,3 +1,6 @@
+interface IObject {
+    [key: string]: any
+}
 interface CommonFormType {
     className?: string,
     name?: string,
