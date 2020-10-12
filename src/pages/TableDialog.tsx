@@ -18,7 +18,11 @@ import LessonDialog from './user/LessonDialog.tsx';
 import * as socketio from 'socket.io-client';
 const io = socketio.connect('http://localhost:9000');
 
+// Styles
 import 'Styles/dialog.scss';
+
+// Types
+import { IColumn, IRow } from 'types/@oogie826/table';
 
 interface DialogProps {
     isDialogVisible: boolean,
@@ -33,68 +37,66 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
     const closeLessonDialog = () => { setLessonDialogShow(false); };
 
     const [tableHead, setTableHead] = useRecoilState(tableHeadStateAtom);
-    const [tableBody, setTableBody] = useRecoilState(tableBodyStateAtom);
+    const [tableBody, setTableBody] = useRecoilState<Array<IRow>>(tableBodyStateAtom);
     const [userState, setUserState] = useRecoilState(userStateAtom);
 
-    const updateTableBodyState = (index, field, name?) => {
-        if (name) {
+    const updateTableBodyState = (index: number, field: string, fullname?: string) => {
+        if (fullname) {
             return (tableBody.map((el, idx) => {
-                return index === idx ? { ...tableBody[idx], [field]: name } : el;
+                return index === idx ? { ...tableBody[idx], [field]: fullname } : el;
             }));
         }
-        return (tableBody.map((el, idx) => {
-            return index === idx ? { ...tableBody[idx], [field]: userState.fullname } : el;
-        }));
+        else {
+            return (tableBody.map((el, idx) => {
+                return index === idx ? { ...tableBody[idx], [field]: userState.fullname } : el;
+            }));
+        }
     };
+
+    const removeTableBodyItem = (field, rowVal, rowIdx) => {
+        return tableBody.map((el, idx) => {
+            return el[field] === rowVal && rowIdx === idx ? { ...el, [field]: "" } : el;
+        });
+    }
 
     useEffect(() => {
         io.on('set', (table) => {
             console.log(table);
             setTableBody(table);
         });
-    }, []);
+    }, [tableBody]);
 
-    const onTableRowClick = async (ev, rowIndex, currentTableRowValue, selectedHeadState) => {
-        const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIndex + 13);
-        // 예약
-        if (isEmpty(currentTableRowValue)) {
+    const onTableRowClick = async (ev: React.MouseEvent, rowIdx: number, rowVal: string, selectedHeadState: IColumn) => {
+        const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIdx + 13);
 
+        if (isEmpty(rowVal)) {
             const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);
             if (ans && !userState.isAdmin) {
-                const updated = updateTableBodyState(rowIndex, selectedHeadState.field)
-                console.log(updated)
+                const updated = updateTableBodyState(rowIdx, selectedHeadState.field);
                 setTableBody(updated);
-                setBookedList(rowIndex, updated[rowIndex], selectedDate);
+                setBookedList(rowIdx, updated[rowIdx], selectedDate);
                 io.emit('get', { table: updated });
-                //updateLesson()
                 return;
             }
             // 어드민일 경우
             if (ans && userState.isAdmin) {
-                const willSetName = prompt('이름을 입력해주세요.');
-                if (!isEmpty(willSetName)) {
-                    const updated = updateTableBodyState(rowIndex, selectedHeadState.field, willSetName)
-                    setBookedList(rowIndex, updated[rowIndex], selectedDate);
+                const setFullname = prompt('이름을 입력해주세요.');
+                if (!isEmpty(setFullname)) {
+                    const updated = updateTableBodyState(rowIdx, selectedHeadState.field, setFullname);
+                    setBookedList(rowIdx, updated[rowIdx], selectedDate);
+                    setTableBody(updated);
                     io.emit('get', { table: updated });
                     return;
                 }
             }
         }
         // 예약 취소
-        if ((currentTableRowValue === userState.fullname) || (!isEmpty(currentTableRowValue) && userState.isAdmin === true)) {
+        if ((rowVal === userState.fullname) || (!isEmpty(rowVal) && userState.isAdmin === true)) {
             const ans = confirm(`예약 취소 하시겠습니까?`);
             if (ans) {
-                const removed = tableBody.map((el, idx) => {
-                    if (el[selectedHeadState.field] === currentTableRowValue && rowIndex === idx) {
-                        console.log("true", el, idx);
-                        return { ...el, [selectedHeadState.field]: "" };
-                    }
-                    else {
-                        return el;
-                    }
-                });
+                const removed = removeTableBodyItem(selectedHeadState.field, rowVal, rowIdx);
                 setTableBody(removed);
-                await setBookedList(rowIndex, removed[rowIndex], selectedDate);
+                setBookedList(rowIdx, removed[rowIdx], selectedDate);
                 io.emit('get', { table: removed });
                 return;
             }
@@ -102,7 +104,7 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
         return;
     };
 
-    const setBookedList = async (rowIndex, newTableState, selectedDate) => {
+    const setBookedList = async (rowIdx, newTableState, selectedDate) => {
         moment.locale('ko');
         const token = getCookie('userToken');
         const formatDate = moment(selectedDate).format('YYYY-MM-DD:HH');
@@ -157,7 +159,7 @@ export default function TableDialog({ isDialogVisible, closeDialog, selectedDate
                     <Table
                         tHeadState={tableHead}
                         tBodyState={tableBody}
-                        onTableRowClick={onTableRowClick} 
+                        onTableRowClick={onTableRowClick}
                     />
                 </Dialog> : null}
             {lessonDialogShow ? <LessonDialog closeDialog={closeLessonDialog} /> : null}

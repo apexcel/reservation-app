@@ -77,7 +77,8 @@ export default function App() {
                     dob: userInfo.dob,
                     tel: userInfo.tel,
                     lessons: userInfo.lessons,
-                    reservations: userInfo.reservations
+                    reservations: userInfo.reservations,
+                    isAdmin: userInfo.isAdmin
                 });
                 // 사용자 정보 요청
                 setIsLogin(true);
@@ -116,7 +117,7 @@ export default function App() {
                                 path='/admin'
                                 component={<Admin />}
                                 fallback={<SignIn setIsLogin={setIsLogin} adminLogin={true} />}
-                                isAllow={isLogin === true && userState.isAdmin === true}
+                                isAllow={(isLogin === true && userState.isAdmin === true)}
                             />
                             <RestrictedRoute
                                 path='/profile'

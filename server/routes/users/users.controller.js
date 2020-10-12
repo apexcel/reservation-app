@@ -99,14 +99,15 @@ exports.getUserInfo = async function (req, resp, next) {
         mongoConn.disconn()
 
         if (user !== null) {
-            const { username, fullname, dob, tel, lessons, reservations } = user;
+            const { username, fullname, dob, tel, lessons, reservations, isAdmin } = user;
             const userInfo = {
                 username: username,
                 fullname: fullname,
                 dob: dob,
                 tel: tel,
                 lessons: lessons,
-                reservations: reservations
+                reservations: reservations,
+                isAdmin: isAdmin
             };
             return resp.json({token: generateJWT(userInfo)});
         }

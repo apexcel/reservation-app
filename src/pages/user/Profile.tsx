@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
 import ReservationApi from '../../../api/ReservationApi.ts'
 import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts'
+import qs from 'qs';
 
 import CardBox from 'Components/CardBox.tsx';
 import DescriptionList from 'Components/DescriptionList.tsx';
 import EditProfile from './EditProfile.tsx';
 
 import 'Styles/Profile.scss';
+import { isEmpty } from '../../../utils/utils.ts';
 
 export default function Profile({ userState }) {
 
@@ -24,28 +26,43 @@ export default function Profile({ userState }) {
                 });
             }
         }
-        return () => { isMounted = false; }
-    }, [])
+        return () => { isMounted = false; };
+    }, []);
 
     useEffect(() => {
         if (reservations) {
             console.log(reservations);
-            refinedReservations();
+            v2();
         }
     }, [reservations]);
 
     const getUserBookedList = async () => {
-        const data = {
-            fullname: userState.fullname
-        };
-        try {
-            const response = await ReservationApi.getUserReservationList(getCookie('userToken'), data);
-            console.log(response)
-            return response;
-        }
-        catch (err) {
-            throw err;
-        }
+        const response = await ReservationApi.getUserReservationList(getCookie('userToken'), userState.fullname);
+        console.log(response);
+        return response;
+    };
+
+    // TODO: 받은 데이터 추출해서 예약현황 만들기
+    const v2 = () => {
+        const list = [];
+        reservations.map((el, idx) => {
+            const bookedItem = {
+                teacher: undefined,
+                timeStamp: undefined
+            };
+            const parsedData = JSON.parse(el.booked_data);
+            const keys = Object.keys(parsedData);
+            for (let i = 0; i < keys.length; i += 1) {
+                const key = keys[i];
+                if (!isEmpty(parsedData[key])) {
+                    bookedItem.teacher = key;
+                    bookedItem.timeStamp = el.time_stamp;
+                }
+            }
+            list.push(bookedItem);
+        });
+        console.log(list);
+        return;
     };
 
     const refinedReservations = () => {

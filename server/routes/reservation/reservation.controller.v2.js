@@ -1,5 +1,4 @@
 const getConn = require('../../database/mysql/mysqlConn');
-const moment = require('moment');
 const initDb = require('../../macro/sql_init_tables');
 initDb();
 
@@ -9,16 +8,14 @@ exports.getBookedData = async function (req, resp, next) {
     try {
         await getConn((conn) => {
             const selectedDate = `${req.params.date}%`;
-            console.log(selectedDate)
             const query = "SELECT * FROM ?? WHERE time_stamp LIKE ?";
             const queryParams = [TABLE_NAME, selectedDate];
             conn.query(query, queryParams, (err, row) => {
+                conn.release();
                 if (err) {
                     console.error(err);
                     return resp.status(500).json({ msg: "Can not find table" });
                 }
-                console.log(row)
-                conn.release();
                 return resp.status(200).json(row);
             });
         });
@@ -41,12 +38,12 @@ exports.setBookedData = async function (req, resp, next) {
                 req.body.time_stamp,
                 req.body.booked_data,
             ];
-
+            
             conn.query(query, queryParams, (err, row) => {
+                conn.release();
                 if (err) throw err;
                 resp.status(200).json(row)
             })
-            conn.release();
         });
     }
     catch (err) {
@@ -56,43 +53,17 @@ exports.setBookedData = async function (req, resp, next) {
     return;
 }
 
-// TODO: 수정필요
-exports.findReservation = async function (req, resp, next) {
+exports.getUserReservationList = async function (req, resp, next) {
+    console.log(req.params)
     await getConn(async (conn) => {
-        const query = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME=?';
-        const queryParams = 'booked_data'
+        const query = 'SELECT * FROM ?? WHERE booked_data LIKE ?';
+        const queryParams = [TABLE_NAME, `%${req.params.fullname}%`];
 
-        await conn.query(query, queryParams, async (err, res) => {
+        await conn.query(query, queryParams, (err, res) => {
+            conn.release();
             if (err) throw err;
-            const tableNames = res.map((el, idx) => el['TABLE_NAME']);
-            searchBookedUser(tableNames);
+            resp.send(res);
         })
-        conn.release();
-    })
-
-    function searchBookedUser(_tableNames) {
-        getConn(async (conn) => {
-            let resultSet = [];
-            for (let i = 0; i < _tableNames.length; i += 1) {
-                const query2 = 'SELECT * FROM ?? WHERE booked_data LIKE ?';
-                await conn.query(query2, ([_tableNames[i], `%${req.body.fullname}%`]), (err, res) => {
-                    if (err) throw err;
-                    if (res !== null && res.length > 0) {
-                        const emptyObj = {};
-                        Object.defineProperty(emptyObj, _tableNames[i], {
-                            value: res,
-                            writable: false,
-                            enumerable: true
-                        });
-                        resultSet.push(emptyObj);
-                    }
-                    if (i === _tableNames.length - 1) {
-                        resp.status(200).send(resultSet);
-                        conn.release();
-                    }
-                })
-            }
-        })
-    }
+    });
     return;
 }

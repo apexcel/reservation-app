@@ -10,8 +10,8 @@ router.post("/set-booked-data", (req, resp, next) => {
     reservationController.setBookedData(req, resp, next)
 });
 
-router.post('/find', (req, resp, next) => {
-    reservationController.findReservation(req, resp, next)
+router.get('/find/:fullname', (req, resp, next) => {
+    reservationController.getUserReservationList(req, resp, next)
 })
 
 module.exports = router;

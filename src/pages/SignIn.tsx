@@ -33,7 +33,7 @@ export default function SignIn({ setIsLogin, adminLogin }) {
         let response = null;
 
         try {
-            if (adminLogin) response = await AdminApi.signIn({ sign_in_form: encData });
+            if (adminLogin) response = await AuthApi.signIn({ sign_in_form: encData });
             else response = await AuthApi.signIn({ sign_in_form: encData });
             if (response !== null) {
                 console.log(response)
@@ -49,7 +49,8 @@ export default function SignIn({ setIsLogin, adminLogin }) {
                     dob: userInfo.dob,
                     tel: userInfo.tel,
                     lessons: userInfo.lessons,
-                    reservations: userInfo.reservations
+                    reservations: userInfo.reservations,
+                    isAdmin: userInfo.isAdmin
                 });
                 setCookie('userToken', token);
                 setIsLogin(true);

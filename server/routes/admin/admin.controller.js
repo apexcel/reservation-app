@@ -1,4 +1,4 @@
-const Admin = require('../../database/mongo/schema/admin');
+const User = require('../../database/mongo/schema/user');
 const KakaoMsg = require('../../database/mongo/schema/kakaomsg');
 const KakaoToken = require('../../database/mongo/schema/kakaotoken');
 const mongoConn = require('../../database/mongo/mongoConn');
@@ -132,27 +132,6 @@ exports.kakaoCheckToken = async function (req, resp, next) {
     })
 }
 
-exports.signInAdmin = async function (req, resp, next) {
-    try {
-        mongoConn.conn();
-        const admin = await Admin.findOne(resp.locals.signInForm);
-        mongoConn.disconn();
-
-        if (admin) {
-            const token = createTokens(admin);
-            resp.json({
-                access_token: token.token,
-                access_token_expires_in: token.tokenExpiresIn,
-            });
-        }
-    }
-    catch (err) {
-        console.error(err);
-        next(err);
-    }
-    return;
-}
-
 exports.signUpAdmin = async function (req, resp, next) {
     try {
         mongoConn.conn();
@@ -174,7 +153,7 @@ exports.signUpAdmin = async function (req, resp, next) {
             setDefaultOnInsert: true
         };
 
-        await Admin.findOneAndUpdate(query, userInfo, options, (err, res) => {
+        await User.findOneAndUpdate(query, userInfo, options, (err, res) => {
             if (err) throw err;
         })
         mongoConn.disconn();
@@ -194,7 +173,7 @@ exports.signUpAdmin = async function (req, resp, next) {
 exports.getAdminList = async function (req, resp, next) {
     try {
         mongoConn.conn();
-        const list = await Admin.find({})
+        const list = await User.find({isAdmin: true})
         const adminNames = list.map(el => el.fullname);
         resp.status(200).json({
             result: true,
