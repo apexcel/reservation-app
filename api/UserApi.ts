@@ -11,6 +11,16 @@ export default {
         })
     },
 
+    findUser(token, id) {
+        return SendTo({
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            url: `/users/finduser/${id}`,
+            method: 'get',
+        })
+    },
+
     subtractLesson(fullname) {
         return SendTo({
             url: `/users/subtract-lesson/${fullname}`,
@@ -18,8 +28,11 @@ export default {
         })
     },
 
-    getAllUserInfo() {
+    getAllUserInfo(token) {
         return SendTo({
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             url: `/users/alluser`,
             method: 'get',
         })

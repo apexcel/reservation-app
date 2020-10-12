@@ -7,21 +7,7 @@ const axios = require('axios')
 const querystring = require('querystring')
 
 // TODO: 키 따로 관리하기
-const TOKEN_KEY = process.env.TOKEN_KEY;
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
-
-function createTokens(payload) {
-    console.log(payload.id)
-    const tokenExpiresIn = 7199;
-    const token = jwt.sign({
-        id: payload.id,
-        username: payload.username,
-        fullname: payload.fullname,
-        is_admin: Boolean(payload.isAdmin),
-    }, TOKEN_KEY,
-        { expiresIn: tokenExpiresIn * 1000 });
-    return { token, tokenExpiresIn };
-}
 
 exports.kakaoAuthToken = async function (req, resp, next) {
     try {
@@ -119,6 +105,8 @@ exports.kakaoRefreshAccessToken = async function (req, resp, next) {
 }
 
 exports.kakaoCheckToken = async function (req, resp, next) {
+    console.log(req.body)
+    console.log(req.params)
     const headers = {
         'Authorization': `Bearer ${req.body.token}`,
         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'

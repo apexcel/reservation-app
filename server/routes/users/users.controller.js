@@ -135,6 +135,34 @@ exports.getAllUserInfo = async function (req, resp, next) {
     return;
 }
 
+exports.findUser = async function (req, resp, next) {
+    try {
+        console.log(req.params)
+        mongoConn.conn();
+        const user = await User.findOne({fullname: req.params.fullname});
+        mongoConn.disconn()
+
+        if (user !== null) {
+            const { username, fullname, dob, tel, lessons, reservations, isAdmin } = user;
+            const userInfo = {
+                username: username,
+                fullname: fullname,
+                dob: dob,
+                tel: tel,
+                lessons: lessons,
+                reservations: reservations,
+                isAdmin: isAdmin
+            };
+            return resp.json({token: generateJWT(userInfo)});
+        }
+        return resp.status(503).json({ error: 'Invalid user' })
+    }
+    catch (err) {
+        console.error(err);
+        return next(err)
+    }
+}
+
 exports.addLesson = async function (req, resp, next) {
     if (req.body.lesson.lessonName === '') {
         resp.status(400).json({ error: 'Empty lesson' });

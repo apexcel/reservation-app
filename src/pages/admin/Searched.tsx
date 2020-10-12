@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {useHistory} from 'react-router-dom'
 import UpdateLessonDialog from './UpdateLessonDialog.tsx';
 import UserApi from 'Api/UserApi.ts';
 import jwtDecode from 'jwt-decode';
@@ -7,13 +8,16 @@ export default function Searched({ match }) {
     const [searchedUserInfo, setSearchedUserInfo] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [visible, setVisible] = useState(false);
+    const history = useHistory();
 
+    console.log(history);
+    console.log(match)
     useEffect(() => {
         let isMounted = true;
         setIsLoading(true);
 
         if (match.params.name !== undefined || match.params.name !== '') {
-            UserApi.getUserInfo(match.params.name).then(resp => {
+            UserApi.findUser(history.location.state, match.params.name).then(resp => {
                 console.log(resp);
                 if (isMounted) {
                     setSearchedUserInfo(jwtDecode(resp.data.token));

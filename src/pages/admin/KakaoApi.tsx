@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 import AdminApi from 'Api/AdminApi.ts';
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
 
-import {autoComplete} from 'Utils/browserUtils.ts';
+import { autoComplete } from 'Utils/browserUtils.ts';
 import useInput from 'Reducers/useInput.ts';
 
 import Input from 'Components/modal/Input.tsx';
@@ -91,13 +92,14 @@ export default function KakaoAPI() {
 
     useEffect(() => {
         messageForm.nickname = document.getElementById('nickname').value;
-        messageForm.uuid = inputValue()[0].uuid;
+        //messageForm.uuid = inputValue()[0].uuid;
     }, [messageForm]);
 
     const getKakaoAuthToken = async () => {
         if (!globalThis.Kakao.Auth.getAccessToken()) {
             if (globalThis.location.search.length > 0) {
-                const res = await AdminApi.getKakaoAccessToken({ code: getQueryString() });
+                const res = await AdminApi.getKakaoAccessToken(getCookie('userToken'), { code: getQueryString() });
+                console.log(res)
                 globalThis.Kakao.Auth.setAccessToken(res.data.access_token);
             }
         }

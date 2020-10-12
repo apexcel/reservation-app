@@ -3,6 +3,8 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 
 import useInput from 'Reducers/useInput.ts';
 import UserApi from 'Api/UserApi.ts';
+import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
+
 
 import Input from 'Components/modal/Input.tsx';
 import Searched from './Searched.tsx';
@@ -22,7 +24,7 @@ export default function Search() {
         if (history.location.pathname === '/admin/search') {
             if (!(userList.length > 0)) {
                 if (isMounted) {
-                    UserApi.getAllUserInfo().then(resp => {
+                    UserApi.getAllUserInfo(getCookie('userToken')).then(resp => {
                         if (isMounted) setUserList(resp.data);
                     });
                 }
@@ -36,13 +38,17 @@ export default function Search() {
     const onSearch = (ev) => {
         ev.preventDefault();
         setNameForSearch(searchName.name);
-        history.push(`/admin/search/getuser/${searchName.name}`);
+        history.push(`/admin/search/finduser/${searchName.name}`, getCookie('userToken'));
         searchName.name = '';
+        return;
     };
 
     const onClickUserList = (ev, name) => {
         ev.preventDefault();
-        console.log(name);
+        setNameForSearch(name);
+        history.push(`/admin/search/finduser/${name}`, getCookie('userToken'));
+        searchName.name = '';
+        return;
     };
 
     const renderUserList = () => {
@@ -68,7 +74,7 @@ export default function Search() {
             </div>
             <div>
                 <Switch>
-                    <Route path='/admin/search/getuser/:name' component={Searched} />
+                    <Route path='/admin/search/finduser/:name' component={Searched} />
                 </Switch>
                 {(searchName.name === '' && history.location.pathname === '/admin/search') ? renderUserList() : ''}
             </div>
