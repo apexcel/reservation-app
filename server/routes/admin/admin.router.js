@@ -2,10 +2,6 @@ const express = require('express')
 const router = express.Router();
 const adminController = require('./admin.controller')
 
-router.get('/adminlist', (req, resp, next) => {
-    adminController.getAdminList(req, resp, next);
-})
-
 router.post('/kakao-token', (req, resp, next) => {
     adminController.kakaoAuthToken(req, resp, next)
 })

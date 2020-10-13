@@ -32,7 +32,7 @@ export default function Footer(): React.ReactElement {
                         <span className='footer-desc'>PM 13:00 ~ 23:00 / Monday off.</span>
                     </div>
                     <div className='footer-item right-item'>
-                        <span>Copyright <a href='https://github.com/oogie826' target="_blank" rel="noreferrer">@oogie826</a></span>
+                        <span style={{fontSize: '0.7rem'}}>Dev <a href='https://github.com/oogie826' target="_blank" rel="noreferrer">@oogie826</a></span>
                     </div>
                 </div>
             </section>

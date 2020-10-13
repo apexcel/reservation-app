@@ -117,22 +117,3 @@ exports.kakaoCheckToken = async function (req, resp, next) {
         desc: 'Kakao user access token checked.'
     })
 }
-
-exports.getAdminList = async function (req, resp, next) {
-    try {
-        mongoConn.conn();
-        const list = await User.find({isAdmin: true})
-        const adminNames = list.map(el => el.fullname);
-        resp.status(200).json({
-            result: true,
-            desc: 'Admin name list',
-            adminNames
-        });
-        mongoConn.disconn();
-    }
-    catch (err) {
-        console.error(err);
-        next(err);
-    }
-    return;
-}

@@ -23,6 +23,16 @@ export default {
         });
     },
 
+    getAdminList(token) {
+        return SendTo({
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            url: '/users/adminlist',
+            method: 'get'
+        });
+    },
+
     findUser(token, id) {
         return SendTo({
             headers: {
@@ -50,8 +60,11 @@ export default {
         })
     },
 
-    addLesson(data) {
+    addLesson(token, data) {
         return SendTo({
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             url: `/users/add-lesson`,
             method: 'put',
             data: data

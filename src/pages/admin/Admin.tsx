@@ -12,21 +12,13 @@ export default function Admin() {
 
     return (
         <div className={`${className}-container`}>
-        {/* <aside className={`${className}-aside`}>
-            <nav className={`${className}-nav`}>
-                <Link className='link' to='/admin/signup'>Enroll User</Link>
-                <Link className='link' to='/admin/search'>Search User</Link>
-                <Link className='link' to='/admin/kakao-api'>Kakao API</Link>
-                <Link className='link' to='/admin/alluser'>All User Manipulation</Link>
-            </nav>
-        </aside> */}
-        <section className={`${className}-section`}>
-            <Switch>
-                <Route path='/admin/signup' component={() => <SignUp />} />
-                <Route path='/admin/search' component={() => <Search />} />
-                <Route path='/admin/kakao-api' component={() => <KakaoAPI />} />
-            </Switch>
-        </section>
+            <section className={`${className}-section`}>
+                <Switch>
+                    <Route path='/admin/signup' component={() => <SignUp />} />
+                    <Route path='/admin/search' component={() => <Search />} />
+                    <Route path='/admin/kakao-api' component={() => <KakaoAPI />} />
+                </Switch>
+            </section>
         </div>
     );
 }

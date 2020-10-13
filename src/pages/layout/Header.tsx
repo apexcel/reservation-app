@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { deleteCookie } from 'Utils/browserUtils.ts';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
+
 interface HeaderProps {
     userState: IObject,
     setIsLogin: (set: boolean) => void
@@ -12,6 +12,8 @@ interface HeaderProps {
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 export default function Header({ setIsLogin, userState }: HeaderProps): React.ReactElement {
+
+    const history = useHistory();
 
     const logout = (ev) => {
         ev.preventDefault();
@@ -24,7 +26,7 @@ export default function Header({ setIsLogin, userState }: HeaderProps): React.Re
         top: false,
         left: false,
         bottom: false,
-        right: false,
+        right: false
     });
 
     const toggleDrawer = (anchor: Anchor, open: boolean) => (

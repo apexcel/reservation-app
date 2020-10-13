@@ -105,7 +105,7 @@ exports.getUserInfo = async function (req, resp, next) {
                 reservations: reservations,
                 isAdmin: isAdmin
             };
-            return resp.json({token: generateJWT(userInfo)});
+            return resp.json({ token: generateJWT(userInfo) });
         }
         return resp.status(503).json({ error: 'Invalid user' })
     }
@@ -134,7 +134,7 @@ exports.getAllUserInfo = async function (req, resp, next) {
 exports.findUser = async function (req, resp, next) {
     try {
         mongoConn.conn();
-        const user = await User.findOne({fullname: req.params.fullname});
+        const user = await User.findOne({ fullname: req.params.fullname });
         mongoConn.disconn()
 
         if (user !== null) {
@@ -148,7 +148,7 @@ exports.findUser = async function (req, resp, next) {
                 reservations: reservations,
                 isAdmin: isAdmin
             };
-            return resp.json({token: generateJWT(userInfo)});
+            return resp.json({ token: generateJWT(userInfo) });
         }
         return resp.status(503).json({ error: 'Invalid user' })
     }
@@ -206,6 +206,21 @@ exports.addLesson = async function (req, resp, next) {
         }
         return;
     }
+}
+
+exports.getAdminList = async function (req, resp, next) {
+    try {
+        mongoConn.conn();
+        const list = await User.find({ isAdmin: true })
+        const adminNames = list.map(el => el.fullname);
+        resp.status(200).json({ adminNames });
+        mongoConn.disconn();
+    }
+    catch (err) {
+        console.error(err);
+        next(err);
+    }
+    return;
 }
 
 exports.subtractLessonCounter = async function (req, resp, next) {

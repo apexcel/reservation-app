@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UserApi from 'Api/UserApi.ts';
 import AdminApi from 'Api/AdminApi.ts';
+import { getCookie } from 'Utils/browserUtils.ts'
 import { formattedDateString } from 'Utils/utils.ts';
 import useInput from 'Reducers/useInput.ts';
 import SelectOption from 'Components/modal/SelectOption.tsx';
@@ -20,7 +21,7 @@ const initForm = {
     price: 0
 };
 
-export default function UpdateLessonDialog({ fullname, closeDialog }) {
+export default function UpdateLessonDialog({ dialogState, fullname, closeDialog }) {
 
     const [adminList, setAdminList] = useState([]);
     const [calculatedValues, setCalculatedValues] = useState(initForm);
@@ -49,9 +50,8 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
     }, [lessonForm]);
 
     const adminListFromAPI = async () => {
-        const res = await AdminApi.getAdminList();
-        res.data.unshift('Admin Names');
-        setAdminList(res.data);
+        const res = await UserApi.getAdminList(getCookie('userToken'));
+        setAdminList(res.data.adminNames);
     };
 
     const addLessonToUser = async (ev) => {
@@ -61,7 +61,7 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
             lesson: lessonForm
         };
         console.log('Add Lesson API');
-        await UserApi.addLesson(data);
+        await UserApi.addLesson(getCookie('userToken'), data);
         window.location.reload();
         closeDialog();
     };
@@ -166,10 +166,12 @@ export default function UpdateLessonDialog({ fullname, closeDialog }) {
     };
 
     return (
-        <Dialog
-            closeDialog={closeDialog}
-            dialogHeader={'Update Lesson'}
-            dialogBody={renderDialogBody()}
-        />
+        <div className={`${dialogState.style ? 'dialog-background' : ''}`}>
+            <Dialog
+                closeDialog={closeDialog}
+                dialogHeader={'Update Lesson'}>
+                {renderDialogBody()}
+            </Dialog>
+        </div>
     );
 }

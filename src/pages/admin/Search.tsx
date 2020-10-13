@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
+import qs from 'qs';
 
 import useInput from 'Reducers/useInput.ts';
 import UserApi from 'Api/UserApi.ts';
@@ -42,26 +43,51 @@ export default function Search(): React.ReactElement {
         if (ev.key === 'Enter' || ev.button === 0) {
             ev.preventDefault();
             setNameForSearch(name ? name : searchName.name);
-            history.push(`/admin/search/finduser/${name ? name : searchName.name}`, getCookie('userToken'));
+            history.push(`/admin/search?q=${name ? name : searchName.name}`);
             searchName.name = '';
         }
         return;
     };
 
-    const renderUserList = () => {
-        return userList.map((el, idx) => {
-            const _onClick = (ev: React.MouseEvent, name = el.fullname) => {
-                ev.preventDefault();
-                onSearch.call(this, ev, name);
-            };
+    const onClickSearchedItem = (ev, name?) => {
+        history.push(`/admin/search/@${name ? name : searchName.name}`, getCookie('userToken'));
+        return;
+    };
 
-            return (
-                <ListItem key={idx} button onClick={_onClick}>
-                    <ListItemText primary={el.fullname} secondary={`${el.tel} ${el.username}`} />
-                    {/* 가장 최신 레슨권 표시 */}
-                </ListItem>
-            );
-        });
+    const renderUserList = (name?: string) => {
+        if (name) {
+            return userList.map((el, idx) => {
+                const _onClick = (ev: React.MouseEvent, fullname = el.fullname) => {
+                    ev.preventDefault();
+                    onClickSearchedItem.call(this, ev, fullname);
+                };
+                if (el.fullname === name) {
+                    return (
+                        <ListItem key={idx} button onClick={_onClick}>
+                            <ListItemText primary={el.fullname} secondary={`${el.tel} ${el.username}`} />
+                            {/* 가장 최신 레슨권 표시 */}
+                        </ListItem>
+                    );
+                }
+                else {
+                    return;
+                }
+            });
+        }
+        else {
+            return userList.map((el, idx) => {
+                const _onClick = (ev: React.MouseEvent, fullname = el.fullname) => {
+                    ev.preventDefault();
+                    onClickSearchedItem.call(this, ev, fullname);
+                };
+                return (
+                    <ListItem key={idx} button onClick={_onClick}>
+                        <ListItemText primary={el.fullname} secondary={`${el.tel} ${el.username}`} />
+                        {/* 가장 최신 레슨권 표시 */}
+                    </ListItem>
+                );
+            });
+        }
     };
 
     return (
@@ -77,10 +103,11 @@ export default function Search(): React.ReactElement {
             />
             <div>
                 <Switch>
-                    <Route path='/admin/search/finduser/:name' component={Searched} />
+                    <Route path='/admin/search/@:name' component={Searched} />
                 </Switch>
-                <List component="nav" aria-label="secondary mailbox folders">
-                    {(searchName.name === '' && history.location.pathname === '/admin/search') ? renderUserList() : ''}
+                <List>
+                    {history.location.pathname === '/admin/search' && !history.location.search ? renderUserList() : null}
+                    {history.location.pathname === '/admin/search' && history.location.search ? renderUserList(qs.parse(history.location.search)['?q'].toString()) : null}
                 </List>
             </div>
         </div>

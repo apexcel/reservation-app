@@ -1,13 +1,6 @@
 import SendTo from './SendTo.ts';
 
 export default {
-    getAdminList() {
-        return SendTo({
-            url: '/admin/adminlist',
-            method: 'get',
-        })
-    },
-
     getKakaoAccessToken(token, data) {
         return SendTo({
             headers: {
