@@ -1,21 +1,23 @@
 import React from 'react';
 import { useSetRecoilState } from 'recoil';
 import { userStateAtom } from 'Atoms/globalAtoms.ts';
-import * as CryptoJS from 'crypto-js/';
+import jwtDecode from 'jwt-decode';
 
 import { isEmpty } from 'Utils/utils.ts';
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
+import { setCookie } from 'Utils/browserUtils.ts';
 import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts';
-import jwtDecode from 'jwt-decode';
-import * as jwt from 'jsonwebtoken';
 
 import Input from 'Components/modal/Input.tsx';
 import useInput from 'Reducers/useInput.ts';
-import AdminApi from 'Api/AdminApi.ts';
 import UserApi from 'Api/UserApi.ts';
 import AuthApi from 'Api/AuthApi.ts';
 
-export default function SignIn({ setIsLogin, adminLogin }) {
+interface SignInProps {
+    setIsLogin: (set: boolean)=> void,
+    adminLogin: boolean
+}
+
+export default function SignIn({ setIsLogin, adminLogin }: SignInProps): React.ReactElement {
 
     const setUserState = useSetRecoilState(userStateAtom);
 
@@ -32,32 +34,27 @@ export default function SignIn({ setIsLogin, adminLogin }) {
         const encData = encryptAES(data);
         let response = null;
 
-        try {
-            if (adminLogin) response = await AuthApi.signIn({ sign_in_form: encData });
-            else response = await AuthApi.signIn({ sign_in_form: encData });
-            if (response !== null) {
-                console.log(response)
-                const token = response.data.token;
-                const decoded = decryptAES(jwtDecode(token).access_code)
-                const id = decoded.id;
-                console.log(id)
-                const userInfo = await UserApi.getUserInfo(response.data.token, id).then(res => jwtDecode(res.data.token));
-                console.log(userInfo)
-                setUserState({
-                    username: userInfo.username,
-                    fullname: userInfo.fullname,
-                    dob: userInfo.dob,
-                    tel: userInfo.tel,
-                    lessons: userInfo.lessons,
-                    reservations: userInfo.reservations,
-                    isAdmin: userInfo.isAdmin
-                });
-                setCookie('userToken', token);
-                setIsLogin(true);
-            }
-        }
-        catch (err) {
-            throw err;
+        if (adminLogin) response = await AuthApi.signIn({ sign_in_form: encData });
+        else response = await AuthApi.signIn({ sign_in_form: encData });
+
+        if (response !== null) {
+            console.log(response)
+            const token = response.data.token;
+            const decoded = decryptAES(jwtDecode(token).access_code);
+            const userInfo = await UserApi.getUserInfo(response.data.token, decoded.id).then(res => jwtDecode(res.data.token));
+            console.log(userInfo)
+            setUserState({
+                username: userInfo.username,
+                fullname: userInfo.fullname,
+                dob: userInfo.dob,
+                tel: userInfo.tel,
+                lessons: userInfo.lessons,
+                reservations: userInfo.reservations,
+                isAdmin: userInfo.isAdmin
+            });
+
+            setCookie('userToken', token);
+            setIsLogin(true);
         }
         return;
     };
