@@ -90,7 +90,8 @@ export default function Profile({ userState }: ProfileProps): React.ReactElement
 
     const renderLessonList = () => {
         if (userState.lessons) {
-            return userState.lessons.reverse().map((el, idx) => {
+            // [...userState.lessons].reverse()
+            return userState.lessons.slice(0).reverse().map((el, idx) => {
                 const dateExp = new Date(el.endDate) < new Date();
                 const countExp = el.counter === 0 ? true : false;
                 return (
@@ -127,7 +128,6 @@ export default function Profile({ userState }: ProfileProps): React.ReactElement
                     </div>
                     <div className='column'>
                         <CardBox title='레슨권 정보'>
-                            <div></div>
                             {renderLessonList()}
                         </CardBox>
                     </div>
