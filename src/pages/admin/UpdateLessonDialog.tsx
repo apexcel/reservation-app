@@ -168,6 +168,7 @@ export default function UpdateLessonDialog({ dialogState, fullname, closeDialog 
     return (
         <div className={`${dialogState.style ? 'dialog-background' : ''}`}>
             <Dialog
+                className={`${dialogState.style ? 'toast' : 'untoast'}`}
                 closeDialog={closeDialog}
                 dialogHeader={'Update Lesson'}>
                 {renderDialogBody()}

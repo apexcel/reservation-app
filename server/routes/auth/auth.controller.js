@@ -43,7 +43,7 @@ const generateJWT = (access_code, key) => {
             access_code: access_code 
         }, key);
 }
-
+//TODO: 토큰 발급 방식 인증 방식 변경하기
 exports.provideToken = async function (req, resp, next) {
     const signInForm = decryptAES(req.body.sign_in_form, AES_KEY);
     const user = await isValidUser(signInForm);

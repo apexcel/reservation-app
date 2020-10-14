@@ -92,11 +92,12 @@ export default function Profile({ userState }: ProfileProps): React.ReactElement
         if (userState.lessons) {
             return userState.lessons.reverse().map((el, idx) => {
                 const dateExp = new Date(el.endDate) < new Date();
+                const countExp = el.counter === 0 ? true : false;
                 return (
                     <DescriptionList key={idx} title={el.name} className={dateExp ? 'expired' : ''}>
                         <div>시작일: {el.startDate}</div>
                         <div>종료일: {el.endDate}</div>
-                        <div>남은 횟수: {el.counter}</div>
+                        <div className={countExp ? 'expired' : ''}>남은 횟수: {el.counter}</div>
                     </DescriptionList>
                 );
             });

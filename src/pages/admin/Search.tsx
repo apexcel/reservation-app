@@ -13,7 +13,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import 'Styles/search.scss';
+import 'Styles/Search.scss';
 
 export default function Search(): React.ReactElement {
 
@@ -50,6 +50,7 @@ export default function Search(): React.ReactElement {
     };
 
     const onClickSearchedItem = (ev, name?) => {
+        ev.preventDefault();
         history.push(`/admin/search/@${name ? name : searchName.name}`, getCookie('userToken'));
         return;
     };
@@ -101,7 +102,7 @@ export default function Search(): React.ReactElement {
                 placeholder='검색어를 입력하세요'
                 searchEvent={onSearch}
             />
-            <div>
+            <div className='search-list-wrapper'>
                 <Switch>
                     <Route path='/admin/search/@:name' component={Searched} />
                 </Switch>

@@ -13,6 +13,10 @@ import { isEmpty } from '../../../utils/utils.ts';
 import UserApi from 'Api/UserApi.ts';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
@@ -21,10 +25,20 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             flexGrow: 1
         },
-        paper: {
+        paperMain: {
             padding: theme.spacing(2),
             textAlign: 'left',
-            color: theme.palette.text.secondary
+            backgroundColor: '#5d5d5d',
+            color: 'a1a1a1',
+            overflow: 'auto'
+        },
+        paperSub: {
+            padding: theme.spacing(2),
+            textAlign: 'left',
+            backgroundColor: '#5d5d5d',
+            color: 'a1a1a1',
+            height: '250px',
+            overflow: 'auto'
         }
     })
 );
@@ -149,22 +163,21 @@ export default function Searched({ match }): React.ReactElement {
 
     const renderLessonList = () => {
         return searchedUserInfo.lessons.reverse().map((el, idx) =>
-            <div key={idx}>
-                <div>레슨권: {el.name}</div>
-                <div>남은횟수: {el.counter}</div>
-                <div>시작일: {el.startDate}</div>
-                <div>종료일: {el.endDate}</div>
-            </div>
+            <ListItem key={idx}>
+                <ListItemText
+                    primary={`${el.name} ${el.counter}회`}
+                    secondary={`${el.startDate}, ${el.endDate}`} />
+            </ListItem>
         );
     };
 
     const renderSearchedUserInfo = () => {
         return (
             <div className={classes.root}>
-                <button type='button' onClick={updateUserLessons}>New Lessons Update</button>
+                <button style={{width: '100%', height: '70px', margin: '10px 0 10px 0' }} className='btn' type='button' onClick={updateUserLessons}>New Lessons Update</button>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <Paper className={classes.paper}>
+                        <Paper className={classes.paperMain}>
                             <div>
                                 Username: {searchedUserInfo.username}
                                 Name: {searchedUserInfo.fullname}
@@ -177,14 +190,14 @@ export default function Searched({ match }): React.ReactElement {
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
-                        <CardBox title='레슨'>
-                            {renderLessonList()}
-                        </CardBox>
+                        <Paper className={classes.paperSub}>
+                            {renderBookingList()}
+                        </Paper>
                     </Grid>
                     <Grid item xs={6}>
-                        <CardBox title='최근 예약'>
-                            {renderBookingList()}
-                        </CardBox>
+                        <Paper className={classes.paperSub}>
+                            {renderLessonList()}
+                        </Paper>
                     </Grid>
                 </Grid>
             </div>
@@ -194,9 +207,12 @@ export default function Searched({ match }): React.ReactElement {
     //TODO: 해당 유저 info 및 lesson 등 기타 업데이트 가능하도록
     return (
         <div className='searched__userinfo-container'>
-            {isLoading ? <Loading /> :
-                (Object.keys(searchedUserInfo).length > 0 ? renderSearchedUserInfo() : '')}
-            {dialogState.component ? <UpdateLessonDialog dialogState={dialogState} fullname={searchedUserInfo.fullname} closeDialog={closeDialog} /> : null}
+            {isLoading ? <Loading /> 
+                : (Object.keys(searchedUserInfo).length > 0 ? renderSearchedUserInfo() 
+                    : null)}
+            {dialogState.component ? 
+                <UpdateLessonDialog dialogState={dialogState} fullname={searchedUserInfo.fullname} closeDialog={closeDialog} /> 
+                : null}
         </div>
     );
 }
