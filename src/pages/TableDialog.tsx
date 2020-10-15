@@ -26,16 +26,16 @@ import 'Styles/Dialog.scss';
 import { IColumn, IRow } from 'types/@oogie826/table';
 
 interface DialogProps {
-    dialogState: IObject,
+    dialogState: Record<string, unknown>,
     closeDialog: () => void,
     selectedDateState: Date
 }
 
 export default function TableDialog({ dialogState, closeDialog, selectedDateState }: DialogProps): React.ReactElement {
 
-    const tableHead = useRecoilValue(tableHeadStateAtom);
+    const tableHead = useRecoilValue<Record<string, any>>(tableHeadStateAtom);
     const [tableBody, setTableBody] = useRecoilState<Array<IRow>>(tableBodyStateAtom);
-    const [userState, setUserState] = useRecoilState<IObject>(userStateAtom);
+    const [userState, setUserState] = useRecoilState<Record<string, any>>(userStateAtom);
     
     const [params, setParams] = useState([]);
     const [open, setOpen] = useState({
@@ -69,14 +69,14 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
         }
     };
 
-    function onBooking(rowIdx, selectedHeadState, selectedDate) {
+    function onBooking(rowIdx: number, selectedHeadState: Record<string, string>, selectedDate: Date) {
         const updated = updateTableBodyState(rowIdx, selectedHeadState.field);
         setTableBody(updated);
         setBookedList(updated[rowIdx], selectedDate);
         io.emit('get', { table: updated });
     }
 
-    const removeTableBodyItem = (field: string, rowVal: number, rowIdx: number) => {
+    const removeTableBodyItem = (field: string, rowVal: string, rowIdx: number) => {
         return tableBody.map((el, idx) => {
             return el[field] === rowVal && rowIdx === idx ? { ...el, [field]: "" } : el;
         });
@@ -85,7 +85,7 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
     const onTableRowClick = async (ev: React.MouseEvent, rowIdx: number, rowVal: string, selectedHeadState: IColumn) => {
         const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIdx + 13);
         if (!canBooking()) {
-            console.log(`You don't have authority`);
+            alert(`You don't have authority`);
             return;
         }
         if (isEmpty(rowVal)) {

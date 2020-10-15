@@ -7,13 +7,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function FormDialog({ open, setOpen, handleClickOpen }) {
+interface FormDialogProps {
+    open: Record<string, boolean>,
+    setOpen: ({comp, flag}) => void,
+    handleClickOpen: () => boolean
+}
+
+export default function FormDialog({ open, setOpen, handleClickOpen }: FormDialogProps): React.ReactElement {
     return (
         <div>
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                 Open form dialog
             </Button>
-            <Dialog open={open} onClose={() => setOpen({comp:false, flag:false })} aria-labelledby="form-dialog-title">
+            <Dialog open={open.comp} onClose={() => setOpen({comp:false, flag:false })} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
