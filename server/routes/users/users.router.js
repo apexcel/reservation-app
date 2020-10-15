@@ -22,12 +22,12 @@ router.get('/alluser', (req, resp, next) => {
     usersController.getAllUserInfo(req, resp, next)
 })
 
-router.put('/subtract-lesson/:name', (req, resp, next) => {
-    usersController.subtractLessonCounter(req, resp, next)
+router.put('/alter-lesson/:name', (req, resp, next) => {
+    usersController.alterLesson(req, resp, next)
 })
 
-router.put('/add-lesson', (req, resp, next) => {
-    usersController.addLesson(req, resp, next)
+router.put('/enroll-lesson', (req, resp, next) => {
+    usersController.enrollLesson(req, resp, next)
 })
 
 router.post('/kakao-token', (req, resp, next) => {

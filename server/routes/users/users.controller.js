@@ -158,7 +158,7 @@ exports.findUser = async function (req, resp, next) {
     }
 }
 
-exports.addLesson = async function (req, resp, next) {
+exports.enrollLesson = async function (req, resp, next) {
     if (req.body.lesson.lessonName === '') {
         resp.status(400).json({ error: 'Empty lesson' });
         return;
@@ -223,7 +223,7 @@ exports.getAdminList = async function (req, resp, next) {
     return;
 }
 
-exports.subtractLessonCounter = async function (req, resp, next) {
+exports.alterLesson = async function (req, resp, next) {
     try {
         mongoConn.conn();
 

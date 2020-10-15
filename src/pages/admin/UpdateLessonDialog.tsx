@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import UserApi from 'Api/UserApi.ts';
-import AdminApi from 'Api/AdminApi.ts';
 import { getCookie } from 'Utils/browserUtils.ts'
 import { formattedDateString } from 'Utils/utils.ts';
 import useInput from 'Reducers/useInput.ts';
@@ -54,14 +53,14 @@ export default function UpdateLessonDialog({ dialogState, fullname, closeDialog 
         setAdminList(res.data.adminNames);
     };
 
-    const addLessonToUser = async (ev) => {
+    const enrollNewLesson = async (ev) => {
         ev.preventDefault();
         const data = {
             fullname: fullname,
             lesson: lessonForm
         };
         console.log('Add Lesson API');
-        await UserApi.addLesson(getCookie('userToken'), data);
+        await UserApi.putEnrollLesson(getCookie('userToken'), data);
         window.location.reload();
         closeDialog();
     };
@@ -159,7 +158,7 @@ export default function UpdateLessonDialog({ dialogState, fullname, closeDialog 
                 <Input onChange={onChangeInput} className='dialog__input common__input' id='point' name='point' type='number' step={1000} />
 
                 <div>
-                    <button type='button' onClick={addLessonToUser}>Confirm</button>
+                    <button type='button' onClick={enrollNewLesson}>Confirm</button>
                 </div>
             </>
         );

@@ -43,9 +43,12 @@ export default {
         });
     },
 
-    subtractLesson(fullname) {
+    putAlterLesson(token, fullname) {
         return SendTo({
-            url: `/users/subtract-lesson/${fullname}`,
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            url: `/users/alter-lesson/${fullname}`,
             method: 'put'
         });
     },
@@ -60,12 +63,12 @@ export default {
         })
     },
 
-    addLesson(token, data) {
+    putEnrollLesson(token, data) {
         return SendTo({
             headers: {
                 Authorization: `Bearer ${token}`
             },
-            url: `/users/add-lesson`,
+            url: `/users/enroll-lesson`,
             method: 'put',
             data: data
         });
