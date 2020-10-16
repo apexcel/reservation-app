@@ -1,10 +1,18 @@
 const mongoose = require('mongoose');
-const cfg = require('./config')
+const config = {
+    uri: process.env.MONGODB_URI,
+    options: {
+        user: process.env.MONGODB_USER,
+        pass: process.env.MONGODB_PASS,
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }
+};
 
 mongoose.set('useFindAndModify', false);
 
 const mdbConn = () => {
-    mongoose.connect(cfg.uri, cfg.options, (err) => {
+    mongoose.connect(config.uri, config.options, (err) => {
         if (err) throw err;
         console.log('MongoDB connected.');
     });

@@ -1,6 +1,5 @@
-const getConn = require('../../database/mysql/mysqlConn');
-const initDb = require('../../macro/sql_init_tables');
-initDb();
+const getConn = require('../../database/mysqlConn');
+require('../../macro/sql_init')();
 
 const TABLE_NAME = 'schedules';
 

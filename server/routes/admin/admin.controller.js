@@ -1,7 +1,7 @@
-const User = require('../../database/mongo/schema/user');
-const KakaoMsg = require('../../database/mongo/schema/kakaomsg');
-const KakaoToken = require('../../database/mongo/schema/kakaotoken');
-const mongoConn = require('../../database/mongo/mongoConn');
+const User = require('../../database/schema/user');
+const KakaoMsg = require('../../database/schema/kakaomsg');
+const KakaoToken = require('../../database/schema/kakaotoken');
+const mongoConn = require('../../database/mongoConn');
 const axios = require('axios')
 const querystring = require('querystring')
 

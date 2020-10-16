@@ -1,6 +1,6 @@
 const CryptoJS = require('crypto-js');
-const mongoConn = require('../../database/mongo/mongoConn');
-const User = require('../../database/mongo/schema/user');
+const mongoConn = require('../../database/mongoConn');
+const User = require('../../database/schema/user');
 const jwt = require('jsonwebtoken');
 
 const TOKEN_KEY = process.env.TOKEN_KEY;

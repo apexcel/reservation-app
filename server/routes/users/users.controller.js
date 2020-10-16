@@ -1,5 +1,5 @@
-const User = require('../../database/mongo/schema/user');
-const mongoConn = require('../../database/mongo/mongoConn');
+const User = require('../../database/schema/user');
+const mongoConn = require('../../database/mongoConn');
 const jwt = require('jsonwebtoken');
 const axios = require('axios')
 const querystring = require('querystring');

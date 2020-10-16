@@ -10,8 +10,6 @@ const connection = mysql.createConnection({
 
 const DB_NAME = 'dilettante'
 const TABLE_NAME = "schedules";
-//TODO: 0시 정각에 테이블 생성 하도록하기
-// crontab 이용해서 node 명령어로 실행하게 하기
 // 당일분 csv파일로 생성하도록 하기
 
 async function generateDataBase(dbName) {
