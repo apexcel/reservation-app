@@ -56,7 +56,9 @@ export default function Header({ setIsLogin, userState }: HeaderProps): React.Re
                     </aside>
                 </Drawer>
                 {userState.isAdmin ? <button className='text-btn' onClick={toggleDrawer('left', true)} >Menu</button> : null}
-                {userState.isAdmin ? <Link className='link' to='/admin'>Admin</Link> : <Link className='link' to='/profile'>Profile</Link>}
+                {userState.isAdmin ? <Link className='link' to='/admin'>Admin</Link> 
+                    : userState.username !== 'guest' ? <Link className='link' to='/profile'>Profile</Link> 
+                        : null}
                 <Link className='link' to='/'>Main</Link>
                 <div className='main-nav-about-user'>
                     <button className='text-btn' type='button' onClick={logout}>Sign Out</button>

@@ -7,8 +7,8 @@ import { isEmpty } from 'Utils/utils.ts';
 import { setCookie } from 'Utils/browserUtils.ts';
 import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts';
 
-import Input from 'Components/modal/Input.tsx';
-import useInput from 'Reducers/useInput.ts';
+import Input from '@/components/modal/Input.tsx';
+import useInput from '@/reducers/useInput.ts';
 import UserApi from 'Api/UserApi.ts';
 import AuthApi from 'Api/AuthApi.ts';
 
@@ -26,33 +26,19 @@ export default function SignIn({ setIsLogin, adminLogin }: SignInProps): React.R
     });
 
     const login = async (username, password) => {
-        const data = {
+        const formData = {
             username: username,
             password: password
         };
 
-        const encData = encryptAES(data);
-        let response = null;
-
-        if (adminLogin) response = await AuthApi.signIn({ sign_in_form: encData });
-        else response = await AuthApi.signIn({ sign_in_form: encData });
+        const encFormData = encryptAES(formData);
+        const response = await AuthApi.signIn({ sign_in_form: encFormData });
 
         if (response !== null) {
-            console.log(response)
             const token = response.data.token;
             const decoded = decryptAES(jwtDecode(token).access_code);
             const userInfo = await UserApi.getUserInfo(response.data.token, decoded.id).then(res => jwtDecode(res.data.token));
-            console.log(userInfo)
-            setUserState({
-                username: userInfo.username,
-                fullname: userInfo.fullname,
-                dob: userInfo.dob,
-                tel: userInfo.tel,
-                lessons: userInfo.lessons,
-                reservations: userInfo.reservations,
-                isAdmin: userInfo.isAdmin
-            });
-
+            setUserState(userInfo);
             setCookie('userToken', token);
             setIsLogin(true);
         }

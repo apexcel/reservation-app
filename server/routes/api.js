@@ -11,6 +11,8 @@ const usersRouter = require('./users/users.router');
 const adminRouter = require('./admin/admin.router');
 const errorRouter = require('./error.router');
 
+require('../macro/mongo_create_defaults.js').createDefaultGuest();
+
 router.use(cors());
 router.use(bodyParser.json());
 router.use(cookieParser());

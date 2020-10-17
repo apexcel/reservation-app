@@ -6,7 +6,7 @@ import moment from 'moment';
 import { tableBodyStateAtom, tableHeadStateAtom } from 'Atoms/tableAtoms.ts';
 import { userStateAtom } from 'Atoms/globalAtoms.ts';
 import { isEmpty } from 'Utils/utils.ts';
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
+import { getCookie } from 'Utils/browserUtils.ts';
 
 import ReservationApi from 'Api/ReservationApi.ts';
 import UserApi from 'Api/UserApi.ts';
@@ -26,7 +26,7 @@ import 'Styles/Dialog.scss';
 import { IColumn, IRow } from 'types/@oogie826/table';
 
 interface DialogProps {
-    dialogState: Record<string, unknown>,
+    dialogState: Record<string, any>,
     closeDialog: () => void,
     selectedDateState: Date
 }
@@ -84,13 +84,14 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
 
     const onTableRowClick = async (ev: React.MouseEvent, rowIdx: number, rowVal: string, selectedHeadState: IColumn) => {
         const selectedDate = new Date(selectedDateState.getFullYear(), selectedDateState.getMonth(), selectedDateState.getDate(), rowIdx + 13);
-        if (!canBooking()) {
-            alert(`You don't have authority`);
-            return;
-        }
+        // TODO: 유저가 예약할 권리가 있는지 확인하기
+        // if (!canBooking()) {
+        //     alert(`You don't have authority`);
+        //     return;
+        // }
         if (isEmpty(rowVal)) {
             const ans = confirm(`${selectedHeadState.name} ${selectedDate.getHours()}시에 예약하시겠습니까?`);
-            if (ans && !userState.isAdmin) {
+            if (ans && !userState.isAdmin && userState.fullname !== 'guest') {
                 popupLessonSelectDialog('sub');
                 setParams([rowIdx, selectedHeadState, selectedDate]);
                 // const updated = updateTableBodyState(rowIdx, selectedHeadState.field);
@@ -99,8 +100,8 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
                 // io.emit('get', { table: updated });
                 return;
             }
-            // 어드민일 경우
-            if (ans && userState.isAdmin) {
+            // 어드민일 경우 OR guest
+            if ((ans && userState.isAdmin) || (ans && userState.fullname === 'guest')) {
                 const setFullname = prompt('이름을 입력해주세요.');
                 if (!isEmpty(setFullname)) {
                     const updated = updateTableBodyState(rowIdx, selectedHeadState.field, setFullname);
@@ -112,7 +113,8 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
             }
         }
         // 예약 취소
-        if ((rowVal === userState.fullname) || (!isEmpty(rowVal) && userState.isAdmin === true)) {
+        // 입력된 값이 현재 유저 이름과 같거나 어드민이거나
+        if ((rowVal === userState.fullname) || (!isEmpty(rowVal) && userState.isAdmin === true) || (!isEmpty(rowVal) && userState.fullname === 'guest')) {
             const ans = confirm(`예약 취소 하시겠습니까?`);
             if (ans) {
                 const removed = removeTableBodyItem(selectedHeadState.field, rowVal, rowIdx);
@@ -165,9 +167,7 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
         const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
         return (
             <div className='dialog-selected-date'>
-                <span>{selectedDateState.getFullYear()}</span>
-                <span>{selectedDateState.getMonth() + 1}</span>
-                <span>{selectedDateState.getDate()}</span>
+                <span>{selectedDateState.getFullYear()}{selectedDateState.getMonth() + 1}{selectedDateState.getDate()}</span>
                 <span>{daysOfWeek[selectedDateState.getDay()]}</span>
             </div>
         );

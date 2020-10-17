@@ -1,5 +1,5 @@
-const mongoConn = require('../database/mongo/mongoConn');
-const Lesson = require('../database/mongo/schema/lesson');
+const mongoConn = require('../database/mongoConn');
+const Lesson = require('../database/schema/lesson');
 
 const now = new Date();
 

@@ -34,6 +34,7 @@ async function addKakaoScript() {
     script.async = true;
     document.body.append(script);
     await globalThis.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
+    return;
 }
 
 export default function App(): React.ReactElement {
@@ -70,17 +71,7 @@ export default function App(): React.ReactElement {
                 const id = decryptAES(token.access_code).id;
                 const response = await UserApi.getUserInfo(userCookie, id).then(res => res.data.token);
                 const userInfo = jwtDecode(response);
-
-                setUserState({
-                    username: userInfo.username,
-                    fullname: userInfo.fullname,
-                    dob: userInfo.dob,
-                    tel: userInfo.tel,
-                    lessons: userInfo.lessons,
-                    reservations: userInfo.reservations,
-                    isAdmin: userInfo.isAdmin
-                });
-                
+                setUserState(userInfo);
                 setIsLogin(true);
                 return;
             }
