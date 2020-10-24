@@ -1,4 +1,4 @@
-.dialog-background {
+@mixin dialog-background {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -8,7 +8,7 @@
     left: 0;
 }
 
-.dialog {
+@mixin dialog {
     position: fixed;
     display: block;
     padding: 25px;
@@ -20,7 +20,7 @@
     z-index: 999;
 }
 
-.dialog-header {
+@mixin dialog-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -45,6 +45,37 @@
             opacity: 1;
         }
     }
+}
+
+// Mobile and Tablet
+@media screen and (min-width: 320px) and (max-width: 768px) {
+    .dialog {
+        @include dialog();
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .dialog {
+        @include dialog();
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.dialog-background {
+    @include dialog-background();
+}
+
+.dialog {
+    @include dialog();
+}
+
+.dialog-header {
+    @include dialog-header()
 }
 
 .dialog__input {

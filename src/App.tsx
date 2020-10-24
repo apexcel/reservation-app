@@ -6,13 +6,14 @@ import jwtDecode from 'jwt-decode';
 // custom
 import { userStateAtom } from 'Atoms/globalAtoms.ts';
 import { isEmpty } from 'Utils/utils.ts';
-import { setCookie, getCookie, deleteCookie } from 'Utils/browserUtils.ts';
-import { encryptAES, decryptAES } from 'Utils/cryptoUtils.ts';
-import Loading from 'Components/Loading.tsx';
+import { getCookie, deleteCookie } from 'Utils/browserUtils.ts';
+import { decryptAES } from 'Utils/cryptoUtils.ts';
 import { useInterval } from 'Reducers/useInterval.ts';
-import UserApi from 'Api/UserApi.ts';
 
+import UserApi from 'Api/UserApi.ts';
+import Loading from 'Components/Loading.tsx';
 import RestrictedRoute from 'Components/RestrictedRoute.tsx';
+
 // pages
 import Header from './pages/layout/Header.tsx';
 import Footer from './pages/layout/Footer.tsx';
@@ -63,11 +64,10 @@ export default function App(): React.ReactElement {
     // TODO: 쿠키 이용 및 세션을 통한 로그인 검증
     const probeUserCookie = async () => {
         const userCookie = getCookie('userToken');
+        const token = jwtDecode(userCookie);
 
         if (isEmpty(userState) && !isEmpty(userCookie)) {
-            const token = jwtDecode(userCookie);
-
-            if (token.exp > new Date().valueOf()) {
+            if (decryptAES(token.access_code).username === 'guest' || token.exp > new Date().valueOf()) {
                 const id = decryptAES(token.access_code).id;
                 const response = await UserApi.getUserInfo(userCookie, id).then(res => res.data.token);
                 const userInfo = jwtDecode(response);

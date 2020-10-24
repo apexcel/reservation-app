@@ -22,7 +22,7 @@ module.exports = {
             '@': path.resolve(__dirname, 'src/'),
             Utils: path.resolve(__dirname, "utils/"),
             Atoms: path.resolve(__dirname, "src/atoms/"),
-            Api: path.resolve(__dirname, "api/"),
+            Api: path.resolve(__dirname, "src/api/"),
             Components: path.resolve(__dirname, "src/components/"),
             Reducers: path.resolve(__dirname, "src/reducers/"),
             Styles: path.resolve(__dirname, "src/styles/"),
