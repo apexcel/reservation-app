@@ -17,7 +17,7 @@ import FormDialog from './FormDialog.tsx';
 
 import * as socketio from 'socket.io-client';
 // TODO: prod 버전에서는 도메인이나 해당 ip로 변경할 것
-const io = socketio.connect('http://localhost:9000');
+const io = socketio.connect('http://3.35.190.11:9000');
 
 // Styles
 import 'Styles/Dialog.scss';
