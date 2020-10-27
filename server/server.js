@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const socketIO = require('socket.io');
 // root는 server가 되기 때문에 최상단 루트로 path 변경함.
 require('dotenv').config({ path: path.join(__dirname, '..', '/.env') });
 
@@ -24,14 +25,18 @@ app.get('*', (req, resp) => {
 
 const server = app.listen(port, () => {
     console.log(`Server running on ${port} port`)
-});
+})
+const io = socketIO(server);
 
-const io = require('socket.io')(server);
 io.on('connection', (socket) => {
-    console.log(socket.client.id)
+    console.log(`SocketID: ${socket.client.id} connected.`)
     socket.on('get', (data) => {
         console.log(data.table)
         socket.broadcast.emit('set', (data.table))
+    })
+
+    socket.on('disconnect', () => {
+        console.log(`SocketID: ${socket.client.id} disconnected.`)
     })
 })
 

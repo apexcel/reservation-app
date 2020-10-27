@@ -15,10 +15,10 @@ import Table from 'Components/table/Table.tsx';
 import Dialog from 'Components/modal/Dialog.tsx';
 import FormDialog from './FormDialog.tsx';
 
-import * as socketio from 'socket.io-client';
+import socket from 'socket.io-client';
 // TODO: prod 버전에서는 도메인이나 해당 ip로 변경할 것
-const io = socketio.connect('http://3.35.190.11:9000');
-
+// const io = socketio.connect('http://3.35.190.11:9000');
+const END_POINT = 'http://dlttbook.shop';
 // Styles
 import 'Styles/Dialog.scss';
 
@@ -43,12 +43,13 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
         flag: false
     });
     
+    const io = socket(END_POINT);
+    
     useEffect(() => {
         io.on('set', (table) => {
-            console.log(table);
             setTableBody(table);
         });
-    }, [tableBody]);
+    });
 
     useEffect(() =>{
         if (open.flag) {
