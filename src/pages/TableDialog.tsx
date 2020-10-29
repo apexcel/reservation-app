@@ -30,28 +30,26 @@ interface DialogProps {
     closeDialog: () => void,
     selectedDateState: Date
 }
-
 export default function TableDialog({ dialogState, closeDialog, selectedDateState }: DialogProps): React.ReactElement {
-
     const tableHead = useRecoilValue<Record<string, any>>(tableHeadStateAtom);
     const [tableBody, setTableBody] = useRecoilState<Array<IRow>>(tableBodyStateAtom);
     const [userState, setUserState] = useRecoilState<Record<string, any>>(userStateAtom);
-    
+
     const [params, setParams] = useState([]);
     const [open, setOpen] = useState({
         comp: false,
         flag: false
     });
-    
+
     const io = socket(END_POINT);
-    
+
     useEffect(() => {
         io.on('set', (table) => {
             setTableBody(table);
         });
     });
 
-    useEffect(() =>{
+    useEffect(() => {
         if (open.flag) {
             onBooking(params[0], params[1], params[2]);
         }
@@ -72,9 +70,9 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
 
     function onBooking(rowIdx: number, selectedHeadState: Record<string, string>, selectedDate: Date) {
         const updated = updateTableBodyState(rowIdx, selectedHeadState.field);
-        setTableBody(updated);
-        setBookedList(updated[rowIdx], selectedDate);
-        io.emit('get', { table: updated });
+        //setTableBody(updated);
+        setBookedList(updated, rowIdx, selectedDate);
+        //io.emit('get', { table: updated });
     }
 
     const removeTableBodyItem = (field: string, rowVal: string, rowIdx: number) => {
@@ -97,7 +95,7 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
                 setParams([rowIdx, selectedHeadState, selectedDate]);
                 // const updated = updateTableBodyState(rowIdx, selectedHeadState.field);
                 // setTableBody(updated);
-                // setBookedList(updated[rowIdx], selectedDate);
+                // setBookedList(updated, rowIdx, selectedDate);
                 // io.emit('get', { table: updated });
                 return;
             }
@@ -106,9 +104,8 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
                 const setFullname = prompt('이름을 입력해주세요.');
                 if (!isEmpty(setFullname)) {
                     const updated = updateTableBodyState(rowIdx, selectedHeadState.field, setFullname);
-                    setBookedList(updated[rowIdx], selectedDate);
-                    setTableBody(updated);
-                    io.emit('get', { table: updated });
+                    setBookedList(updated, rowIdx, selectedDate);
+                    //setTableBody(updated);
                     return;
                 }
             }
@@ -119,24 +116,30 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
             const ans = confirm(`예약 취소 하시겠습니까?`);
             if (ans) {
                 const removed = removeTableBodyItem(selectedHeadState.field, rowVal, rowIdx);
-                setTableBody(removed);
-                setBookedList(removed[rowIdx], selectedDate);
-                io.emit('get', { table: removed });
+                //setTableBody(removed);
+                setBookedList(removed, rowIdx, selectedDate);
                 return;
             }
         }
         return;
     };
 
-    const setBookedList = async (newTableState: IObject, selectedDate: Date) => {
+    const setBookedList = async (newTableState, rowIndex: number, selectedDate: Date) => {
         moment.locale('ko');
         const token = getCookie('userToken');
         const formatDate = moment(selectedDate).format('YYYY-MM-DD:HH');
         const data = {
             time_stamp: formatDate,
-            booked_data: JSON.stringify(newTableState)
+            booked_data: JSON.stringify(newTableState[rowIndex])
         };
-        await ReservationApi.setReservationList(token, data).then(res => console.log(res));
+        const response = await ReservationApi.setReservationList(token, data);
+        if (response.data.error_code === '-100') {
+            alert('22시가 넘어서 예약 및 취소를 할 수 없어요!');
+        }
+        else {
+            setTableBody(newTableState);
+            io.emit('get', { table: newTableState });
+        }
         return;
     };
 
@@ -148,9 +151,9 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
         return false;
     };
 
-    function popupLessonSelectDialog (addSub: string) {
+    function popupLessonSelectDialog(addSub: string) {
         if (addSub === 'sub') {
-            setOpen({flag: false, comp: true});
+            setOpen({ flag: false, comp: true });
             //const response = await UserApi.putAlterLesson(getCookie('userToken'), userState.fullname).then(res => console.log(res.data));
             return true;
         }
@@ -161,7 +164,7 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
 
 
     const handleClickOpen = () => {
-        setOpen({...open, comp: true});
+        setOpen({ ...open, comp: true });
     };
 
     const renderDialogHeader = () => {

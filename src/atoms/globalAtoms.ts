@@ -50,7 +50,7 @@ export const getTableHeadersEachDay = selector({
                 ];
             case 4:
                 return [
-                    { name: "소정", field: "so" },
+                    { name: "소정", field: "so", range: [6, 10] },
                     { name: "현영", field: "hyun" },
                     { name: "상정", field: "jung" }
                 ];

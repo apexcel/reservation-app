@@ -52,6 +52,10 @@ export default function Main(): React.ReactElement {
 
     const onDateClick = async (ev, selectedDate: Date) => {
         //console.log(ev, selectedDate);
+        if (selectedDate.getDay() === 1) {
+            alert('월요일은 휴무입니다.');
+            return;
+        }
         await setSelectedDateState(selectedDate);
         getBookedList(selectedDate);
         openDialog();

@@ -37,11 +37,24 @@ exports.setBookedData = async function (req, resp, next) {
                 req.body.time_stamp,
                 req.body.booked_data,
             ];
+
+            const clientTime = (req.body.time_stamp).split(':')[0];
+            const serverTime = new Date().toISOString().split('T')[0];
+
+            if (new Date().getHours() + 1 >= 22 && (clientTime == serverTime)) {
+                resp.json({
+                    error_code: '-100',
+                    error: 'Deadline excess'
+                })
+                return;
+            }
             
             conn.query(query, queryParams, (err, row) => {
                 conn.release();
                 if (err) throw err;
-                resp.status(200).json(row)
+                resp.status(200).json({
+                    time_stamp: new Date().valueOf()
+                })
             })
         });
     }
