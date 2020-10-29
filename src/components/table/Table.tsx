@@ -3,7 +3,7 @@ import TableBody from './TableBody.tsx';
 import TableHeader from './TableHeader.tsx';
 
 import { IColumn, IRow } from 'types/@oogie826/table';
-import '../../styles/table.scss';
+import '../../styles/Table.scss';
 
 interface TableProps {
     tHeadState: Array<IColumn>

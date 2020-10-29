@@ -11,7 +11,7 @@ object-assign
  * @license  MIT
  */
 
-/*! Build: 2020. 10. 27. */
+/*! Build: 2020. 10. 29. */
 
 /*! https://mths.be/utf8js v2.1.2 by @mathias */
 
