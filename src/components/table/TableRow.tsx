@@ -1,5 +1,7 @@
 import React from 'react';
 import { isEmpty } from '../../../utils/utils.ts';
+import { userStateAtom } from 'Atoms/globalAtoms.ts';
+import { useRecoilValue } from 'recoil';
 
 interface TableRowProps {
     className: string,
@@ -23,6 +25,8 @@ export default function TableRow({
     onTableRowClick
 }: TableRowProps) {
 
+    const userState = useRecoilValue(userStateAtom);
+
     const renderRows = () => {
         const rows = [];
 
@@ -30,7 +34,7 @@ export default function TableRow({
             //console.log(rowItem);
             //console.log(tHeadState[i]);
             //console.log(index)
-            
+
             const _onTableRowClick = (ev: React.MouseEvent, rowIndex = index, currentTableRowValue = rowItem[tHeadState[i].field]) => {
                 ev.preventDefault();
                 onTableRowClick.call(this, ev, rowIndex, currentTableRowValue, tHeadState[i]);
@@ -41,13 +45,19 @@ export default function TableRow({
 
             // row가 비어있는지 확인
             isEmpty(rowItem[tHeadState[i].field]) ? classNames.push(`${className}-not-booked`) : classNames.push(`${className}-booked`);
-            // 저녁시간 확인
+            // break-time 확인
             index === 5 ? classNames.push(`${className}-break-time`) : null;
             // unabled table range 확인
             if (tHeadState[i].range) {
                 if (tHeadState[i].range[0] <= index && tHeadState[i].range[1] > index) {
-                    classNames.push(`${className}-unable`);
-                    isClickable = false;
+                    if (userState.isAdmin) {
+                        classNames.push(`${className}-unable-admin`);
+                        isClickable = userState.isAdmin;
+                    }
+                    else {
+                        classNames.push(`${className}-unable`);
+                        isClickable = false;
+                    }
                 }
             }
 

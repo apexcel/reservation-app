@@ -101,7 +101,7 @@ export default function TableDialog({ dialogState, closeDialog, selectedDateStat
                 // io.emit('get', { table: updated });
                 return;
             }
-            // 어드민일 경우 OR guest
+            // Admin & Guest
             if ((ans && userState.isAdmin) || (ans && userState.fullname === 'guest')) {
                 const setFullname = prompt('이름을 입력해주세요.');
                 if (!isEmpty(setFullname)) {
