@@ -4,7 +4,8 @@ const instance: AxiosInstance = axios.create({
     // TODO: dev
     // baseURL: 'http://127.0.0.1:9000/api',
     headers: {
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'X-custom'
     },
     baseURL: 'http://3.35.190.11/api',
     // TODO: prod

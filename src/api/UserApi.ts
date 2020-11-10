@@ -2,10 +2,10 @@ import { AxiosRequestConfig } from 'axios';
 import SendTo from './SendTo.ts';
 
 export default {
-    signUp(token: string, data: IObject): AxiosRequestConfig {
+    signUp(token: string, data): AxiosRequestConfig {
         return SendTo({
             headers: {
-                Authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: `/users/signup`,
             method: 'post',
@@ -16,7 +16,7 @@ export default {
     getUserInfo(token: string, id: string): AxiosRequestConfig {
         return SendTo({
             headers: {
-                Authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: `/users/getuser/${id}`,
             method: 'get'
@@ -26,7 +26,7 @@ export default {
     getAdminList(token) {
         return SendTo({
             headers: {
-                Authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: '/users/adminlist',
             method: 'get'
@@ -36,7 +36,7 @@ export default {
     findUser(token, id) {
         return SendTo({
             headers: {
-                Authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: `/users/finduser/${id}`,
             method: 'get'
@@ -46,7 +46,7 @@ export default {
     putAlterLesson(token, fullname) {
         return SendTo({
             headers: {
-                Authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: `/users/alter-lesson/${fullname}`,
             method: 'put'
@@ -56,7 +56,7 @@ export default {
     getAllUserInfo(token) {
         return SendTo({
             headers: {
-                Authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: `/users/alluser`,
             method: 'get'
@@ -66,7 +66,7 @@ export default {
     putEnrollLesson(token, data) {
         return SendTo({
             headers: {
-                Authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: `/users/enroll-lesson`,
             method: 'put',

@@ -4,7 +4,7 @@ export default {
     setReservationList(token, data) {
         return SendTo({
             headers: {
-                authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: '/reservation/set-booked-data',
             method: 'post',
@@ -15,7 +15,7 @@ export default {
     getReservationList(token, params) {
         return SendTo({
             headers: {
-                authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: `/reservation/get-booked-data/${params}`,
             method: 'get',
@@ -25,7 +25,7 @@ export default {
     getUserReservationList(token, params) {
         return SendTo({
             headers: {
-                authorization: `Bearer ${token}`
+                'X-custom': `Bearer ${token}`
             },
             url: `/reservation/find/${params}`,
             method: 'get',
