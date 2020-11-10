@@ -11,7 +11,8 @@ exports.kakaoAuthToken = async function (req, resp, next) {
     try {
         const host = 'https://kauth.kakao.com';
         const path = '/oauth/token';
-        const redirectUri = 'http://localhost:3001/admin/kakao-api';
+        //const redirectUri = 'http://localhost:3001/admin/kakao-api';
+        const redirectUri = 'http://dlttshop.book/admin/kakao-api';
         const data = {
             'grant_type': 'authorization_code',
             'client_id': KAKAO_REST_API_KEY,

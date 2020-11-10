@@ -20,7 +20,8 @@ const initForm = {
 
 function kakaoLogin() {
     globalThis.Kakao.Auth.authorize({
-        redirectUri: 'http://localhost:3001/admin/kakao-api',
+        // redirectUri: 'http://localhost:3001/admin/kakao-api',
+        redirectUri: 'http://dlttbook.shop/admin/kakao-api',
         scope: 'profile, birthday, talk_message, friends'
     });
     return;
