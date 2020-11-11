@@ -15,17 +15,17 @@ function formattedDateString(date) {
 
     return [yy, mm, dd].join('-');
 }
-
 const cronJob = new CronJob('* * * * * *', () => {
     console.log('START CRON JOB')
     console.log('Now:', new Date())
     sendMessage()
-    cronJob.stop();
+    // cronJob.stop();
 });
-cronJob.start()
+//cronJob.start()
 
 async function sendMessage() {
     const now = formattedDateString(new Date())
+    console.log('server Now:', now)
     try {
         mongoConn.conn()
         let [list, token] = await Promise.all([KakaoMsg.find({ date: now }), KakaoToken.find({})])
@@ -43,12 +43,14 @@ async function sendMessage() {
 
 async function sendMessageToKakaoFriends(url, headers, list) {
     try {
-        for (let i = 0; i < list.length; i += 1) {
-            const dataString = `receiver_uuids=["${list[i].app_uuid}"]&template_object={ "object_type": "text", "text": "${list[0].message}", "link": { "web_url": "https://developers.kakao.com", "mobile_web_url": "https://developers.kakao.com" }, "button_title": "바로 확인" }`
+        // for (let i = 0; i < list.length; i += 1) {
+            const dataString = `receiver_uuids=["${list[list.length-1].app_uuid}"]&template_object={ "object_type": "text", "text": "${list[list.length-1].message}", "link": { "web_url": "https://developers.kakao.com", "mobile_web_url": "https://developers.kakao.com" }, "button_title": "바로 확인" }`
             await axios.post(url, dataString, { headers: headers }).then(res => console.log(res))
-        }
+        // }
     }
     catch (err) {
         console.error(err)
     }
 }
+
+module.exports = cronJob;

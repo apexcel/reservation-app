@@ -39,6 +39,7 @@ exports.kakaoBookMessage = async function (req, resp, next) {
     console.log(req.body)
     try {
         mongoConn.conn()
+
         for (let i = 0; i < req.body.length; i += 1) {
             
             const options = {

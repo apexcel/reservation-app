@@ -93,7 +93,7 @@ export default function KakaoAPI() {
 
     useEffect(() => {
         messageForm.nickname = document.getElementById('nickname').value;
-        //messageForm.uuid = inputValue()[0].uuid;
+        messageForm.uuid = inputValue();
     }, [messageForm]);
 
     const getKakaoAuthToken = async () => {
@@ -123,16 +123,16 @@ export default function KakaoAPI() {
     };
 
     const kakaoSetBookMessage = async () => {
-        await AdminApi.kakaoBookMessage(msgList).then(res => console.log(res));
+        await AdminApi.kakaoBookMessage(getCookie('userToken'), msgList).then(res => console.log(res));
     };
 
     const kakaoCheckToken = async () => {
         console.log(globalThis.Kakao.Auth.getAccessToken());
-        await AdminApi.kakaoCheckToken({ token: globalThis.Kakao.Auth.getAccessToken() });
+        await AdminApi.kakaoCheckToken(getCookie('userToken'), { token: globalThis.Kakao.Auth.getAccessToken() });
     };
 
     const kakaoRefreshAccessToken = async () => {
-        await AdminApi.kakaoRefreshAccessToken();
+        await AdminApi.kakaoRefreshAccessToken(getCookie('userToken'));
     };
 
     const setBookingMessage = (ev) => {
@@ -141,7 +141,13 @@ export default function KakaoAPI() {
     };
 
     const inputValue = () => {
-        return friendsList.filter(el => el.profile_nickname === messageForm.nickname);
+        const result = friendsList.filter(el => el.profile_nickname === messageForm.nickname);
+        if (result[0]){
+            return result[0].uuid;
+        }
+        else {
+            return '';
+        }
     };
 
     const renderFriendsList = () => {
