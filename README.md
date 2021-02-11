@@ -1,4 +1,4 @@
-# reservation-app
+# dilettante
 
 ## 개요
 
@@ -27,8 +27,3 @@
     - AWS EC2
     - AWS Route53
     - AWS Elastic IP
-
-## 기타
-
-- 관리자 페이지, 카톡 API를 활용한 예약 알림 메세지 보내기 등 미구현된 부분이 있다. 
-- 3주 정도 운영하고 개발 중단.
